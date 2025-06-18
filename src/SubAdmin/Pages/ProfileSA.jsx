@@ -1,7 +1,13 @@
 import React from "react";
+import SubAdminHeader from "../Components/SubAdminHeader";
 
 const ProfileSA = () => {
-  return <div>subAdmin profile</div>;
+  return (
+    <>
+      <SubAdminHeader />
+      <div>subAdmin profile</div>
+    </>
+  );
 };
 
 export default ProfileSA;

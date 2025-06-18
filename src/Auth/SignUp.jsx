@@ -20,6 +20,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import { userContext } from "./ContextProvider";
 import background from "../assets/backgroundSignUp.png";
+import AdminHeader from "../Admin/Components/AdminHeader";
 
 const SignUp = () => {
   const { signup } = useContext(userContext);
@@ -116,6 +117,7 @@ const SignUp = () => {
               control={<Checkbox />}
               label="من طلاب الدورات السابقة"
               name="previous"
+              color="warning"
             />
             <TextareaAutosize
               maxRows={4}
@@ -139,6 +141,7 @@ const SignUp = () => {
 
   return (
     <>
+      <AdminHeader />
       <form onSubmit={handleSignUp}>
         <Stack
           direction="column"
@@ -154,7 +157,9 @@ const SignUp = () => {
           }}
           className="w-screen"
         >
-          <Typography variant="h5">إنشاء حساب</Typography>
+          <Typography variant="h5" style={{ marginTop: "60px" }}>
+            إنشاء حساب
+          </Typography>
 
           <Stack direction="row" spacing={5}>
             <Stack direction="column" spacing={2} sx={{ marginLeft: "550px" }}>
@@ -290,6 +295,7 @@ const SignUp = () => {
                 control={<Checkbox />}
                 label="مجازة"
                 name="mojaza"
+                color="warning"
               />
 
               <Box width="250px">

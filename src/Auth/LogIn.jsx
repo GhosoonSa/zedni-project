@@ -11,7 +11,8 @@ import {
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { userContext } from "./ContextProvider";
-import backgroundLogIn from "../assets/backgroundLogIn.png";
+import backgroundLogIn from "../assets/backgroundLogIn3.png";
+import AdminHeader from "../Admin/Components/AdminHeader";
 
 const LogIn = () => {
   const { login } = useContext(userContext);
@@ -44,6 +45,7 @@ const LogIn = () => {
 
   return (
     <>
+      <AdminHeader />
       <form onSubmit={handleLogin}>
         <Stack
           direction="column"

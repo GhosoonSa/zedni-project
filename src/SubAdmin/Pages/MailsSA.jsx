@@ -1,7 +1,13 @@
 import React from "react";
+import SubAdminHeader from "../Components/SubAdminHeader";
 
 const MailsSA = () => {
-  return <div>subAdmin mails</div>;
+  return (
+    <>
+      <SubAdminHeader />
+      <div>subAdmin mails</div>
+    </>
+  );
 };
 
 export default MailsSA;

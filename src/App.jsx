@@ -92,7 +92,7 @@ function App() {
           }
         />
         <Route
-          path="/Teacher/ProfileSA"
+          path="/Teacher/ProfileT"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <ProfileT />
@@ -100,7 +100,7 @@ function App() {
           }
         />
         <Route
-          path="/Teacher/MailsSA"
+          path="/Teacher/MailsT"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <MailsT />

@@ -1,7 +1,13 @@
 import React from "react";
+import AdminHeader from "../Components/AdminHeader";
 
 const Profile = () => {
-  return <div>profile</div>;
+  return (
+    <>
+      <AdminHeader />
+      <div>profile</div>
+    </>
+  );
 };
 
 export default Profile;

@@ -1,7 +1,13 @@
 import React from "react";
+import AdminHeader from "../Components/AdminHeader";
 
 const Mails = () => {
-  return <div>Mails</div>;
+  return (
+    <>
+      <AdminHeader />
+      <div>Mails</div>
+    </>
+  );
 };
 
 export default Mails;

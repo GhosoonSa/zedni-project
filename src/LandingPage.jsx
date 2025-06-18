@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "./Header";
 
 const LandingPage = () => {
   /*header
@@ -8,7 +9,12 @@ const LandingPage = () => {
     3.who we are
     4.new courses poster
   */
-  return <div>hello world</div>;
+  return (
+    <>
+      <Header />
+      <div>hello world</div>
+    </>
+  );
 };
 
 export default LandingPage;

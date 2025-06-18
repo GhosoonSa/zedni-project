@@ -1,7 +1,13 @@
 import React from "react";
+import TeacherHeader from "../Components/TeacherHeader";
 
 const CoursesT = () => {
-  return <div>teacher courses</div>;
+  return (
+    <>
+      <TeacherHeader />
+      <div>teacher courses</div>
+    </>
+  );
 };
 
 export default CoursesT;
