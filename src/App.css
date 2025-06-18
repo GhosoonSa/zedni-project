@@ -1,1 +1,31 @@
 @import "tailwindcss";
+.start-photo {
+  width: 600px;
+  height: 600px;
+}
+#navigate {
+  margin: 7%;
+}
+.c-b-n {
+  background-color: #ffbb70;
+}
+#about-us {
+  background-color: #fffbda;
+}
+#new-courses {
+  margin-left: 4%;
+}
+.course {
+  border-color: #ed9455;
+  border-style: solid;
+}
+.pro-photo {
+  width: 520px;
+  height: 510px;
+}
+.mycolor {
+  background-color: #b7ff80;
+}
+.IoT {
+  color: #b7ff80;
+}
