@@ -5,7 +5,7 @@ import axios from "axios";
 export const userContext = createContext();
 
 const ContextProvider = ({ children }) => {
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("admin");
   const [authenticated, setAuthenticated] = useState(true);
 
   const login = (formData) => {

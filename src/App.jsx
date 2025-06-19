@@ -10,18 +10,22 @@ import LandingPage from "./LandingPage";
 import Courses from "./Admin/Pages/Courses";
 import Profile from "./Admin/Pages/Profile";
 import Mails from "./Admin/Pages/Mails";
+import CourseTabs from "./Admin/Pages/CourseTabs";
 //import subAdmin
 import CoursesSA from "./SubAdmin/Pages/CoursesSA";
 import ProfileSA from "./SubAdmin/Pages/ProfileSA";
 import MailsSA from "./SubAdmin/Pages/MailsSA";
+import SubAdminCourseTabs from "./SubAdmin/Pages/SubAdminCourseTabs";
 //import teacher
 import CoursesT from "./Teacher/Pages/CoursesT";
 import ProfileT from "./Teacher/Pages/ProfileT";
 import MailsT from "./Teacher/Pages/MailsT";
+import TeacherCourseTabs from "./Teacher/Pages/TeacherCourseTabs";
 //import student
 import CoursesS from "./Student/Pages/CoursesS";
 import ProfileS from "./Student/Pages/ProfileS";
 import MailsS from "./Student/Pages/MailsS";
+import StudentCourseTabs from "./Student/Pages/StudentCourseTabs";
 
 function App() {
   return (
@@ -31,7 +35,6 @@ function App() {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/unAuthenticated" element={<UnAuthenticated />} />
         <Route path="/" element={<LandingPage />} />
-
         {/*protected routes for Admin */}
         <Route
           path="/Admin/Courses"
@@ -54,6 +57,14 @@ function App() {
           element={
             <ProtectedRoute roles={["admin"]}>
               <Mails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Admin/CourseTabs"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <CourseTabs />
             </ProtectedRoute>
           }
         />
@@ -82,6 +93,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/SubAdmin/CourseTabs"
+          element={
+            <ProtectedRoute roles={["subAdmin"]}>
+              <SubAdminCourseTabs />
+            </ProtectedRoute>
+          }
+        />
         {/*protected routes for Teacher */}
         <Route
           path="/Teacher/CoursesT"
@@ -107,6 +126,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/Teacher/CourseTabs"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <TeacherCourseTabs />
+            </ProtectedRoute>
+          }
+        />
         {/*protected routes for Student */}
         <Route
           path="/Student/CoursesS"
@@ -129,6 +156,14 @@ function App() {
           element={
             <ProtectedRoute roles={["student"]}>
               <MailsS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Student/CourseTabs"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <StudentCourseTabs />
             </ProtectedRoute>
           }
         />
