@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Typography,
   Button,
@@ -21,7 +21,6 @@ const LogIn = () => {
     userName: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
