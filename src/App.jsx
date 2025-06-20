@@ -37,7 +37,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         {/*protected routes for Admin */}
         <Route
-          path="/Admin/Courses"
+          path="/Courses"
           element={
             <ProtectedRoute roles={["admin"]}>
               <Courses />
@@ -45,7 +45,7 @@ function App() {
           }
         />
         <Route
-          path="/Admin/Profile"
+          path="/Profile"
           element={
             <ProtectedRoute roles={["admin"]}>
               <Profile />
@@ -53,7 +53,7 @@ function App() {
           }
         />
         <Route
-          path="/Admin/Mails"
+          path="/Mails"
           element={
             <ProtectedRoute roles={["admin"]}>
               <Mails />
@@ -61,7 +61,7 @@ function App() {
           }
         />
         <Route
-          path="/Admin/CourseTabs"
+          path="/CourseTabs"
           element={
             <ProtectedRoute roles={["admin"]}>
               <CourseTabs />
@@ -70,7 +70,7 @@ function App() {
         />
         {/*protected routes for SubAdmin */}
         <Route
-          path="/SubAdmin/CoursesSA"
+          path="/CoursesSA"
           element={
             <ProtectedRoute roles={["subAdmin"]}>
               <CoursesSA />
@@ -78,7 +78,7 @@ function App() {
           }
         />
         <Route
-          path="/SubAdmin/ProfileSA"
+          path="/ProfileSA"
           element={
             <ProtectedRoute roles={["subAdmin"]}>
               <ProfileSA />
@@ -86,7 +86,7 @@ function App() {
           }
         />
         <Route
-          path="/SubAdmin/MailsSA"
+          path="/MailsSA"
           element={
             <ProtectedRoute roles={["subAdmin"]}>
               <MailsSA />
@@ -94,7 +94,7 @@ function App() {
           }
         />
         <Route
-          path="/SubAdmin/CourseTabs"
+          path="/SubAdminCourseTabs"
           element={
             <ProtectedRoute roles={["subAdmin"]}>
               <SubAdminCourseTabs />
@@ -103,7 +103,7 @@ function App() {
         />
         {/*protected routes for Teacher */}
         <Route
-          path="/Teacher/CoursesT"
+          path="/CoursesT"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <CoursesT />
@@ -111,7 +111,7 @@ function App() {
           }
         />
         <Route
-          path="/Teacher/ProfileT"
+          path="/ProfileT"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <ProfileT />
@@ -119,7 +119,7 @@ function App() {
           }
         />
         <Route
-          path="/Teacher/MailsT"
+          path="/MailsT"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <MailsT />
@@ -127,7 +127,7 @@ function App() {
           }
         />
         <Route
-          path="/Teacher/CourseTabs"
+          path="/TeacherCourseTabs"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <TeacherCourseTabs />
@@ -136,7 +136,7 @@ function App() {
         />
         {/*protected routes for Student */}
         <Route
-          path="/Student/CoursesS"
+          path="/CoursesS"
           element={
             <ProtectedRoute roles={["student"]}>
               <CoursesS />
@@ -144,7 +144,7 @@ function App() {
           }
         />
         <Route
-          path="/Student/ProfileS"
+          path="/ProfileS"
           element={
             <ProtectedRoute roles={["student"]}>
               <ProfileS />
@@ -152,7 +152,7 @@ function App() {
           }
         />
         <Route
-          path="/Student/MailsS"
+          path="/MailsS"
           element={
             <ProtectedRoute roles={["student"]}>
               <MailsS />
@@ -160,7 +160,7 @@ function App() {
           }
         />
         <Route
-          path="/Student/CourseTabs"
+          path="/StudentCourseTabs"
           element={
             <ProtectedRoute roles={["student"]}>
               <StudentCourseTabs />

@@ -25,8 +25,9 @@ const SubAdminCourseTabs = () => {
           overflow: "hidden",
           height: "500px",
           width: "700px",
-          marginLeft: "100px",
+          marginLeft: "525px",
           marginTop: "20px",
+          direction: "rtl",
         }}
       >
         <h2

@@ -384,10 +384,17 @@ const LandingPage = () => {
                 container
                 spacing={3}
                 sx={{ direction: "rtl" }}
-                justifyContent="flex-start"
+                justifyContent="center"
               >
                 {courses.map((course, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={course.id}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    key={course.id}
+                    sx={{ marginBottom: "40px" }}
+                  >
                     <Grow in={showCourses} timeout={index * 200 + 500}>
                       <Card
                         sx={{
@@ -401,6 +408,7 @@ const LandingPage = () => {
                             transform: "translateY(-8px)",
                             boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
                           },
+                          margin: "8px",
                         }}
                       >
                         <CardMedia

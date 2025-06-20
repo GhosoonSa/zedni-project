@@ -11,7 +11,7 @@ import {
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { userContext } from "./ContextProvider";
-import backgroundLogIn from "../assets/backgroundLogIn3.png";
+import backgroundLogIn from "../assets/backgroundLogIn4.png";
 import AdminHeader from "../Admin/Components/AdminHeader";
 
 const LogIn = () => {
@@ -91,13 +91,19 @@ const LogIn = () => {
             helperText="كلمة المرور مطلوبة"
           />
           <Typography>
-            <NavLink to="/SignUp" style={{ color: "black" }}>
+            <NavLink
+              to="/SignUp"
+              style={{ color: "black", textDecoration: "none" }}
+            >
               هل نسيت كلمة المرور؟
             </NavLink>
           </Typography>
 
           <Typography>
-            <NavLink to="/SignUp" style={{ color: "black" }}>
+            <NavLink
+              to="/SignUp"
+              style={{ color: "black", textDecoration: "none" }}
+            >
               ليس لديك حساب؟ أنشئ الآن
             </NavLink>
           </Typography>
