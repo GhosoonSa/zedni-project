@@ -57,33 +57,33 @@ const LandingPage = () => {
     {
       id: 1,
       title: "دورة الفقه للمبتدئين",
-      image: "/course.png"
+      image: "/course.png",
     },
     {
       id: 2,
       title: "دورة التجويد المتقدمة",
-      image: "/course.png"
+      image: "/course.png",
     },
     {
       id: 3,
       title: "دورة التفسير الموضوعي",
-      image: "/course.png"
+      image: "/course.png",
     },
     {
       id: 4,
       title: "دورة السيرة النبوية",
-      image: "/course.png"
+      image: "/course.png",
     },
     {
       id: 5,
       title: "دورة العقيدة الإسلامية",
-      image: "/course.png"
+      image: "/course.png",
     },
     {
       id: 6,
       title: "دورة أحكام الأسرة",
-      image: "/course.png"
-    }
+      image: "/course.png",
+    },
   ];
 
   return (
@@ -123,10 +123,10 @@ const LandingPage = () => {
               right: 0,
               bottom: 0,
               background: "rgba(0,0,0,0.03)",
-            }
+            },
           }}
         >
-          <Zoom in={true} style={{ transitionDelay: '100ms' }}>
+          <Zoom in={true} style={{ transitionDelay: "100ms" }}>
             <Box
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 0.88)",
@@ -139,8 +139,8 @@ const LandingPage = () => {
                 animation: "pulse 2s infinite alternate",
                 "@keyframes pulse": {
                   "0%": { transform: "scale(0.95)" },
-                  "100%": { transform: "scale(1)" }
-                }
+                  "100%": { transform: "scale(1)" },
+                },
               }}
             >
               <Typography
@@ -163,11 +163,11 @@ const LandingPage = () => {
           container
           spacing={2}
           justifyContent="flex-start"
-          sx={{ 
-            py: 3, 
+          sx={{
+            py: 3,
             px: 2,
-            maxWidth: '100%',
-            mx: 0
+            maxWidth: "100%",
+            mx: 0,
           }}
         >
           <Grid item>
@@ -181,10 +181,10 @@ const LandingPage = () => {
                   px: 3,
                   transition: "all 0.3s ease",
                   transform: "translateY(0)",
-                  "&:hover": { 
+                  "&:hover": {
                     backgroundColor: "#cf8b45",
                     transform: "translateY(-3px)",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
                   },
                 }}
                 startIcon={<MenuBookIcon sx={{ ml: 1 }} />}
@@ -205,10 +205,10 @@ const LandingPage = () => {
                   px: 3,
                   transition: "all 0.3s ease",
                   transform: "translateY(0)",
-                  "&:hover": { 
+                  "&:hover": {
                     backgroundColor: "#ffe9d6",
                     transform: "translateY(-3px)",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                   },
                 }}
                 startIcon={<InfoIcon sx={{ ml: 1 }} />}
@@ -229,10 +229,10 @@ const LandingPage = () => {
                   px: 3,
                   transition: "all 0.3s ease",
                   transform: "translateY(0)",
-                  "&:hover": { 
+                  "&:hover": {
                     backgroundColor: "#ffe9d6",
                     transform: "translateY(-3px)",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                   },
                 }}
                 startIcon={<ContactPhoneIcon sx={{ ml: 1 }} />}
@@ -254,24 +254,24 @@ const LandingPage = () => {
                   px: 3,
                   py: 4,
                   textAlign: "right",
-                  mx: 'auto',
-                  maxWidth: '95vw',
+                  mx: "auto",
+                  maxWidth: "95vw",
                   mt: 2,
                   borderRadius: 2,
                   transition: "all 0.5s ease",
                   boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
                   "&:hover": {
-                    boxShadow: "0 8px 30px rgba(0,0,0,0.12)"
-                  }
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
+                  },
                 }}
               >
                 <Typography
                   variant="h4"
-                  sx={{ 
-                    color: "#7b3f00", 
-                    fontWeight: "bold", 
+                  sx={{
+                    color: "#7b3f00",
+                    fontWeight: "bold",
                     mb: 2,
-                    textAlign: 'right'
+                    textAlign: "right",
                   }}
                   gutterBottom
                 >
@@ -279,16 +279,18 @@ const LandingPage = () => {
                 </Typography>
                 <Typography
                   variant="body1"
-                  sx={{ 
-                    maxWidth: "800px", 
+                  sx={{
+                    maxWidth: "800px",
                     lineHeight: 2,
-                    fontSize: '1.1rem'
+                    fontSize: "1.1rem",
                   }}
                 >
-                  دورات زدني علماً للعلوم الشرعية والتزكويّة تسعى لتعليم أساسيات العلوم الشرعيّة والتقدم خلال عدة مستويات.
-                  تستوعب دوراتنا فئات عمريّة مختلفة.
+                  دورات زدني علماً للعلوم الشرعية والتزكويّة تسعى لتعليم أساسيات
+                  العلوم الشرعيّة والتقدم خلال عدة مستويات. تستوعب دوراتنا فئات
+                  عمريّة مختلفة.
                   <br />
-                  انطلقت الدورات عام 1446هـ - 2024م مع مجموعة من المدرسات المختصات والمجازات في جامع الإيمان.
+                  انطلقت الدورات عام 1446هـ - 2024م مع مجموعة من المدرسات
+                  المختصات والمجازات في جامع الإيمان.
                 </Typography>
               </Box>
             </Fade>
@@ -299,13 +301,15 @@ const LandingPage = () => {
         <div ref={contactRef}>
           <Collapse in={showContact} timeout={800} unmountOnExit>
             <Grow in={showContact} timeout={1000}>
-              <Box sx={{ 
-                py: 3, 
-                textAlign: "center",
-                mx: 'auto',
-                maxWidth: '95vw',
-                mt: 2,
-              }}>
+              <Box
+                sx={{
+                  py: 3,
+                  textAlign: "center",
+                  mx: "auto",
+                  maxWidth: "95vw",
+                  mt: 2,
+                }}
+              >
                 <Card
                   sx={{
                     maxWidth: 400,
@@ -316,24 +320,28 @@ const LandingPage = () => {
                     transition: "all 0.3s ease",
                     "&:hover": {
                       transform: "scale(1.03)",
-                      boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
-                    }
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                    },
                   }}
                 >
                   <CardContent>
-                    <Typography variant="h6" sx={{ color: "#5a3921" }} gutterBottom>
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "#5a3921" }}
+                      gutterBottom
+                    >
                       رقم التواصل
                     </Typography>
                     <Typography
                       variant="h5"
                       fontWeight="bold"
-                      sx={{ 
+                      sx={{
                         color: "#5a3921",
                         transition: "all 0.3s ease",
                         "&:hover": {
                           color: "#7b3f00",
-                          transform: "scale(1.05)"
-                        }
+                          transform: "scale(1.05)",
+                        },
                       }}
                     >
                       09999998886
@@ -348,19 +356,21 @@ const LandingPage = () => {
         {/* قسم الدورات */}
         <div ref={coursesRef}>
           <Collapse in={showCourses} timeout={800} unmountOnExit>
-            <Box sx={{ 
-              px: 2, 
-              py: 2,
-              mx: 'auto',
-              maxWidth: '95vw',
-              mt: 2,
-            }}>
+            <Box
+              sx={{
+                px: 2,
+                py: 2,
+                mx: "auto",
+                maxWidth: "95vw",
+                mt: 2,
+              }}
+            >
               <Slide direction="right" in={showCourses} timeout={500}>
                 <Typography
                   variant="h4"
-                  sx={{ 
-                    color: "#7b3f00", 
-                    textAlign: "right", 
+                  sx={{
+                    color: "#7b3f00",
+                    textAlign: "right",
                     mb: 3,
                     fontWeight: "bold",
                   }}
@@ -369,7 +379,7 @@ const LandingPage = () => {
                   الدورات الجديدة
                 </Typography>
               </Slide>
-              
+
               <Grid
                 container
                 spacing={3}
@@ -385,12 +395,12 @@ const LandingPage = () => {
                           boxShadow: 3,
                           borderRadius: "16px",
                           overflow: "hidden",
-                          height: '100%',
+                          height: "100%",
                           transition: "all 0.3s ease",
                           "&:hover": {
                             transform: "translateY(-8px)",
-                            boxShadow: "0 15px 30px rgba(0,0,0,0.15)"
-                          }
+                            boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
+                          },
                         }}
                       >
                         <CardMedia
@@ -403,12 +413,12 @@ const LandingPage = () => {
                             borderBottom: "2px solid #e0a96d",
                             transition: "all 0.5s ease",
                             "&:hover": {
-                              transform: "scale(1.05)"
-                            }
+                              transform: "scale(1.05)",
+                            },
                           }}
                         />
-                        <CardContent 
-                          sx={{ 
+                        <CardContent
+                          sx={{
                             textAlign: "center",
                             background: "#fffaf5",
                           }}
@@ -416,14 +426,13 @@ const LandingPage = () => {
                           <Typography
                             variant="h6"
                             fontWeight="bold"
-                            sx={{ 
+                            sx={{
                               color: "#7b3f00",
-                              fontSize:"1.2rem",
+                              fontSize: "1.2rem",
                               transition: "all 0.3s ease",
                               "&:hover": {
-                                color: "#5a3921"
-
-                              }
+                                color: "#5a3921",
+                              },
                             }}
                           >
                             {course.title}

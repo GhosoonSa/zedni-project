@@ -47,7 +47,7 @@ const Header = () => {
         <Stack
           direction="row"
           spacing={2}
-          className="gap-16 items-center h-6 w-xl flex col-span-2 pt-8 ml-28"
+          className="gap-4 items-center h-6 w-xl flex col-span-2 pt-8 ml-40"
         >
           <NavLink
             to="/Admin/Courses"
