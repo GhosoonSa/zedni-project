@@ -167,6 +167,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/student/course/:id" element={<StudentCourseTabs />} />
       </Routes>
     </>
   );

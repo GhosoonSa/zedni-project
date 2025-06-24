@@ -13,7 +13,6 @@ import {
   InputAdornment,
 } from "@mui/material";
 const StudentHeader = () => {
-  const [isHovered, setIsHovered] = useState(false);
   const [isHoveredC, setIsHoveredC] = useState(false);
   const [isHoveredP, setIsHoveredP] = useState(false);
   const [isHoveredM, setIsHoveredM] = useState(false);
