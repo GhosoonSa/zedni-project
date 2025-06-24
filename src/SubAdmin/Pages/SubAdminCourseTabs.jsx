@@ -8,7 +8,7 @@ import SubAdminResultsTab from "../Components/SubAdminResultsTab";
 import SubAdminBooksTab from "../Components/SubAdminBooksTab";
 import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminPosterTab from "../Components/SubAdminPosterTab";
-import { Paper, useMediaQuery, useTheme } from "@mui/material";
+import { Paper, useMediaQuery, useTheme, Box } from "@mui/material";
 
 const SubAdminCourseTabs = () => {
   const [key, setKey] = useState("ClassesPlanTab");
@@ -19,17 +19,36 @@ const SubAdminCourseTabs = () => {
   return (
     <>
       <SubAdminHeader />
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundImage: "url('/backgroundTabs.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          zIndex: -1,
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          },
+        }}
+      />
       <div
         style={{
-          // backgroundImage: `url(${backgroundTabs})`,
-          // backgroundSize: "cover",
-          // backgroundPosition: "center",
           flex: 1,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
           height: isSmallScreen ? "auto" : "500px",
-          width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1300px",
+          width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
           padding: isSmallScreen ? "0 10px" : "0",
         }}
@@ -37,8 +56,10 @@ const SubAdminCourseTabs = () => {
         <h2
           style={{
             marginBottom: "30px",
+            marginRight: "10px",
             fontSize: isSmallScreen ? "1.5rem" : "2rem",
             textAlign: isSmallScreen ? "center" : "right",
+            color: "#7b3f00",
           }}
         >
           course name

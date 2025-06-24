@@ -20,21 +20,39 @@ const CourseTabs = () => {
   return (
     <>
       <AdminHeader />
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundImage: "url('/backgroundTabs.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          zIndex: -1,
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          },
+        }}
+      />
       <div
         style={{
-          // backgroundImage: `url(${backgroundTabs})`,
-          // backgroundSize: "cover",
-          // backgroundPosition: "center",
           flex: 1,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
           height: isSmallScreen ? "auto" : "500px",
-          width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1300px",
+          width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
           padding: isSmallScreen ? "0 10px" : "0",
         }}
-        // className="bg-cover h-screen "
       >
         <h2
           style={{

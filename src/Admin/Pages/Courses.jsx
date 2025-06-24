@@ -132,20 +132,9 @@ const Courses = () => {
   return (
     <>
       <AdminHeader />
-      <div
-        className="bg-cover h-screen "
-        style={{ backgroundImage: `url(${books})` }}
-      >
-        <img
-          src="../public/start.png"
-          alt="arabic font"
-          className="ml-10 pt-20"
-          style={{ width: "600px", height: "600px", marginRight: "700px" }}
-        />
-      </div>
 
       {/* add course */}
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "100px" }}>
         <div>
           <Button
             variant="outlined"
