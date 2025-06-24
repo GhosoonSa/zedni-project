@@ -4,23 +4,24 @@ import axios from "axios";
 import AdminHeader from "../Components/AdminHeader";
 import books from "/77221.jpg";
 import {
-  Box,
   Typography,
   Button,
   Grid,
   Card,
   CardContent,
   CardMedia,
-  Collapse,
-  Zoom,
-  Fade,
-  Grow,
-  Slide,
+  Paper,
 } from "@mui/material";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import AddCourse from "../Components/AddCourse";
 
 const Courses = () => {
   // const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const status = ["الجديدة", "الحالية", "السابقة"];
   const courses = [
     {
@@ -54,6 +55,42 @@ const Courses = () => {
       image: "/course.png",
     },
   ];
+
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   useEffect(() => {
     // fetch courses
     const fetchCourses = async () => {
@@ -96,19 +133,61 @@ const Courses = () => {
     <>
       <AdminHeader />
       <div
-        className="bg-cover h-screen w-screen"
+        className="bg-cover h-screen "
         style={{ backgroundImage: `url(${books})` }}
       >
         <img
           src="../public/start.png"
           alt="arabic font"
           className="ml-10 pt-20"
-          style={{ width: "600px", height: "600px" }}
+          style={{ width: "600px", height: "600px", marginRight: "700px" }}
         />
       </div>
+
+      {/* add course */}
       <div style={{ marginTop: "20px" }}>
+        <div>
+          <Button
+            variant="outlined"
+            onClick={() => setIsModalOpen(true)}
+            sx={{
+              backgroundColor: "#E7BC91",
+              color: "black",
+              border: "#DAE2ED",
+              marginRight: "50px",
+              "&:hover": { borderColor: "#8B5E34" },
+            }}
+            size="large"
+          >
+            إضافة دورة
+          </Button>
+          <AddCourse
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+            }}
+            //token={token}
+          />
+        </div>
+
+        {/* show courses */}
+        <Typography variant="h2" sx={{ marginRight: "50px", marginTop: 4 }}>
+          الدورات
+        </Typography>
         {status.map((status) => (
-          <div key={status}>
+          <Paper
+            key={status}
+            elevation={3}
+            sx={{
+              marginTop: 4,
+              marginBottom: 4,
+              marginLeft: 4,
+              marginRight: 4,
+              padding: 3,
+              direction: "rtl",
+              backgroundColor: "#fffaf5",
+            }}
+          >
             <h3
               className={`m-20 ${status.toLowerCase()}`}
               style={{
@@ -127,6 +206,7 @@ const Courses = () => {
                 justifyContent="center"
               >
                 {courses.map((course, index) => (
+                  // <Slider {...settings}>
                   <Grid
                     item
                     xs={12}
@@ -153,7 +233,7 @@ const Courses = () => {
                     >
                       <CardMedia
                         component="img"
-                        height="200"
+                        height="140"
                         image={course.image}
                         alt={course.title}
                         sx={{
@@ -188,10 +268,11 @@ const Courses = () => {
                       </CardContent>
                     </Card>
                   </Grid>
+                  // </Slider>
                 ))}
               </Grid>
             </div>
-          </div>
+          </Paper>
         ))}
       </div>
     </>

@@ -10,11 +10,7 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Collapse,
-  Zoom,
-  Fade,
-  Grow,
-  Slide,
+  Paper,
 } from "@mui/material";
 import SubAdminHeader from "../Components/SubAdminHeader";
 
@@ -61,104 +57,119 @@ const CoursesSA = () => {
     <>
       <SubAdminHeader />
       <div
-        className="bg-cover h-screen w-screen"
+        className="bg-cover h-screen"
         style={{ backgroundImage: `url(${books})` }}
       >
         <img
           src="../public/start.png"
           alt="arabic font"
-          className="ml-10 pt-20"
-          style={{ width: "600px", height: "600px" }}
+          className="mr-10 pt-20"
+          style={{ width: "600px", height: "600px", marginRight: "700px" }}
         />
       </div>
+
       <div style={{ marginTop: "20px" }}>
         {status.map((status) => (
-          <div key={status}>
-            <h3
-              className={`m-20 ${status.toLowerCase()}`}
-              style={{
-                marginBottom: "40px",
-                marginTop: "20px",
-                direction: "rtl",
-              }}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </h3>
-            <div>
-              <Grid
-                container
-                spacing={3}
-                sx={{ direction: "rtl", maxWidth: "90vw" }}
-                justifyContent="center"
+          <Paper
+            key={status}
+            elevation={3}
+            sx={{
+              marginTop: 4,
+              marginBottom: 4,
+              marginLeft: 4,
+              marginRight: 4,
+              padding: 3,
+              direction: "rtl",
+              backgroundColor: "#fffaf5",
+            }}
+          >
+            <div key={status}>
+              <h3
+                className={`m-20 ${status.toLowerCase()}`}
+                style={{
+                  marginBottom: "40px",
+                  marginTop: "20px",
+                  direction: "rtl",
+                }}
               >
-                {courses.map((course, index) => (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    key={course.id}
-                    sx={{ marginBottom: "40px" }}
-                  >
-                    <Card
-                      sx={{
-                        backgroundColor: "#fffaf5",
-                        boxShadow: 3,
-                        borderRadius: "16px",
-                        overflow: "hidden",
-                        height: "100%",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          transform: "translateY(-8px)",
-                          boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
-                        },
-                        margin: "8px",
-                      }}
-                      onClick={handleChoose}
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </h3>
+              <div>
+                <Grid
+                  container
+                  spacing={3}
+                  sx={{ direction: "rtl", maxWidth: "90vw" }}
+                  justifyContent="center"
+                >
+                  {courses.map((course, index) => (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      key={course.id}
+                      sx={{ marginBottom: "40px" }}
                     >
-                      <CardMedia
-                        component="img"
-                        height="200"
-                        image={course.image}
-                        alt={course.title}
+                      <Card
                         sx={{
-                          objectFit: "cover",
-                          borderBottom: "2px solid #e0a96d",
-                          transition: "all 0.5s ease",
+                          backgroundColor: "#fffaf5",
+                          boxShadow: 3,
+                          borderRadius: "16px",
+                          overflow: "hidden",
+                          height: "100%",
+                          transition: "all 0.3s ease",
                           "&:hover": {
-                            transform: "scale(1.05)",
+                            transform: "translateY(-8px)",
+                            boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
                           },
+                          margin: "8px",
                         }}
-                      />
-                      <CardContent
-                        sx={{
-                          textAlign: "center",
-                          background: "#fffaf5",
-                        }}
+                        onClick={handleChoose}
                       >
-                        <Typography
-                          variant="h6"
-                          fontWeight="bold"
+                        <CardMedia
+                          component="img"
+                          height="200"
+                          image={course.image}
+                          alt={course.title}
                           sx={{
-                            color: "#7b3f00",
-                            fontSize: "1.2rem",
-                            transition: "all 0.3s ease",
+                            objectFit: "cover",
+                            borderBottom: "2px solid #e0a96d",
+                            transition: "all 0.5s ease",
                             "&:hover": {
-                              color: "#5a3921",
+                              transform: "scale(1.05)",
                             },
                           }}
+                        />
+                        <CardContent
+                          sx={{
+                            textAlign: "center",
+                            background: "#fffaf5",
+                          }}
                         >
-                          {course.title}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
+                          <Typography
+                            variant="h6"
+                            fontWeight="bold"
+                            sx={{
+                              color: "#7b3f00",
+                              fontSize: "1.2rem",
+                              transition: "all 0.3s ease",
+                              "&:hover": {
+                                color: "#5a3921",
+                              },
+                            }}
+                          >
+                            {course.title}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
             </div>
-          </div>
+          </Paper>
         ))}
-      </div>{" "}
+      </div>
     </>
   );
 };

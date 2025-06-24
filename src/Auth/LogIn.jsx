@@ -1,13 +1,6 @@
 import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
-import {
-  Typography,
-  Button,
-  Stack,
-  TextField,
-  Box,
-  MenuItem,
-} from "@mui/material";
+import { Typography, Button, Stack, TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { userContext } from "./ContextProvider";
@@ -59,7 +52,6 @@ const LogIn = () => {
             display: "flex",
             padding: "50px",
           }}
-          className="w-screen"
         >
           <Typography variant="h5"> مرحباً بعودتك</Typography>
 

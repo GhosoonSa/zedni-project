@@ -61,7 +61,7 @@ const SignUp = () => {
 
   const renderAdditionalFields = () => {
     switch (formData.accountType) {
-      case "cordinator":
+      case "subAdmin":
         return (
           <>
             <TextareaAutosize
@@ -72,6 +72,9 @@ const SignUp = () => {
                 height: 37,
                 borderRadius: "3px",
                 border: "1px solid #DAE2ED",
+                "&:focus": {
+                  border: "1px solid #fb8c00",
+                },
               }}
               onMouseEnter={(e) => (e.target.style.borderColor = "#434D5B")}
               onMouseLeave={(e) => (e.target.style.borderColor = "#DAE2ED")}
@@ -90,6 +93,9 @@ const SignUp = () => {
                 height: 37,
                 borderRadius: "3px",
                 border: "1px solid #DAE2ED",
+                "&:focus": {
+                  border: "1px solid #fb8c00",
+                },
               }}
               onMouseEnter={(e) => (e.target.style.borderColor = "#434D5B")}
               onMouseLeave={(e) => (e.target.style.borderColor = "#DAE2ED")}
@@ -108,6 +114,9 @@ const SignUp = () => {
                 height: 37,
                 borderRadius: "3px",
                 border: "1px solid #DAE2ED",
+                "&:focus": {
+                  border: "1px solid #fb8c00",
+                },
               }}
               onMouseEnter={(e) => (e.target.style.borderColor = "#434D5B")}
               onMouseLeave={(e) => (e.target.style.borderColor = "#DAE2ED")}
@@ -127,6 +136,9 @@ const SignUp = () => {
                 height: 37,
                 borderRadius: "3px",
                 border: "1px solid #DAE2ED",
+                "&:focus": {
+                  border: "1px solid #fb8c00",
+                },
               }}
               onMouseEnter={(e) => (e.target.style.borderColor = "#434D5B")}
               onMouseLeave={(e) => (e.target.style.borderColor = "#DAE2ED")}
@@ -155,14 +167,13 @@ const SignUp = () => {
             minHeight: "100vh",
             display: "flex",
           }}
-          className="w-screen"
         >
           <Typography variant="h5" style={{ marginTop: "60px" }}>
             إنشاء حساب
           </Typography>
 
-          <Stack direction="row" spacing={5}>
-            <Stack direction="column" spacing={2} sx={{ marginLeft: "550px" }}>
+          <Stack direction="row" spacing={0}>
+            <Stack direction="column" spacing={2}>
               <TextField
                 required
                 name="userName"
@@ -180,6 +191,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr", marginRight: 2 }}
+                color="warning"
               />
               <TextField
                 required
@@ -198,6 +211,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
               <TextField
                 required
@@ -216,6 +231,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
               <TextField
                 required
@@ -234,6 +251,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
               <TextField
                 required
@@ -252,6 +271,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
               <TextField
                 required
@@ -270,6 +291,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
             </Stack>
             <Stack direction="column" spacing={2}>
@@ -290,6 +313,8 @@ const SignUp = () => {
                     ),
                   },
                 }}
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
               <FormControlLabel
                 control={<Checkbox />}
@@ -304,11 +329,13 @@ const SignUp = () => {
                   label="اختاري نوع الحساب"
                   variant="standard"
                   select
+                  defaultValue=""
                   name="accountType"
                   onChange={handleChange}
                   fullWidth
+                  color="warning"
                 >
-                  <MenuItem value="cordinator">مشرف</MenuItem>
+                  <MenuItem value="subAdmin">مشرف</MenuItem>
                   <MenuItem value="teacher">أستاذ</MenuItem>
                   <MenuItem value="student">طالب</MenuItem>
                 </TextField>
@@ -326,6 +353,8 @@ const SignUp = () => {
                 size="small"
                 onChange={handleChange}
                 helperText="كلمة المرور مطلوبة"
+                sx={{ direction: "ltr" }}
+                color="warning"
               />
             </Stack>
           </Stack>
@@ -334,7 +363,7 @@ const SignUp = () => {
             type="submit"
             // onClick={handleLogin}
             variant="outlined"
-            color="primary"
+            color="warning"
           >
             إنشاء حساب
           </Button>

@@ -8,9 +8,14 @@ import SubAdminResultsTab from "../Components/SubAdminResultsTab";
 import SubAdminBooksTab from "../Components/SubAdminBooksTab";
 import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminPosterTab from "../Components/SubAdminPosterTab";
+import { Paper, useMediaQuery, useTheme } from "@mui/material";
 
 const SubAdminCourseTabs = () => {
   const [key, setKey] = useState("ClassesPlanTab");
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
+
   return (
     <>
       <SubAdminHeader />
@@ -23,53 +28,66 @@ const SubAdminCourseTabs = () => {
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          height: "500px",
-          width: "700px",
-          marginLeft: "525px",
-          marginTop: "20px",
-          direction: "rtl",
+          height: isSmallScreen ? "auto" : "500px",
+          width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1300px",
+          margin: isSmallScreen ? "20px auto" : "100px auto",
+          padding: isSmallScreen ? "0 10px" : "0",
         }}
       >
         <h2
           style={{
             marginBottom: "30px",
+            fontSize: isSmallScreen ? "1.5rem" : "2rem",
+            textAlign: isSmallScreen ? "center" : "right",
           }}
         >
           course name
         </h2>
-        <Tabs
-          id="courseTab"
-          activeKey={key}
-          onSelect={(k) => setKey(k)}
-          className="mb-3 items-center"
-          justify
+        <Paper
+          // key={Course.id}
+          elevation={3}
+          sx={{
+            marginTop: isSmallScreen ? 2 : 4,
+            marginBottom: isSmallScreen ? 2 : 4,
+            marginLeft: isSmallScreen ? 0 : 4,
+            padding: isSmallScreen ? 2 : 3,
+            backgroundColor: "#fffaf5",
+          }}
         >
-          <Tab eventKey="ClassesPlanTab" title="الإعلانات ">
-            <div style={{ flex: 1, overflow: "auto" }}>
-              <SubAdminPosterTab />
-            </div>
-          </Tab>
-          <Tab eventKey="SubjectsTab" title="طلبات الانضمام">
-            <div style={{ flex: 1, overflow: "auto" }}>
-              <SubAdminJoiningRequestsTab />
-            </div>
-          </Tab>
-          <Tab eventKey="PeopleTab" title="الكتب">
-            <div style={{ flex: 1, overflow: "auto" }}>
-              <SubAdminBooksTab />
-            </div>
-          </Tab>
-          <Tab eventKey="ResultsTab" title="الطلاب">
-            <div style={{ flex: 1, overflow: "auto" }}>
-              <SubAdminPeopleTab />
-            </div>
-          </Tab>
-          <Tab eventKey="JoiningRequestsTab" title="النتائج ">
-            <div style={{ flex: 1, overflow: "auto" }}>
-              <SubAdminResultsTab />
-            </div>
-          </Tab>
-        </Tabs>
+          <Tabs
+            id="courseTab"
+            activeKey={key}
+            onSelect={(k) => setKey(k)}
+            className="mb-3 items-center"
+            justify
+          >
+            <Tab eventKey="ClassesPlanTab" title="الإعلانات ">
+              <div style={{ flex: 1, overflow: "auto" }}>
+                <SubAdminPosterTab />
+              </div>
+            </Tab>
+            <Tab eventKey="SubjectsTab" title="طلبات الانضمام">
+              <div style={{ flex: 1, overflow: "auto" }}>
+                <SubAdminJoiningRequestsTab />
+              </div>
+            </Tab>
+            <Tab eventKey="PeopleTab" title="الكتب">
+              <div style={{ flex: 1, overflow: "auto" }}>
+                <SubAdminBooksTab />
+              </div>
+            </Tab>
+            <Tab eventKey="ResultsTab" title="الطلاب">
+              <div style={{ flex: 1, overflow: "auto" }}>
+                <SubAdminPeopleTab />
+              </div>
+            </Tab>
+            <Tab eventKey="JoiningRequestsTab" title="النتائج ">
+              <div style={{ flex: 1, overflow: "auto" }}>
+                <SubAdminResultsTab />
+              </div>
+            </Tab>
+          </Tabs>
+        </Paper>
       </div>
     </>
   );

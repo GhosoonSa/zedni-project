@@ -46,23 +46,14 @@ const TeacherHeader = () => {
           isScrolled ? "bg-amber-100 py-1 h-14" : "py-2"
         }`}
       >
-        <Stack
-          direction="row"
-          spacing={2}
-          className="col-span-1 gap-4 items-center h-8 w-xl flex pt-8 ml-24"
-        >
-          <Button onClick={handleSignIn} style={{ color: "#BC8A5F" }}>
-            إنشاء حساب
-          </Button>
-          <Button onClick={handleLogIn} style={{ color: "#BC8A5F" }}>
-            تسجيل دخول
-          </Button>
+        <Stack className="col-span-1 h-6 w-xl flex pt-6 mr-20">
+          <img src="/small-logo.png" alt="logo" className="w-24 ml-28" />
         </Stack>
 
         <Stack
           direction="row"
           spacing={2}
-          className="gap-16 items-center h-6 w-xl flex col-span-2 pt-8 ml-28"
+          className="gap-6 items-center h-6 w-xl flex col-span-2 pt-8 mr-40"
         >
           <NavLink
             to="/CoursesT"
@@ -101,7 +92,7 @@ const TeacherHeader = () => {
             onMouseEnter={() => setIsHoveredM(true)}
             onMouseLeave={() => setIsHoveredM(false)}
           >
-            اليريد
+            البريد
           </NavLink>
           <NavLink
             to="/MailsT"
@@ -117,8 +108,18 @@ const TeacherHeader = () => {
             الطلاب
           </NavLink>
         </Stack>
-        <Stack className="col-span-1 h-6 w-xl flex pt-6 ml-16">
-          <img src="/small-logo.png" alt="logo" className="w-24 ml-28" />
+
+        <Stack
+          direction="row"
+          spacing={2}
+          className="col-span-1 gap-2 items-center h-8 w-xl flex pt-8 mr-24"
+        >
+          <Button onClick={handleSignIn} style={{ color: "#BC8A5F" }}>
+            إنشاء حساب
+          </Button>
+          <Button onClick={handleLogIn} style={{ color: "#BC8A5F" }}>
+            تسجيل دخول
+          </Button>
         </Stack>
       </nav>
     </>
