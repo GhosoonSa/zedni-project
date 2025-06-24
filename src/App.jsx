@@ -133,6 +133,15 @@ function App() {
               <TeacherCourseTabs />
             </ProtectedRoute>
           }
+           />
+        <Route
+  path="/teacher/course/:id"
+  element={
+    <ProtectedRoute roles={["teacher"]}>
+      <TeacherCourseTabs />
+    </ProtectedRoute>
+  }
+          
         />
         {/*protected routes for Student */}
         <Route

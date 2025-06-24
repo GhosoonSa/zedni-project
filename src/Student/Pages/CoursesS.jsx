@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import StudentHeader from "../Components/StudentHeader";
 import CourseCard from "../Components/CourseCard";
@@ -14,7 +13,6 @@ import {
   Stack,
   Paper
 } from "@mui/material";
-
 const CoursesS = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -56,7 +54,7 @@ const CoursesS = () => {
       <CssBaseline />
       <StudentHeader />
       
-      {/* الهيكل الرئيسي باستخدام Stack */}
+      {}
       <Stack 
         direction="column" 
         sx={{ 
@@ -65,7 +63,7 @@ const CoursesS = () => {
           direction: 'rtl'
         }}
       >
-        {/* الخلفية التي تمتد لكل الشاشة */}
+        {}
         <Box sx={{
           position: 'fixed',
           top: 0,
@@ -84,11 +82,11 @@ const CoursesS = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(248, 244, 233, 0.8)', // تدرج بيج مع شفافية
+            backgroundColor: 'rgba(248, 244, 233, 0.8)', 
           },
         }} />
         
-        {/* المحتوى الرئيسي داخل Paper */}
+        {}
         <Paper 
           elevation={4}
           sx={{
