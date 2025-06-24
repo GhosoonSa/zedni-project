@@ -8,21 +8,21 @@ import {
   Fade,
   Tabs,
   Tab,
-  Container,
   CssBaseline,
   Stack,
   Paper
 } from "@mui/material";
+
 const CoursesS = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
   const enrolledCourses = [
-    { id: 1, title: "دورة الفقه للمبتدئين", image: "/course.png" },
+    { id: 1, title: "دورة الفقه للمبتدئين", image: "/course.png", delay: "100ms" },
   ];
 
   const newCourses = [
-    { id: 5, title: "دورة التفسير الموضوعي", image: "/course.png" },
-    { id: 6, title: "دورة التفسير الموضوعي", image: "/course.png" },
+    { id: 5, title: "دورة التفسير الموضوعي", image: "/course.png", delay: "200ms" },
+    { id: 6, title: "دورة التفسير الموضوعي", image: "/course.png", delay: "300ms" },
   ];
 
   const handleChange = (event, newValue) => {
@@ -54,7 +54,6 @@ const CoursesS = () => {
       <CssBaseline />
       <StudentHeader />
       
-      {}
       <Stack 
         direction="column" 
         sx={{ 
@@ -63,7 +62,6 @@ const CoursesS = () => {
           direction: 'rtl'
         }}
       >
-        {}
         <Box sx={{
           position: 'fixed',
           top: 0,
@@ -82,16 +80,16 @@ const CoursesS = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(248, 244, 233, 0.8)', 
+            background: "linear-gradient(135deg, rgba(255, 253, 248, 0.92) 0%, rgba(252, 250, 245, 0.92) 100%)",
+            backdropFilter: "blur(2px)",
           },
         }} />
         
-        {}
         <Paper 
           elevation={4}
           sx={{
             flexGrow: 1,
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderRadius: 4,
             m: { xs: 2, sm: 3, md: 4 },
             p: { xs: 2, sm: 3, md: 4 },
@@ -100,6 +98,10 @@ const CoursesS = () => {
             alignSelf: 'center',
             mt: { xs: '80px', md: '100px' },
             mb: 4,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              boxShadow: '0 8px 32px rgba(122, 81, 22, 0.2)',
+            }
           }}
         >
           <Fade in timeout={1000}>
@@ -116,6 +118,10 @@ const CoursesS = () => {
                   "& .MuiTab-root": {
                     fontWeight: "bold",
                     color: "#5a3e1b",
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      color: '#7b3f00',
+                    }
                   },
                   direction: 'rtl'
                 }}
@@ -125,31 +131,43 @@ const CoursesS = () => {
               </Tabs>
 
               {tabIndex === 0 && (
-                <>
-                  <Typography variant="h6" sx={{
-                    mb: 3,
-                    color: "#7b3f00",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                  }}>
-                    دوراتي الحالية
-                  </Typography>
-                  {renderCourses(enrolledCourses)}
-                </>
+                <Fade in timeout={800}>
+                  <div>
+                    <Typography variant="h6" sx={{
+                      mb: 3,
+                      color: "#7b3f00",
+                      fontWeight: "bold",
+                      textAlign: "right",
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateX(-5px)'
+                      }
+                    }}>
+                      دوراتي الحالية
+                    </Typography>
+                    {renderCourses(enrolledCourses)}
+                  </div>
+                </Fade>
               )}
 
               {tabIndex === 1 && (
-                <>
-                  <Typography variant="h6" sx={{
-                    mb: 3,
-                    color: "#7b3f00",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                  }}>
-                    الدورات الجديدة
-                  </Typography>
-                  {renderCourses(newCourses)}
-                </>
+                <Fade in timeout={800}>
+                  <div>
+                    <Typography variant="h6" sx={{
+                      mb: 3,
+                      color: "#7b3f00",
+                      fontWeight: "bold",
+                      textAlign: "right",
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateX(-5px)'
+                      }
+                    }}>
+                      الدورات الجديدة
+                    </Typography>
+                    {renderCourses(newCourses)}
+                  </div>
+                </Fade>
               )}
             </Box>
           </Fade>

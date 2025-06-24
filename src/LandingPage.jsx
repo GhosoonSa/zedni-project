@@ -52,7 +52,6 @@ const LandingPage = () => {
     }
   };
 
-  // بيانات الدورات التجريبية
   const courses = [
     {
       id: 1,
@@ -101,7 +100,7 @@ const LandingPage = () => {
           mx: 0,
         }}
       >
-        {/* قسم الترحيب */}
+        {}
         <Box
           sx={{
             backgroundImage: `url('/Landing.jpg')`,
@@ -158,7 +157,7 @@ const LandingPage = () => {
           </Zoom>
         </Box>
 
-        {/* أزرار التنقل */}
+        {}
         <Grid
           container
           spacing={2}
@@ -244,7 +243,7 @@ const LandingPage = () => {
           </Grid>
         </Grid>
 
-        {/* قسم من نحن */}
+        {}
         <div ref={aboutRef}>
           <Collapse in={showAbout} timeout={800} unmountOnExit>
             <Fade in={showAbout} timeout={1000}>
@@ -297,7 +296,7 @@ const LandingPage = () => {
           </Collapse>
         </div>
 
-        {/* قسم التواصل */}
+        {}
         <div ref={contactRef}>
           <Collapse in={showContact} timeout={800} unmountOnExit>
             <Grow in={showContact} timeout={1000}>
@@ -353,7 +352,7 @@ const LandingPage = () => {
           </Collapse>
         </div>
 
-        {/* قسم الدورات */}
+        {}
         <div ref={coursesRef}>
           <Collapse in={showCourses} timeout={800} unmountOnExit>
             <Box

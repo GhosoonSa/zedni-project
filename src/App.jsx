@@ -133,7 +133,7 @@ function App() {
               <TeacherCourseTabs />
             </ProtectedRoute>
           }
-           />
+            />
         <Route
   path="/teacher/course/:id"
   element={

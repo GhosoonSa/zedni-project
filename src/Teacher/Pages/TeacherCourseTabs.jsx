@@ -46,8 +46,8 @@ const TeacherCourseTabs = () => {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(248, 240, 227, 0.85)", 
-            background: "linear-gradient(135deg, rgba(248, 240, 227, 0.9) 0%, rgba(232, 221, 203, 0.9) 100%)",
+            background: "linear-gradient(135deg, rgba(255, 253, 248, 0.92) 0%, rgba(252, 250, 245, 0.92) 100%)",
+            backdropFilter: "blur(2px)",
           },
         }}
       />

@@ -43,7 +43,6 @@ const CoursesT = () => {
       id: 4, 
       title: "دورة التفسير الموضوعي", 
       image: "/course.png",
-      isNew: true,
       delay: "100ms"
     }
   ];
@@ -118,30 +117,29 @@ const CoursesT = () => {
           direction: 'rtl'
         }}
       >
-        {}
-      <Box sx={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  backgroundImage: "url('/backgroundTabs.jpg')",
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundAttachment: 'fixed',
-  zIndex: -1,
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: "linear-gradient(135deg, rgba(248, 240, 227, 0.9) 0%, rgba(232, 221, 203, 0.9) 100%)",
-  },
-}} />
+        <Box sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundImage: "url('/backgroundTabs.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          zIndex: -1,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: "linear-gradient(135deg, rgba(255, 253, 248, 0.92) 0%, rgba(252, 250, 245, 0.92) 100%)",
+            backdropFilter: "blur(2px)",
+          },
+        }} />
         
-        {}
         <Paper 
           elevation={4}
           sx={{
@@ -155,6 +153,10 @@ const CoursesT = () => {
             alignSelf: 'center',
             mt: { xs: '80px', md: '100px' },
             mb: 4,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              boxShadow: '0 8px 32px rgba(122, 81, 22, 0.2)',
+            }
           }}
         >
           <Fade in timeout={1000}>
@@ -171,6 +173,10 @@ const CoursesT = () => {
                   "& .MuiTab-root": {
                     fontWeight: "bold",
                     color: "#5a3e1b",
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      color: '#7b3f00',
+                    }
                   },
                   direction: 'rtl'
                 }}
@@ -180,31 +186,43 @@ const CoursesT = () => {
               </Tabs>
 
               {tabIndex === 0 && (
-                <>
-                  <Typography variant="h6" sx={{
-                    mb: 3,
-                    color: "#7b3f00",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                  }}>
-                    الدورات الحالية
-                  </Typography>
-                  {renderCourses(currentCourses)}
-                </>
+                <Fade in timeout={800}>
+                  <div>
+                    <Typography variant="h6" sx={{
+                      mb: 3,
+                      color: "#7b3f00",
+                      fontWeight: "bold",
+                      textAlign: "right",
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateX(-5px)'
+                      }
+                    }}>
+                      الدورات الحالية
+                    </Typography>
+                    {renderCourses(currentCourses)}
+                  </div>
+                </Fade>
               )}
 
               {tabIndex === 1 && (
-                <>
-                  <Typography variant="h6" sx={{
-                    mb: 3,
-                    color: "#7b3f00",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                  }}>
-                    الدورات الجديدة
-                  </Typography>
-                  {renderCourses(newCourses)}
-                </>
+                <Fade in timeout={800}>
+                  <div>
+                    <Typography variant="h6" sx={{
+                      mb: 3,
+                      color: "#7b3f00",
+                      fontWeight: "bold",
+                      textAlign: "right",
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateX(-5px)'
+                      }
+                    }}>
+                      الدورات الجديدة
+                    </Typography>
+                    {renderCourses(newCourses)}
+                  </div>
+                </Fade>
               )}
             </Box>
           </Fade>
@@ -214,4 +232,4 @@ const CoursesT = () => {
   );
 };
 
-export default CoursesT; 
+export default CoursesT;
