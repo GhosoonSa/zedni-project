@@ -66,7 +66,15 @@ function App() {
             <ProtectedRoute roles={["admin"]}>
               <CourseTabs />
             </ProtectedRoute>
-          }
+          } 
+          />
+            <Route
+  path="/admin/course/:id"
+  element={
+    <ProtectedRoute roles={["admin"]}>
+      <CourseTabs />
+    </ProtectedRoute>
+  }
         />
         {/*protected routes for SubAdmin */}
         <Route

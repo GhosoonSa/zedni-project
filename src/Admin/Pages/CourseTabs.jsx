@@ -1,18 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+
 import ClassesPlanTab from "../Components/ClassesPlanTab";
 import JoiningRequestsTab from "../Components/JoiningRequestsTab";
 import PeopleTab from "../Components/PeopleTab";
 import ResultsTab from "../Components/ResultsTab";
 import SubjectsTab from "../Components/SubjectsTab";
 import AdminHeader from "../Components/AdminHeader";
+
 import backgroundTabs from "/backgroundTabs.jpg";
-import { Paper, useMediaQuery, useTheme } from "@mui/material";
+
+import {
+  Paper,
+  useMediaQuery,
+  useTheme,
+  Box,
+  Typography,
+} from "@mui/material";
 
 const CourseTabs = () => {
-  const [key, setKey] = useState("ClassesPlanTab");
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+
+  const tabParam = params.get("tab");
+  const levelParam = params.get("level");
+  const courseNameParam = params.get("courseName");
+
+  const courseName = courseNameParam
+    ? decodeURIComponent(courseNameParam)
+    : "اسم الدورة";
+
+  const [key, setKey] = useState(
+    tabParam === "joining" ? "JoiningRequestsTab" : "ClassesPlanTab"
+  );
+
+  useEffect(() => {
+    if (tabParam === "joining") setKey("JoiningRequestsTab");
+  }, [tabParam]);
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
@@ -20,6 +48,7 @@ const CourseTabs = () => {
   return (
     <>
       <AdminHeader />
+
       <Box
         sx={{
           position: "fixed",
@@ -27,21 +56,14 @@ const CourseTabs = () => {
           left: 0,
           width: "100vw",
           height: "100vh",
-          backgroundImage: "url('/backgroundTabs.jpg')",
+          backgroundImage: `url('${backgroundTabs}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
           zIndex: -1,
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-          },
         }}
       />
+
       <div
         style={{
           flex: 1,
@@ -54,23 +76,25 @@ const CourseTabs = () => {
           padding: isSmallScreen ? "0 10px" : "0",
         }}
       >
-        <h2
-          style={{
-            marginBottom: "30px",
-            fontSize: isSmallScreen ? "1.5rem" : "2rem",
+        <Typography
+          variant={isSmallScreen ? "h5" : "h4"}
+          sx={{
+            mb: 3,
             textAlign: isSmallScreen ? "center" : "right",
+            fontWeight: "bold",
           }}
         >
-          اسم الدورة
-        </h2>
+          {courseName}
+          {levelParam && ` – المستوى ${levelParam}`}
+        </Typography>
+
         <Paper
-          // key={Course.id}
           elevation={3}
           sx={{
-            marginTop: isSmallScreen ? 2 : 4,
-            marginBottom: isSmallScreen ? 2 : 4,
-            marginLeft: isSmallScreen ? 0 : 4,
-            padding: isSmallScreen ? 2 : 3,
+            mt: isSmallScreen ? 2 : 4,
+            mb: isSmallScreen ? 2 : 4,
+            ml: isSmallScreen ? 0 : 4,
+            p: isSmallScreen ? 2 : 3,
             backgroundColor: "#fffaf5",
           }}
         >
@@ -78,33 +102,20 @@ const CourseTabs = () => {
             id="courseTab"
             activeKey={key}
             onSelect={(k) => setKey(k)}
-            className="mb-3 items-center"
+            className="mb-3"
             justify
           >
             <Tab eventKey="ClassesPlanTab" title="الخطة الدرسية">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <ClassesPlanTab />
-              </div>
+              <ClassesPlanTab level={levelParam} />
             </Tab>
             <Tab eventKey="SubjectsTab" title="المواد">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <SubjectsTab />
-              </div>
+              <SubjectsTab level={levelParam} />
             </Tab>
             <Tab eventKey="PeopleTab" title="الطلاب">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <PeopleTab />
-              </div>
+              <PeopleTab />
             </Tab>
             <Tab eventKey="ResultsTab" title="النتائج">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <ResultsTab />
-              </div>
-            </Tab>
-            <Tab eventKey="JoiningRequestsTab" title="طلبات الانضمام">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <JoiningRequestsTab />
-              </div>
+              <ResultsTab />
             </Tab>
           </Tabs>
         </Paper>
