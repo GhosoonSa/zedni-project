@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Card,
   CardMedia,
@@ -6,120 +6,167 @@ import {
   Typography,
   Zoom,
   Box,
+  Button,
+  Snackbar,
+  Alert,
+  Stack,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const ANIMATION_DURATION = 400; 
-const HOVER_SCALE        = 1.05;
-const CLICK_SCALE        = 1.07;  
-const IMG_HOVER_SCALE    = 1.10;  
-const IMG_CLICK_SCALE    = 1.15;  
-const CourseCard = ({ course }) => {
+const ANIMATION_DURATION = 400;
+const HOVER_SCALE = 1.05;
+const CLICK_SCALE = 1.07;
+const IMG_HOVER_SCALE = 1.1;
+const IMG_CLICK_SCALE = 1.15;
+
+const CourseCard = ({ course, isNew = false }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackPosition, setSnackPosition] = useState({ top: 0 });
+  const cardRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    if (clicked) return;              
-    setClicked(true);                 
+  const handleCardClick = () => {
+    if (clicked || isNew) return;
+    setClicked(true);
     setTimeout(() => {
       navigate(`/student/course/${course.id}`, { state: { course } });
-    }, ANIMATION_DURATION);           
-    };
+    }, ANIMATION_DURATION);
+  };
 
-  const cardScale = clicked
-    ? CLICK_SCALE
-    : hovered
-    ? HOVER_SCALE
-    : 1;
+  const handleJoinClick = (e) => {
+    e.stopPropagation();
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setSnackPosition({
+        top: rect.height + 32,
+      });
+    }
+    setSnackOpen(true);
+  };
 
-  const imgScale = clicked
-    ? IMG_CLICK_SCALE
-    : hovered
-    ? IMG_HOVER_SCALE
-    : 1;
+  const handleSnackClose = (_, reason) => {
+    if (reason === "clickaway") return;
+    setSnackOpen(false);
+  };
+
+  const cardScale = clicked ? CLICK_SCALE : hovered ? HOVER_SCALE : 1;
+  const imgScale = clicked ? IMG_CLICK_SCALE : hovered ? IMG_HOVER_SCALE : 1;
 
   return (
-    <Zoom in timeout={500} style={{ transitionDelay: course.delay || "0ms" }}>
-      <Card
-        onClick={handleClick}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        sx={{
-          backgroundColor: "#fff8f0",
-          boxShadow: 4,
-          borderRadius: "18px",
-          overflow: "hidden",
-          cursor: "pointer",
-          border: "2px solid transparent",
-          position: "relative",
-
-          transform: `scale(${cardScale})`,
-          transition: `transform ${ANIMATION_DURATION}ms ease`,
-
-          "&:hover": {
-            boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-            borderColor: "#d2a679",
-          },
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background:
-              "linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.1))",
-            zIndex: 1,
-            pointerEvents: "none",
-          },
-        }}
-      >
-        <Box
+    <Box sx={{ position: "relative", display: "inline-block" }}>
+      <Zoom in timeout={500} style={{ transitionDelay: course.delay || "0ms" }}>
+        <Card
+          ref={cardRef}
+          onClick={handleCardClick}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
           sx={{
-            position: "relative",
+            backgroundColor: "#fdf9f2",
+            boxShadow: 4,
+            borderRadius: 3,
             overflow: "hidden",
-            height: "180px",
+            cursor: isNew ? "default" : "pointer",
+            border: "2px solid transparent",
+            transform: `scale(${cardScale})`,
+            transition: `transform ${ANIMATION_DURATION}ms ease`,
+            "&:hover": {
+              boxShadow: "0 12px 26px rgba(0,0,0,0.10)",
+              borderColor: "#e8d4b8",
+            },
           }}
         >
-          <CardMedia
-            component="img"
-            height="180"
-            image={course.image}
-            alt={course.title}
-            sx={{
-              objectFit: "cover",
-              borderBottom: "2px solid #d2a679",
-              transform: `scale(${imgScale})`,
-              transition: `transform ${ANIMATION_DURATION}ms ease`,
-            }}
-          />
-        </Box>
+          {}
+          <Box sx={{ position: "relative", overflow: "hidden", height: 180 }}>
+            <CardMedia
+              component="img"
+              height="180"
+              image={course.image}
+              alt={course.title}
+              sx={{
+                objectFit: "cover",
+                borderBottom: "2px solid #e8d4b8",
+                transform: `scale(${imgScale})`,
+                transition: `transform ${ANIMATION_DURATION}ms ease`,
+              }}
+            />
+          </Box>
 
-        <CardContent
-          sx={{
-            textAlign: "center",
-            position: "relative",
-            zIndex: 2,
-            backgroundColor: "rgba(255, 248, 240, 0.8)",
-          }}
-        >
-          <Typography
-            variant="h6"
-            fontWeight="bold"
+          {}
+          <CardContent
             sx={{
-              color: "#5a3e1b",
-              fontSize: "1.1rem",
-              mb: 1,
-              transition: "all 0.3s ease",
-              "&:hover": { color: "#7b3f00" },
+              textAlign: "center",
+              position: "relative",
+              zIndex: 2,
+              backgroundColor: "rgba(253, 249, 242, 0.92)",
             }}
           >
-            {course.title}
-          </Typography>
-        </CardContent>
-      </Card>
-    </Zoom>
+            <Stack spacing={1} alignItems="center">
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{ color: "#6a4a2f", fontSize: "1.05rem" }}
+              >
+                {course.title}
+              </Typography>
+
+              {isNew && (
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleJoinClick}
+                  sx={{
+                    px: 2.5,
+                    backgroundColor: "#f9e6cd",
+                    color: "#6b4e21",
+                    fontWeight: "bold",
+                    borderRadius: 2,
+                    textTransform: "none",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
+                    "&:hover": { backgroundColor: "#f1dcb2" },
+                  }}
+                >
+                  طلب الانضمام
+                </Button>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+      </Zoom>
+
+      {}
+      <Snackbar
+        open={snackOpen}
+        onClose={handleSnackClose}
+        autoHideDuration={2500}
+        sx={{
+          position: "absolute",
+          top: `${snackPosition.top}px`,
+          right: "16px",
+          transform: "none",
+          zIndex: 1300,
+        }}
+      >
+        <Alert
+          icon={<CheckCircleIcon fontSize="small" />}
+          severity="success"
+          variant="filled"
+          sx={{
+            backgroundColor: "#f9e8d7",
+            color: "#5e4627",
+            fontWeight: "bold",
+            borderRadius: 3,
+            boxShadow: "0 4px 10px rgba(0,0,0,0.06)",
+            px: 3,
+            py: 1.5,
+          }}
+        >
+          تم إرسال طلب الانضمام إلى «{course.title}»
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 };
 
