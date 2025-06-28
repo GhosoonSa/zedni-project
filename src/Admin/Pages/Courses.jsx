@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AdminHeader from "../Components/AdminHeader";
 import {
   Typography,
@@ -10,9 +9,6 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 import AddCourse from "../Components/AddCourse";
 import CourseOptionsModal from "../Components/CourseOptionsModal";
 import backgroundTabs from "/backgroundTabs.jpg";
@@ -20,43 +16,69 @@ import backgroundTabs from "/backgroundTabs.jpg";
 const CARD_WIDTH = 260;
 
 const Courses = () => {
-  const navigate = useNavigate();
-
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [showOnlyLevels, setShowOnlyLevels] = useState(false);
 
   const courses = [
-    { id: 1, title: "دورة الفقه للمبتدئين", image: "/course.png", status: "الجديدة" },
-    { id: 3, title: "دورة التفسير الموضوعي", image: "/course.png", status: "الحالية" },
-    { id: 5, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
-    { id: 6, title: "دورة أحكام الأسرة", image: "/course.png", status: "السابقة" },
+    { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
+    { id: 2, title: "دورة التفسير الموضوعي", image: "/course.png", status: "الحالية" },
+    { id: 3, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 4, title: "دورة أحكام الأسرة", image: "/course.png", status: "السابقة" },
+    { id: 5, title: "دورة الفقه للمبتدئين", image: "/course.png", status: "السابقة" },
+    { id: 6, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
+    { id: 7, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
+    { id: 8, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
+
   ];
 
-  const sliderCfg = {
-    dots: true,
-    infinite: false,
-    rtl: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      { breakpoint: 1280, settings: { slidesToShow: 3 } },
-      { breakpoint: 900,  settings: { slidesToShow: 2 } },
-      { breakpoint: 600,  settings: { slidesToShow: 1 } },
-    ],
+  const handleCourseClick = (course) => {
+    setSelectedCourse(course);
+    setShowOnlyLevels(course.status === "السابقة");
+    setIsOptionsOpen(true);
   };
 
-  const handleCourseClick = (course) => {
-    if (course.status === "السابقة") {
-      navigate(
-        `/CourseTabs?courseId=${course.id}&courseName=${encodeURIComponent(course.title)}`
-      );
-    } else {
-      setSelectedCourse(course);
-      setIsOptionsOpen(true);
-    }
+  const closeModal = () => {
+    setIsOptionsOpen(false);
+    setShowOnlyLevels(false);
   };
+
+  const CardBox = ({ course }) => (
+    <Box sx={{ width: CARD_WIDTH, flex: "0 0 auto" }}>
+      <Card
+        sx={{
+          mx: 1,
+          my: 1,
+          backgroundColor: "#fffaf5",
+          borderRadius: 2,
+          boxShadow: 3,
+          overflow: "hidden",
+          transition: "transform .3s",
+          "&:hover": { transform: "translateY(-6px)" },
+          cursor: "pointer",
+        }}
+        onClick={() => handleCourseClick(course)}
+      >
+        <CardMedia
+          component="img"
+          height="140"
+          image={course.image}
+          alt={course.title}
+          sx={{
+            objectFit: "cover",
+            transition: "transform .5s",
+            "&:hover": { transform: "scale(1.05)" },
+          }}
+        />
+        <CardContent sx={{ textAlign: "center", pb: 2 }}>
+          <Typography variant="subtitle1" fontWeight="bold">
+            {course.title}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
+  );
 
   const statuses = ["الجديدة", "الحالية", "السابقة"];
 
@@ -99,75 +121,41 @@ const Courses = () => {
       </Box>
 
       {}
-      {statuses.map((st) => {
-        const list = courses.filter((c) => c.status === st);
-
-        const CardBox = ({ course }) => (
-          <Box sx={{ width: CARD_WIDTH }}>
-            <Card
-              sx={{
-                mx: 1,
-                backgroundColor: "#fffaf5",
-                borderRadius: 2,
-                boxShadow: 3,
-                overflow: "hidden",
-                transition: "transform .3s",
-                "&:hover": { transform: "translateY(-6px)" },
-                cursor: "pointer",
-              }}
-              onClick={() => handleCourseClick(course)}
-            >
-              <CardMedia
-                component="img"
-                height="140"
-                image={course.image}
-                alt={course.title}
-                sx={{
-                  objectFit: "cover",
-                  transition: "transform .5s",
-                  "&:hover": { transform: "scale(1.05)" },
-                }}
-              />
-              <CardContent sx={{ textAlign: "center", pb: 2 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {course.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Box>
-        );
+      {statuses.map((status) => {
+        const list = courses.filter((c) => c.status === status);
 
         return (
           <Paper
-            key={st}
+            key={status}
             elevation={3}
             sx={{
-              m: 4,
-              p: 3,
+              my: 4,
+              py: 3,
+              px: 4,
               direction: "rtl",
               backgroundColor: "#fffaf5",
-              width: list.length < 4 ? "50vw" : "100%",
-              maxWidth: "100%",
-              transition: "width 0.3s ease",
+              width: list.length <= 2 ? "75%" : "auto",
+              mr: 4,                               
+              ml: list.length <= 2 ? "auto" : 4,   
+              boxSizing: "border-box",
             }}
           >
             <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
-              {st}
+              {status}
             </Typography>
 
-            {list.length <= 4 ? (
-              <Box sx={{ display: "flex", gap: 2 }}>
-                {list.map((course) => (
-                  <CardBox key={course.id} course={course} />
-                ))}
-              </Box>
-            ) : (
-              <Slider {...sliderCfg}>
-                {list.map((course) => (
-                  <CardBox key={course.id} course={course} />
-                ))}
-              </Slider>
-            )}
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                justifyContent: "flex-start",
+              }}
+            >
+              {list.map((course) => (
+                <CardBox key={course.id} course={course} />
+              ))}
+            </Box>
           </Paper>
         );
       })}
@@ -176,8 +164,9 @@ const Courses = () => {
       {selectedCourse && (
         <CourseOptionsModal
           open={isOptionsOpen}
-          onClose={() => setIsOptionsOpen(false)}
+          onClose={closeModal}
           course={selectedCourse}
+          showOnlyLevels={showOnlyLevels}
         />
       )}
     </>
