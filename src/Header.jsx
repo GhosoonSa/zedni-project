@@ -53,47 +53,7 @@ const Header = () => {
           direction="row"
           spacing={2}
           className="gap-4 items-center h-6 w-xl flex col-span-2 pt-8 mr-60"
-        >
-          <NavLink
-            to="/Courses"
-            style={{
-              paddingLeft: "4px",
-              paddingRight: "4px",
-              color: isHoveredC ? "#8B5E34" : "#BC8A5F",
-              textDecoration: "none",
-            }}
-            onMouseEnter={() => setIsHoveredC(true)}
-            onMouseLeave={() => setIsHoveredC(false)}
-          >
-            الدورات
-          </NavLink>
-          <NavLink
-            to="/Profile"
-            style={{
-              paddingLeft: "4px",
-              paddingRight: "4px",
-              color: isHoveredP ? "#8B5E34" : "#BC8A5F",
-              textDecoration: "none",
-            }}
-            onMouseEnter={() => setIsHoveredP(true)}
-            onMouseLeave={() => setIsHoveredP(false)}
-          >
-            الملف الشخصي
-          </NavLink>
-          <NavLink
-            to="/Mails"
-            style={{
-              paddingLeft: "4px",
-              paddingRight: "4px",
-              color: isHoveredM ? "#8B5E34" : "#BC8A5F",
-              textDecoration: "none",
-            }}
-            onMouseEnter={() => setIsHoveredM(true)}
-            onMouseLeave={() => setIsHoveredM(false)}
-          >
-            البريد
-          </NavLink>
-        </Stack>
+        ></Stack>
 
         <Stack
           direction="row"

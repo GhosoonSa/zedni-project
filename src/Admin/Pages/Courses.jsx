@@ -23,14 +23,43 @@ const Courses = () => {
 
   const courses = [
     { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
-    { id: 2, title: "دورة التفسير الموضوعي", image: "/course.png", status: "الحالية" },
+    {
+      id: 2,
+      title: "دورة التفسير الموضوعي",
+      image: "/course.png",
+      status: "الحالية",
+    },
     { id: 3, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 4, title: "دورة أحكام الأسرة", image: "/course.png", status: "السابقة" },
-    { id: 5, title: "دورة الفقه للمبتدئين", image: "/course.png", status: "السابقة" },
-    { id: 6, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
-    { id: 7, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
-    { id: 8, title: "دورة العقيدة الإسلامية", image: "/course.png", status: "السابقة" },
-
+    {
+      id: 4,
+      title: "دورة أحكام الأسرة",
+      image: "/course.png",
+      status: "السابقة",
+    },
+    {
+      id: 5,
+      title: "دورة الفقه للمبتدئين",
+      image: "/course.png",
+      status: "السابقة",
+    },
+    {
+      id: 6,
+      title: "دورة العقيدة الإسلامية",
+      image: "/course.png",
+      status: "السابقة",
+    },
+    {
+      id: 7,
+      title: "دورة العقيدة الإسلامية",
+      image: "/course.png",
+      status: "السابقة",
+    },
+    {
+      id: 8,
+      title: "دورة العقيدة الإسلامية",
+      image: "/course.png",
+      status: "السابقة",
+    },
   ];
 
   const handleCourseClick = (course) => {
@@ -135,8 +164,8 @@ const Courses = () => {
               direction: "rtl",
               backgroundColor: "#fffaf5",
               width: list.length <= 2 ? "75%" : "auto",
-              mr: 4,                               
-              ml: list.length <= 2 ? "auto" : 4,   
+              mr: 4,
+              ml: list.length <= 2 ? "auto" : 4,
               boxSizing: "border-box",
             }}
           >

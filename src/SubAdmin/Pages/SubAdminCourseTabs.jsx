@@ -87,7 +87,7 @@ const SubAdminCourseTabs = () => {
                 <SubAdminPosterTab />
               </div>
             </Tab>
-            <Tab eventKey="SubjectsTab" title="طلبات الانضمام">
+            <Tab eventKey="SubjectsTab" title=" الحضور">
               <div style={{ flex: 1, overflow: "auto" }}>
                 <SubAdminJoiningRequestsTab />
               </div>

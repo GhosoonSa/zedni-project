@@ -83,7 +83,9 @@ const AddCourse = ({ isOpen, onClose }) => {
               id="name"
               label="اسم الدورة"
               variant="outlined"
-              // onChange={(e)=>{setCourseName(e.target.value)}}
+              onChange={(e) => {
+                setSelectedFile(e.target.value);
+              }}
               color="success"
               size="small"
               fullWidth
@@ -106,19 +108,7 @@ const AddCourse = ({ isOpen, onClose }) => {
               sx={{ direction: "ltr", marginTop: 1 }}
             />
 
-            {/* <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="form-control"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                name="title"
-                required
-              />
-            </div> 
-
+            {/* 
             <Form.Group controlId="formFile">
               <Form.Label style={{ marginRight: "5px" }}>اختر صورة</Form.Label>
               <Form.Control

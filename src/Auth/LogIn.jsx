@@ -5,13 +5,13 @@ import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { userContext } from "./ContextProvider";
 import backgroundLogIn from "../assets/backgroundLogIn4.png";
-import AdminHeader from "../Admin/Components/AdminHeader";
+import Header from "../Header";
 
 const LogIn = () => {
   const { login } = useContext(userContext);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    userName: "",
+    email: "",
     password: "",
   });
 
@@ -37,7 +37,7 @@ const LogIn = () => {
 
   return (
     <>
-      <AdminHeader />
+      <Header />
       <form onSubmit={handleLogin}>
         <Stack
           direction="column"
@@ -57,12 +57,13 @@ const LogIn = () => {
 
           <TextField
             required
-            name="userName"
-            id="name"
-            label="اسم المستخدم"
+            name="email"
+            id="email"
+            label="البريد الالكتروني "
             variant="outlined"
             onChange={handleChange}
             color="warning"
+            size="small"
             slotProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -70,6 +71,7 @@ const LogIn = () => {
                 </InputAdornment>
               ),
             }}
+            sx={{ direction: "ltr", width: "250px" }}
           />
           <TextField
             required
@@ -80,7 +82,9 @@ const LogIn = () => {
             variant="outlined"
             onChange={handleChange}
             color="warning"
+            size="small"
             helperText="كلمة المرور مطلوبة"
+            sx={{ direction: "ltr", width: "250px" }}
           />
           <Typography>
             <NavLink
@@ -102,7 +106,6 @@ const LogIn = () => {
           {error && <Typography color="error">{error}</Typography>}
           <Button
             type="submit"
-            // onClick={handleLogin}
             variant="outlined"
             style={{
               backgroundColor: "#E7BC91",

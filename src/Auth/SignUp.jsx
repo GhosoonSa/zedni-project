@@ -20,23 +20,27 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import { userContext } from "./ContextProvider";
 import background from "../assets/backgroundSignUp.png";
-import AdminHeader from "../Admin/Components/AdminHeader";
+import Header from "../Header";
 
 const SignUp = () => {
   const { signup } = useContext(userContext);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    userName: "",
+    role: "",
+    firstAndLastName: "",
     email: "",
     fatherName: "",
     phoneNumber: "",
     address: "",
-    birthdate: "",
-    study: "",
-    mojaza: "",
-    previous: "",
-    accountType: "",
+    birthDate: "",
+    studyOrCareer: "",
+    magazeh: false,
+    PreviousExperience: "",
+    isPreviousStudent: false,
+    PreviousCoursesInOtherPlace: "",
+    perviousCourses: "",
     password: "",
+    password_confirmation: "",
   });
 
   const handleChange = (e) => {
@@ -47,6 +51,7 @@ const SignUp = () => {
     });
   };
 
+  const handleCheck = (e) => {};
   const handleSignUp = (e) => {
     console.log("formDataLogin", formData);
     e.preventDefault();
@@ -60,12 +65,13 @@ const SignUp = () => {
   };
 
   const renderAdditionalFields = () => {
-    switch (formData.accountType) {
+    switch (formData.role) {
       case "subAdmin":
         return (
           <>
             <TextareaAutosize
               maxRows={4}
+              name="PreviousExperience"
               placeholder="خبرات سابقة"
               style={{
                 width: 255,
@@ -87,6 +93,7 @@ const SignUp = () => {
           <>
             <TextareaAutosize
               maxRows={4}
+              name="PreviousExperience"
               placeholder="خبرات سابقة"
               style={{
                 width: 255,
@@ -108,6 +115,7 @@ const SignUp = () => {
           <>
             <TextareaAutosize
               maxRows={4}
+              name="PreviousCoursesInOtherPlace"
               placeholder="  دورات سابقة"
               style={{
                 width: 255,
@@ -125,11 +133,13 @@ const SignUp = () => {
             <FormControlLabel
               control={<Checkbox />}
               label="من طلاب الدورات السابقة"
-              name="previous"
+              name="isPreviousStudent"
               color="warning"
+              onChange={handleCheck}
             />
             <TextareaAutosize
               maxRows={4}
+              name="perviousCourses"
               placeholder="  الدورات السابقة عندنا"
               style={{
                 width: 255,
@@ -153,7 +163,7 @@ const SignUp = () => {
 
   return (
     <>
-      <AdminHeader />
+      <Header />
       <form onSubmit={handleSignUp}>
         <Stack
           direction="column"
@@ -172,11 +182,20 @@ const SignUp = () => {
             إنشاء حساب
           </Typography>
 
-          <Stack direction="row" spacing={0}>
+          <Stack
+            direction="row"
+            sx={{
+              display: "flex",
+              gap: "40px", // 5 * 8px
+              flexWrap: "wrap", // optional, in case screen is narrow
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
             <Stack direction="column" spacing={2}>
               <TextField
                 required
-                name="userName"
+                name="firstAndLastName"
                 id="userName"
                 label="اسم المستخدم"
                 variant="outlined"
@@ -276,7 +295,7 @@ const SignUp = () => {
               />
               <TextField
                 required
-                name="birthdate"
+                name="birthDate"
                 id="birthdate"
                 label="تاريخ الميلاد "
                 variant="outlined"
@@ -298,7 +317,7 @@ const SignUp = () => {
             <Stack direction="column" spacing={2}>
               <TextField
                 required
-                name="study"
+                name="studyOrCareer"
                 id="study"
                 label=" الشهادة/العمل "
                 variant="outlined"
@@ -319,7 +338,7 @@ const SignUp = () => {
               <FormControlLabel
                 control={<Checkbox />}
                 label="مجازة"
-                name="mojaza"
+                name="magazeh"
                 color="warning"
               />
 
@@ -330,7 +349,7 @@ const SignUp = () => {
                   variant="standard"
                   select
                   defaultValue=""
-                  name="accountType"
+                  name="role"
                   onChange={handleChange}
                   fullWidth
                   color="warning"
@@ -352,7 +371,20 @@ const SignUp = () => {
                 variant="outlined"
                 size="small"
                 onChange={handleChange}
-                helperText="كلمة المرور مطلوبة"
+                helperText="كلمة المرور يجب ان تكون 8حروف على الأقل"
+                sx={{ direction: "ltr" }}
+                color="warning"
+              />
+              <TextField
+                required
+                name="password_confirmation"
+                id="password-outline"
+                label="كلمة المرور"
+                type="password"
+                variant="outlined"
+                size="small"
+                onChange={handleChange}
+                helperText="كلمة المرور للتحقق"
                 sx={{ direction: "ltr" }}
                 color="warning"
               />
@@ -361,9 +393,9 @@ const SignUp = () => {
           {error && <Typography color="error">{error}</Typography>}
           <Button
             type="submit"
-            // onClick={handleLogin}
             variant="outlined"
             color="warning"
+            sx={{ marginBottom: "20px" }}
           >
             إنشاء حساب
           </Button>
