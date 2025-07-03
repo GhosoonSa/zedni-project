@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import{ useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tab from "react-bootstrap/Tab";
@@ -9,9 +9,7 @@ import PeopleTab from "../Components/PeopleTab";
 import ResultsTab from "../Components/ResultsTab";
 import SubjectsTab from "../Components/SubjectsTab";
 import AdminHeader from "../Components/AdminHeader";
-
 import backgroundTabs from "/backgroundTabs.jpg";
-
 import {
   Paper,
   useMediaQuery,
@@ -21,24 +19,20 @@ import {
 } from "@mui/material";
 
 const CourseTabs = () => {
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
+  const location = useLocation();
+  
+  const level = location.state?.level || null;
+  const courseName = location.state?.courseName || "اسم الدورة";
 
-  const tabParam = params.get("tab");
-  const levelParam = params.get("level");
-  const courseNameParam = params.get("courseName");
-
-  const courseName = courseNameParam
-    ? decodeURIComponent(courseNameParam)
-    : "اسم الدورة";
-
-  const [key, setKey] = useState(
-    tabParam === "joining" ? "JoiningRequestsTab" : "ClassesPlanTab"
-  );
+  const [key, setKey] = useState("ClassesPlanTab");
 
   useEffect(() => {
-    if (tabParam === "joining") setKey("JoiningRequestsTab");
-  }, [tabParam]);
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+    if (tabParam === "joining") {
+      setKey("JoiningRequestsTab");
+    }
+  }, []);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -84,7 +78,7 @@ const CourseTabs = () => {
           }}
         >
           {courseName}
-          {levelParam && ` – المستوى ${levelParam}`}
+          {level && ` – المستوى ${level}`}
         </Typography>
 
         <Paper
@@ -105,10 +99,10 @@ const CourseTabs = () => {
             justify
           >
             <Tab eventKey="ClassesPlanTab" title="الخطة الدرسية">
-              <ClassesPlanTab level={levelParam} />
+              <ClassesPlanTab level={level} />
             </Tab>
             <Tab eventKey="SubjectsTab" title="المواد">
-              <SubjectsTab level={levelParam} />
+              <SubjectsTab level={level} />
             </Tab>
             <Tab eventKey="PeopleTab" title="الطلاب">
               <PeopleTab />

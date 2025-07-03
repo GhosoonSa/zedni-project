@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import AdminHeader from "../Components/AdminHeader";
 import {
   Typography,
@@ -20,60 +20,44 @@ const Courses = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showOnlyLevels, setShowOnlyLevels] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const ads = [
+    { 
+      id: 1, 
+      content: "/course.png" 
+    },
+    { 
+      id: 2, 
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن" 
+    },
+    { 
+      id: 3, 
+      content: "/course.png" 
+    }
+  ];
 
   const courses = [
     { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
-    {
-      id: 2,
-      title: "دورة التفسير الموضوعي",
-      image: "/course.png",
-      status: "الحالية",
-    },
+    { id: 2, title: "دورة التفسير الموضوعي", image: "/course.png", status: "الحالية" },
     { id: 3, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    {
-      id: 4,
-      title: "دورة أحكام الأسرة",
-      image: "/course.png",
-      status: "السابقة",
-    },
-    {
-      id: 5,
-      title: "دورة الفقه للمبتدئين",
-      image: "/course.png",
-      status: "السابقة",
-    },
-    {
-      id: 6,
-      title: "دورة العقيدة الإسلامية",
-      image: "/course.png",
-      status: "السابقة",
-    },
-    {
-      id: 7,
-      title: "دورة العقيدة الإسلامية",
-      image: "/course.png",
-      status: "السابقة",
-    },
-    {
-      id: 8,
-      title: "دورة العقيدة الإسلامية",
-      image: "/course.png",
-      status: "السابقة",
-    },
   ];
 
-  const handleCourseClick = (course) => {
+  const handleCourseClick = (course, event) => {
     setSelectedCourse(course);
     setShowOnlyLevels(course.status === "السابقة");
+    setAnchorEl(event.currentTarget);
     setIsOptionsOpen(true);
   };
 
   const closeModal = () => {
     setIsOptionsOpen(false);
     setShowOnlyLevels(false);
+    setAnchorEl(null);
   };
 
-  const CardBox = ({ course }) => (
+  const CourseCard = ({ course }) => (
     <Box sx={{ width: CARD_WIDTH, flex: "0 0 auto" }}>
       <Card
         sx={{
@@ -87,7 +71,7 @@ const Courses = () => {
           "&:hover": { transform: "translateY(-6px)" },
           cursor: "pointer",
         }}
-        onClick={() => handleCourseClick(course)}
+        onClick={(e) => handleCourseClick(course, e)}
       >
         <CardMedia
           component="img"
@@ -106,6 +90,43 @@ const Courses = () => {
           </Typography>
         </CardContent>
       </Card>
+    </Box>
+  );
+
+  const AdCard = ({ ad }) => (
+    <Box sx={{ 
+      width: 300,
+      flex: "0 0 auto",
+      mx: 1,
+      borderRadius: 2,
+      overflow: "hidden",
+      boxShadow: 3,
+      border: '2px solid #E7BC91',
+      backgroundColor: '#fffaf5'
+    }}>
+      {}
+      <CardMedia
+        component="img"
+        height="140"
+        image={ad.content}
+        alt="إعلان"
+        sx={{ 
+          width: '100%', 
+          objectFit: 'cover',
+        }}
+      />
+      
+      {}
+      {ad.text && (
+        <Box sx={{ 
+          p: 2,
+          textAlign: 'center',
+        }}>
+          <Typography variant="body1" sx={{ lineHeight: 1.5, color: '#555' }}>
+            {ad.text}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 
@@ -132,70 +153,119 @@ const Courses = () => {
       />
 
       {}
-      <Box sx={{ mt: 12, textAlign: "right", pr: 6 }}>
-        <Button
-          variant="outlined"
-          onClick={() => setIsAddOpen(true)}
+      <Box sx={{ mt: 12, px: 4 }}>
+        {}
+        <Paper
+          elevation={3}
           sx={{
-            backgroundColor: "#E7BC91",
-            color: "black",
-            border: "#DAE2ED",
-            "&:hover": { borderColor: "#8B5E34" },
+            my: 4,
+            py: 3,
+            px: 4,
+            direction: "rtl",
+            backgroundColor: "#fffaf5",
+            mr: 4,
+            ml: 4,
+            borderTop: '4px solid #E7BC91'
           }}
-          size="large"
         >
-          إضافة دورة
-        </Button>
-        <AddCourse isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
-      </Box>
+          <Typography variant="h5" sx={{ 
+            fontWeight: "bold", 
+            mb: 3,
+            color: '#333',
+            textAlign: 'right'
+          }}>
+            الإعلانات
+          </Typography>
 
-      {}
-      {statuses.map((status) => {
-        const list = courses.filter((c) => c.status === status);
-
-        return (
-          <Paper
-            key={status}
-            elevation={3}
+          <Box
             sx={{
-              my: 4,
-              py: 3,
-              px: 4,
-              direction: "rtl",
-              backgroundColor: "#fffaf5",
-              width: list.length <= 2 ? "75%" : "auto",
-              mr: 4,
-              ml: list.length <= 2 ? "auto" : 4,
-              boxSizing: "border-box",
+              display: "flex",
+              flexWrap: "nowrap",
+              overflowX: "auto",
+              gap: 2,
+              justifyContent: "flex-start",
+              py: 1,
+              '&::-webkit-scrollbar': {
+                height: '6px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#E7BC91',
+                borderRadius: '3px',
+              },
             }}
           >
-            <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
-              {status}
-            </Typography>
+            {ads.map((ad) => (
+              <AdCard key={ad.id} ad={ad} />
+            ))}
+          </Box>
+        </Paper>
 
-            <Box
+        {}
+        <Box sx={{ textAlign: "right", pr: 4, mb: 4 }}>
+          <Button
+            variant="outlined"
+            onClick={() => setIsAddOpen(true)}
+            sx={{
+              backgroundColor: "#E7BC91",
+              color: "black",
+              border: "#DAE2ED",
+              "&:hover": { borderColor: "#8B5E34" },
+            }}
+            size="large"
+          >
+            إضافة دورة
+          </Button>
+          <AddCourse isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
+        </Box>
+
+        {}
+        {statuses.map((status) => {
+          const list = courses.filter((c) => c.status === status);
+
+          return (
+            <Paper
+              key={status}
+              elevation={3}
               sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 2,
-                justifyContent: "flex-start",
+                my: 4,
+                py: 3,
+                px: 4,
+                direction: "rtl",
+                backgroundColor: "#fffaf5",
+                width: list.length <= 2 ? "75%" : "auto",
+                mr: 4,
+                ml: list.length <= 2 ? "auto" : 4,
+                boxSizing: "border-box",
               }}
             >
-              {list.map((course) => (
-                <CardBox key={course.id} course={course} />
-              ))}
-            </Box>
-          </Paper>
-        );
-      })}
+              <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                {status}
+              </Typography>
 
-      {}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 2,
+                  justifyContent: "flex-start",
+                }}
+              >
+                {list.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </Box>
+            </Paper>
+          );
+        })}
+      </Box>
+
       {selectedCourse && (
         <CourseOptionsModal
           open={isOptionsOpen}
           onClose={closeModal}
           course={selectedCourse}
           showOnlyLevels={showOnlyLevels}
+          anchorEl={showOnlyLevels ? null : anchorEl}
         />
       )}
     </>
