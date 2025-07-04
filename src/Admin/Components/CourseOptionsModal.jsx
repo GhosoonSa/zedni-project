@@ -20,10 +20,10 @@ import {
   Snackbar,
   Alert,
   Divider,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 const CourseOptionsModal = ({
   open,
@@ -38,8 +38,8 @@ const CourseOptionsModal = ({
   const [selectedLevel, setSelectedLevel] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [requests, setRequests] = useState([
-    { 
-      name: "أحمد محمد", 
+    {
+      name: "أحمد محمد",
       email: "ahmed@example.com",
       fatherName: "محمد عبدالله",
       phone: "0912345678",
@@ -47,10 +47,10 @@ const CourseOptionsModal = ({
       birthDate: "1995-05-15",
       qualification: "بكالوريوس في الشريعة",
       isCertified: true,
-      previousCourses: ["الفقه الأساسي", "أصول الفقه"]
+      previousCourses: ["الفقه الأساسي", "أصول الفقه"],
     },
-    { 
-      name: "سارة علي", 
+    {
+      name: "سارة علي",
       email: "sara@example.com",
       fatherName: "علي محمود",
       phone: "0934567890",
@@ -58,10 +58,10 @@ const CourseOptionsModal = ({
       birthDate: "1998-08-22",
       qualification: "طالبة جامعية",
       isCertified: false,
-      previousCourses: ["التجويد"]
+      previousCourses: ["التجويد"],
     },
-    { 
-      name: "خالد عبدالله", 
+    {
+      name: "خالد عبدالله",
       email: "khaled@example.com",
       fatherName: "عبدالله أحمد",
       phone: "0945678901",
@@ -69,10 +69,10 @@ const CourseOptionsModal = ({
       birthDate: "1990-03-10",
       qualification: "إمام مسجد",
       isCertified: true,
-      previousCourses: ["الفقه", "التفسير", "الحديث"]
+      previousCourses: ["الفقه", "التفسير", "الحديث"],
     },
-    { 
-      name: "بيان", 
+    {
+      name: "بيان",
       email: "bayyan@example.com",
       fatherName: "محمود حسن",
       phone: "0956789012",
@@ -80,8 +80,8 @@ const CourseOptionsModal = ({
       birthDate: "1993-11-05",
       qualification: "مدرسة",
       isCertified: false,
-      previousCourses: []
-    }
+      previousCourses: [],
+    },
   ]);
 
   useEffect(() => {
@@ -92,12 +92,12 @@ const CourseOptionsModal = ({
 
   const handleLevelClick = (level) => {
     onClose();
-    navigate('/CourseTabs', {
+    navigate("/CourseTabs", {
       state: {
         courseId: course.id,
         level: level,
-        courseName: course.title
-      }
+        courseName: course.title,
+      },
     });
   };
 
@@ -112,9 +112,13 @@ const CourseOptionsModal = ({
 
   const handleAssignLevel = () => {
     if (selectedRequest && selectedLevel) {
-      console.log(`تم تعيين المستوى ${selectedLevel} للطالب ${selectedRequest.name}`);
+      console.log(
+        `تم تعيين المستوى ${selectedLevel} للطالب ${selectedRequest.name}`
+      );
       setSnackbarOpen(true);
-      setRequests(requests.filter(req => req.email !== selectedRequest.email));
+      setRequests(
+        requests.filter((req) => req.email !== selectedRequest.email)
+      );
       handleCloseRequestModal();
     }
   };
@@ -127,7 +131,10 @@ const CourseOptionsModal = ({
     <Box sx={{ mt: 1 }}>
       {[...Array(7)].map((_, i) => (
         <ListItemButton key={i + 1} onClick={() => handleLevelClick(i + 1)}>
-          <ListItemText primary={`المستوى ${i + 1}`} sx={{ textAlign: 'right' }} />
+          <ListItemText
+            primary={`المستوى ${i + 1}`}
+            sx={{ textAlign: "right" }}
+          />
         </ListItemButton>
       ))}
     </Box>
@@ -136,32 +143,34 @@ const CourseOptionsModal = ({
   const JoinRequestsList = () => (
     <Box sx={{ mt: 1 }}>
       {requests.map((request, index) => (
-        <ListItemButton 
-          key={index} 
+        <ListItemButton
+          key={index}
           onClick={() => handleRequestClick(request)}
           sx={{
-            '&:hover': {
-              backgroundColor: '#f5f5f5',
-            }
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
           }}
         >
           <ListItemAvatar>
-            <Avatar sx={{ 
-              bgcolor: '#E7BC91',
-              color: '#5E3023',
-              fontSize: '1rem',
-              width: 32,
-              height: 32,
-            }}>
+            <Avatar
+              sx={{
+                bgcolor: "#E7BC91",
+                color: "#5E3023",
+                fontSize: "1rem",
+                width: 32,
+                height: 32,
+              }}
+            >
               {request.name.charAt(0)}
             </Avatar>
           </ListItemAvatar>
-          <ListItemText 
-            primary={request.name} 
-            sx={{ 
-              textAlign: 'right',
-              paddingRight: '8px',
-            }} 
+          <ListItemText
+            primary={request.name}
+            sx={{
+              textAlign: "right",
+              paddingRight: "8px",
+            }}
           />
         </ListItemButton>
       ))}
@@ -181,84 +190,89 @@ const CourseOptionsModal = ({
 
   return (
     <>
-      {}
       <Popper
         open={open}
         anchorEl={anchorEl}
         placement="right-start"
         modifiers={[
           {
-            name: 'offset',
+            name: "offset",
             options: {
-              offset: [150,-0.001]
+              offset: [150, -0.001],
             },
           },
           {
-            name: 'preventOverflow',
+            name: "preventOverflow",
             options: {
               padding: 8,
             },
           },
         ]}
-        sx={{ 
+        sx={{
           zIndex: 1300,
           width: 300,
-          bgcolor: 'background.paper',
+          bgcolor: "background.paper",
           boxShadow: 3,
           borderRadius: 2,
-          overflow: 'hidden',
-          border: '1px solid #E7BC91',
+          overflow: "hidden",
+          border: "1px solid #E7BC91",
+          marginLeft: "30px",
         }}
       >
-        <Paper elevation={0} sx={{ p: 1, backgroundColor: '#fffaf5', position: 'relative' }}>
+        <Paper
+          elevation={0}
+          sx={{ p: 1, backgroundColor: "#fffaf5", position: "relative" }}
+        >
           {}
           <IconButton
             aria-label="close"
             onClick={onClose}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               left: 8,
               top: 8,
-              color: '#d32f2f',
-              '&:hover': {
-                backgroundColor: 'rgba(211, 47, 47, 0.08)',
-              }
+              color: "#d32f2f",
+              "&:hover": {
+                backgroundColor: "rgba(211, 47, 47, 0.08)",
+              },
             }}
           >
             <CloseIcon />
           </IconButton>
-          
-          <Typography variant="h6" sx={{ 
-            textAlign: "center", 
-            p: 2,
-            fontWeight: 'bold',
-            color: '#5E3023'
-          }}>
+
+          <Typography
+            variant="h6"
+            sx={{
+              textAlign: "center",
+              p: 2,
+              fontWeight: "bold",
+              color: "#5E3023",
+            }}
+          >
             {course?.title}
           </Typography>
-          
+
           <Tabs
             value={tab}
             onChange={handleTabChange}
             centered
             variant="fullWidth"
-            sx={{ 
+            sx={{
               mb: 1,
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#E7BC91',
-              }
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#E7BC91",
+              },
             }}
           >
-            <Tab label="طلبات الانضمام" sx={{ fontSize: '0.85rem' }} />
-            <Tab label="مستويات الدورة" sx={{ fontSize: '0.85rem' }} />
+            <Tab label="طلبات الانضمام" sx={{ fontSize: "0.85rem" }} />
+            <Tab label="مستويات الدورة" sx={{ fontSize: "0.85rem" }} />
           </Tabs>
-          
+
           {tab === 0 && <JoinRequestsList />}
           {tab === 1 && <LevelsList />}
         </Paper>
       </Popper>
 
-      {}
       <Dialog
         open={Boolean(selectedRequest)}
         onClose={() => {}}
@@ -266,79 +280,119 @@ const CourseOptionsModal = ({
         maxWidth="sm"
         dir="rtl"
         sx={{
-          '& .MuiDialog-paper': {
-            backgroundColor: '#fffaf5',
-            border: '1px solid #E7BC91',
-          }
+          "& .MuiDialog-paper": {
+            backgroundColor: "#fffaf5",
+            border: "1px solid #E7BC91",
+          },
         }}
-        disableEscapeKeyDown  
+        disableEscapeKeyDown
       >
-        <DialogTitle sx={{ 
-          textAlign: "center", 
-          fontWeight: 'bold',
-          color: '#5E3023',
-          borderBottom: '1px solid #E7BC91',
-          position: 'relative'
-        }}>
-          {}
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "#5E3023",
+            borderBottom: "1px solid #E7BC91",
+            position: "relative",
+          }}
+        >
           <IconButton
             aria-label="close"
             onClick={handleCloseRequestModal}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               left: 8,
               top: 8,
-              color: '#d32f2f',
-              '&:hover': {
-                backgroundColor: 'rgba(211, 47, 47, 0.08)',
-              }
+              color: "#d32f2f",
+              "&:hover": {
+                backgroundColor: "rgba(211, 47, 47, 0.08)",
+              },
             }}
           >
             <CloseIcon />
           </IconButton>
           تفاصيل طلب الانضمام
         </DialogTitle>
-        <DialogContent sx={{ pt: 3 }}>
-          {}
+        <DialogContent sx={{ pt: 6 }}>
           <Box sx={{ mb: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>الاسم:</Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                الاسم:
+              </Typography>
               <Typography variant="body1">{selectedRequest?.name}</Typography>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>اسم الأب:</Typography>
-              <Typography variant="body1">{selectedRequest?.fatherName}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>تاريخ الميلاد:</Typography>
-              <Typography variant="body1">{selectedRequest?.birthDate}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>البريد الإلكتروني:</Typography>
-              <Typography variant="body1">{selectedRequest?.email}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>رقم الهاتف:</Typography>
-              <Typography variant="body1">{selectedRequest?.phone}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>العنوان:</Typography>
-              <Typography variant="body1">{selectedRequest?.address}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>الشهادة/العمل:</Typography>
-              <Typography variant="body1">{selectedRequest?.qualification}</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>حاصل على إجازة:</Typography>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                اسم الأب:
+              </Typography>
               <Typography variant="body1">
-                {selectedRequest?.isCertified ? 'نعم' : 'لا'}
+                {selectedRequest?.fatherName}
               </Typography>
             </Box>
-            <Box sx={{ mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>الدورات السابقة:</Typography>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                تاريخ الميلاد:
+              </Typography>
+              <Typography variant="body1">
+                {selectedRequest?.birthDate}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                البريد الإلكتروني:
+              </Typography>
+              <Typography variant="body1">{selectedRequest?.email}</Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                رقم الهاتف:
+              </Typography>
+              <Typography variant="body1">{selectedRequest?.phone}</Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                العنوان:
+              </Typography>
+              <Typography variant="body1">
+                {selectedRequest?.address}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                الشهادة/العمل:
+              </Typography>
+              <Typography variant="body1">
+                {selectedRequest?.qualification}
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                حاصل على إجازة:
+              </Typography>
+              <Typography variant="body1">
+                {selectedRequest?.isCertified ? "نعم" : "لا"}
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 1, justifyContent: "center" }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
+                الدورات السابقة:
+              </Typography>
               {selectedRequest?.previousCourses?.length > 0 ? (
-                <ul style={{ paddingRight: '20px', margin: 0 }}>
+                <ul
+                  style={{
+                    paddingRight: "20px",
+                    margin: 0,
+                    justifyContent: "center",
+                  }}
+                >
                   {selectedRequest.previousCourses.map((course, index) => (
                     <li key={index}>
                       <Typography variant="body1">{course}</Typography>
@@ -353,7 +407,7 @@ const CourseOptionsModal = ({
 
           {}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
               اختر المستوى:
             </Typography>
             <Select
@@ -361,10 +415,10 @@ const CourseOptionsModal = ({
               onChange={(e) => setSelectedLevel(e.target.value)}
               fullWidth
               sx={{
-                textAlign: 'right',
-                '& .MuiSelect-select': {
-                  textAlign: 'right',
-                }
+                textAlign: "right",
+                "& .MuiSelect-select": {
+                  textAlign: "right",
+                },
               }}
             >
               <MenuItem value="" disabled>
@@ -378,20 +432,20 @@ const CourseOptionsModal = ({
             </Select>
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
             <Button
               variant="contained"
               onClick={handleAssignLevel}
               disabled={!selectedLevel}
               sx={{
-                backgroundColor: '#E7BC91',
-                color: '#5E3023',
-                '&:hover': {
-                  backgroundColor: '#D8AB7F',
+                backgroundColor: "#E7BC91",
+                color: "#5E3023",
+                "&:hover": {
+                  backgroundColor: "#D8AB7F",
                 },
-                '&:disabled': {
-                  backgroundColor: '#f5f5f5',
-                }
+                "&:disabled": {
+                  backgroundColor: "#f5f5f5",
+                },
               }}
             >
               تعيين المستوى
@@ -405,14 +459,18 @@ const CourseOptionsModal = ({
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           تم تعيين المستوى بنجاح!
         </Alert>
       </Snackbar>
     </>
   );
 };
-    
+
 export default CourseOptionsModal;
