@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StudentHeader from "../Components/StudentHeader";
 import CourseCard from "../Components/CourseCard";
+import AdsSection from "../Components/AdsSection";
 import {
   Box,
   Typography,
@@ -15,6 +16,23 @@ import {
 
 const CoursesS = () => {
   const [tabIndex, setTabIndex] = useState(0);
+
+  const ads = [
+    {
+      id: 1,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    },
+    {
+      id: 2,
+      content: "/course.png",
+    },
+    {
+      id: 3,
+      content: "/course.png",
+      text: "ورشة عمل مجانية هذا الأسبوع",
+    },
+  ];
 
   const enrolledCourses = [
     {
@@ -34,7 +52,7 @@ const CoursesS = () => {
     },
     {
       id: 6,
-      title: "دورة التفسير ",
+      title: "دورة التفسير",
       image: "/course.png",
       delay: "300ms",
     },
@@ -43,7 +61,7 @@ const CoursesS = () => {
   const handleChange = (_, newValue) => setTabIndex(newValue);
 
   const renderCourses = (courses, isNew = false) => (
-    <Box sx={{ width: "100%", direction: "rtl" }}>
+    <Box sx={{ width: "100%", direction: "rtl", mt: 4 }}>
       <Grid container spacing={3} sx={{ width: "100%", m: 0 }}>
         {courses.map((course, idx) => (
           <Grid
@@ -60,7 +78,6 @@ const CoursesS = () => {
               pl: { xs: "0 !important", sm: "24px !important" },
             }}
           >
-            {}
             <CourseCard course={course} isNew={isNew} />
           </Grid>
         ))}
@@ -77,7 +94,6 @@ const CoursesS = () => {
         direction="column"
         sx={{ minHeight: "100vh", position: "relative", direction: "rtl" }}
       >
-        {}
         <Box
           sx={{
             position: "fixed",
@@ -104,7 +120,6 @@ const CoursesS = () => {
           }}
         />
 
-        {}
         <Paper
           elevation={4}
           sx={{
@@ -112,7 +127,7 @@ const CoursesS = () => {
             backgroundColor: "rgba(255, 255, 255, 0.95)",
             borderRadius: 4,
             m: { xs: 2, sm: 3, md: 4 },
-            p: { xs: 2, sm: 3, md: 4 },
+            p: { xs: 3, sm: 4, md: 5 }, 
             width: {
               xs: "calc(100% - 32px)",
               sm: "calc(100% - 48px)",
@@ -127,73 +142,79 @@ const CoursesS = () => {
           }}
         >
           <Fade in timeout={1000}>
-            <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
               {}
-              <Tabs
-                value={tabIndex}
-                onChange={handleChange}
-                variant="fullWidth"
-                textColor="primary"
-                indicatorColor="primary"
-                sx={{
-                  mb: 3,
-                  borderBottom: "1px solid #e0a96d",
-                  "& .MuiTab-root": {
-                    fontWeight: "bold",
-                    color: "#5a3e1b",
-                    transition: "all 0.3s ease",
-                    "&:hover": { color: "#7b3f00" },
-                  },
-                  direction: "rtl",
-                }}
-              >
-                <Tab label="دوراتي الحالية" />
-                <Tab label="الدورات الجديدة" />
-              </Tabs>
+              <Box sx={{ mb: 6 }}> {}
+                <AdsSection ads={ads} />
+              </Box>
+              
+              {}
+              <Box sx={{ 
+                backgroundColor: "rgba(255, 248, 235, 0.5)",
+                borderRadius: 3,
+                p: 3,
+                border: "1px solid #f0e6d2",
+              }}>
+                <Tabs
+                  value={tabIndex}
+                  onChange={handleChange}
+                  variant="fullWidth"
+                  textColor="primary"
+                  indicatorColor="primary"
+                  sx={{
+                    mb: 4,
+                    borderBottom: "1px solid #e0a96d",
+                    "& .MuiTab-root": {
+                      fontWeight: "bold",
+                      color: "#5a3e1b",
+                      transition: "all 0.3s ease",
+                      "&:hover": { color: "#7b3f00" },
+                    },
+                    direction: "rtl",
+                  }}
+                >
+                  <Tab label="دوراتي الحالية" />
+                  <Tab label="الدورات الجديدة" />
+                </Tabs>
 
-              {}
-              {tabIndex === 0 && (
-                <Fade in timeout={800}>
-                  <div>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        mb: 3,
-                        color: "#7b3f00",
-                        fontWeight: "bold",
-                        textAlign: "right",
-                        transition: "all 0.3s ease",
-                        "&:hover": { transform: "translateX(-5px)" },
-                      }}
-                    >
-                      دوراتي الحالية
-                    </Typography>
-                    {renderCourses(enrolledCourses /* isNew = false */)}
-                  </div>
-                </Fade>
-              )}
+                {tabIndex === 0 && (
+                  <Fade in timeout={800}>
+                    <Box>
+                      <Typography
+                        variant="h5" 
+                        sx={{
+                          mb: 4,
+                          color: "#7b3f00",
+                          fontWeight: "bold",
+                          textAlign: "right",
+                        }}
+                      >
+                        دوراتي الحالية
+                      </Typography>
+                      {renderCourses(enrolledCourses)}
+                    </Box>
+                  </Fade>
+                )}
 
-              {}
-              {tabIndex === 1 && (
-                <Fade in timeout={800}>
-                  <div>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        mb: 3,
-                        color: "#7b3f00",
-                        fontWeight: "bold",
-                        textAlign: "right",
-                        transition: "all 0.3s ease",
-                        "&:hover": { transform: "translateX(-5px)" },
-                      }}
-                    >
-                      الدورات الجديدة
-                    </Typography>
-                    {renderCourses(newCourses, true /* isNew = true */)}
-                  </div>
-                </Fade>
-              )}
+                {tabIndex === 1 && (
+                  <Fade in timeout={800}>
+                    <Box>
+                      <Typography
+                        variant="h5" 
+                        sx={{
+                          mb: 4,
+                          color: "#7b3f00",
+                          fontWeight: "bold",
+                          textAlign: "right",
+                        }}
+                      >
+                        الدورات الجديدة
+                      </Typography>
+                      {renderCourses(newCourses, true)}
+                    </Box>
+                  </Fade>
+                )}
+              </Box>
             </Box>
           </Fade>
         </Paper>
