@@ -11,7 +11,6 @@ import {
   Typography,
   Paper,
   Popper,
-  ClickAwayListener,
   Avatar,
   ListItemAvatar,
   MenuItem,
@@ -19,7 +18,6 @@ import {
   Button,
   Snackbar,
   Alert,
-  Divider,
   IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -82,6 +80,50 @@ const CourseOptionsModal = ({
       isCertified: false,
       previousCourses: [],
     },
+    {
+      name: "نور",
+      email: "nour@example.com",
+      fatherName: "محمود ",
+      phone: "0956779012",
+      address: "دمشق ",
+      birthDate: "1983-11-05",
+      qualification: "مدرسة",
+      isCertified: false,
+      previousCourses: [],
+    },
+    {
+      name: "اية",
+      email: "aya@example.com",
+      fatherName: " حسن",
+      phone: "0956749012",
+      address: " الميدان",
+      birthDate: "1999-11-05",
+      qualification: "مدرسة",
+      isCertified: false,
+      previousCourses: [],
+    },
+    {
+      name: "راية",
+      email: "raya@example.com",
+      fatherName: "محمود ",
+      phone: "0996789012",
+      address: " الميدان",
+      birthDate: "1999-11-05",
+      qualification: "مدرسة",
+      isCertified: false,
+      previousCourses: [],
+    },
+      {
+      name: "شمس",
+      email: "ya@example.com",
+      fatherName: "محمود ",
+      phone: "0906789012",
+      address: " الميدان",
+      birthDate: "1979-11-05",
+      qualification: "مدرسة",
+      isCertified: false,
+      previousCourses: [],
+    },
   ]);
 
   useEffect(() => {
@@ -128,9 +170,28 @@ const CourseOptionsModal = ({
   };
 
   const LevelsList = () => (
-    <Box sx={{ mt: 1 }}>
+    <Box sx={{ 
+      mt: 1,
+      height: '45vh',
+      overflowY: 'auto',
+      "&::-webkit-scrollbar": {
+        width: "8px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#E7BC91",
+        borderRadius: "4px",
+      },
+    }}>
       {[...Array(7)].map((_, i) => (
-        <ListItemButton key={i + 1} onClick={() => handleLevelClick(i + 1)}>
+        <ListItemButton 
+          key={i + 1} 
+          onClick={() => handleLevelClick(i + 1)}
+          sx={{
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+            }
+          }}
+        >
           <ListItemText
             primary={`المستوى ${i + 1}`}
             sx={{ textAlign: "right" }}
@@ -141,7 +202,20 @@ const CourseOptionsModal = ({
   );
 
   const JoinRequestsList = () => (
-    <Box sx={{ mt: 1 }}>
+    <Box
+      sx={{
+        mt: 1,
+        height: '45vh',
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#E7BC91",
+          borderRadius: "4px",
+        },
+      }}
+    >
       {requests.map((request, index) => (
         <ListItemButton
           key={index}
@@ -171,6 +245,9 @@ const CourseOptionsModal = ({
               textAlign: "right",
               paddingRight: "8px",
             }}
+            primaryTypographyProps={{
+              noWrap: true,
+            }}
           />
         </ListItemButton>
       ))}
@@ -193,37 +270,46 @@ const CourseOptionsModal = ({
       <Popper
         open={open}
         anchorEl={anchorEl}
-        placement="right-start"
+        placement="bottom-end"
         modifiers={[
           {
             name: "offset",
             options: {
-              offset: [150, -0.001],
+              offset: [150, 100],
             },
           },
           {
             name: "preventOverflow",
             options: {
-              padding: 8,
+              padding: 16,
+              boundariesElement: 'viewport',
             },
           },
         ]}
         sx={{
           zIndex: 1300,
-          width: 300,
+          width: 350,
           bgcolor: "background.paper",
           boxShadow: 3,
           borderRadius: 2,
           overflow: "hidden",
           border: "1px solid #E7BC91",
-          marginLeft: "30px",
+          marginLeft: "100px",
+          marginTop: "200px",
+          maxHeight: '70vh',
         }}
       >
         <Paper
           elevation={0}
-          sx={{ p: 1, backgroundColor: "#fffaf5", position: "relative" }}
+          sx={{ 
+            p: 1, 
+            backgroundColor: "#fffaf5", 
+            position: "relative",
+            height: '65vh',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
         >
-          {}
           <IconButton
             aria-label="close"
             onClick={onClose}
@@ -268,14 +354,16 @@ const CourseOptionsModal = ({
             <Tab label="مستويات الدورة" sx={{ fontSize: "0.85rem" }} />
           </Tabs>
 
-          {tab === 0 && <JoinRequestsList />}
-          {tab === 1 && <LevelsList />}
+          <Box sx={{ flex: 1, overflow: 'hidden' }}>
+            {tab === 0 && <JoinRequestsList />}
+            {tab === 1 && <LevelsList />}
+          </Box>
         </Paper>
       </Popper>
 
       <Dialog
         open={Boolean(selectedRequest)}
-        onClose={() => {}}
+        onClose={handleCloseRequestModal}
         fullWidth
         maxWidth="sm"
         dir="rtl"
@@ -285,7 +373,6 @@ const CourseOptionsModal = ({
             border: "1px solid #E7BC91",
           },
         }}
-        disableEscapeKeyDown
       >
         <DialogTitle
           sx={{
@@ -315,15 +402,15 @@ const CourseOptionsModal = ({
         </DialogTitle>
         <DialogContent sx={{ pt: 6 }}>
           <Box sx={{ mb: 3 }}>
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 الاسم:
               </Typography>
               <Typography variant="body1">{selectedRequest?.name}</Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 اسم الأب:
               </Typography>
               <Typography variant="body1">
@@ -331,8 +418,8 @@ const CourseOptionsModal = ({
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 تاريخ الميلاد:
               </Typography>
               <Typography variant="body1">
@@ -340,22 +427,22 @@ const CourseOptionsModal = ({
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 البريد الإلكتروني:
               </Typography>
               <Typography variant="body1">{selectedRequest?.email}</Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 رقم الهاتف:
               </Typography>
               <Typography variant="body1">{selectedRequest?.phone}</Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 العنوان:
               </Typography>
               <Typography variant="body1">
@@ -363,8 +450,8 @@ const CourseOptionsModal = ({
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
@@ -372,8 +459,8 @@ const CourseOptionsModal = ({
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Box sx={{ display: "flex", mb: 1 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
                 حاصل على إجازة:
               </Typography>
               <Typography variant="body1">
@@ -381,18 +468,12 @@ const CourseOptionsModal = ({
               </Typography>
             </Box>
 
-            <Box sx={{ mb: 1, justifyContent: "center" }}>
+            <Box sx={{ mb: 1 }}>
               <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
                 الدورات السابقة:
               </Typography>
               {selectedRequest?.previousCourses?.length > 0 ? (
-                <ul
-                  style={{
-                    paddingRight: "20px",
-                    margin: 0,
-                    justifyContent: "center",
-                  }}
-                >
+                <ul style={{ paddingRight: "20px", margin: 0 }}>
                   {selectedRequest.previousCourses.map((course, index) => (
                     <li key={index}>
                       <Typography variant="body1">{course}</Typography>
@@ -405,7 +486,6 @@ const CourseOptionsModal = ({
             </Box>
           </Box>
 
-          {}
           <Box sx={{ mb: 4 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
               اختر المستوى:
@@ -432,7 +512,7 @@ const CourseOptionsModal = ({
             </Select>
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
             <Button
               variant="contained"
               onClick={handleAssignLevel}
@@ -454,7 +534,6 @@ const CourseOptionsModal = ({
         </DialogContent>
       </Dialog>
 
-      {}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}

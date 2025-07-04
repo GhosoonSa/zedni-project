@@ -37,6 +37,19 @@ const Courses = () => {
       content: "/course.png",
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
     },
+     {
+      id: 2,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    }, {
+      id: 2,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    }, {
+      id: 2,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    },
     {
       id: 3,
       content: "/course.png",
@@ -55,6 +68,10 @@ const Courses = () => {
     { id: 4, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 5, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+        { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+
   ];
 
   const handleCourseClick = (course, event) => {
@@ -119,7 +136,6 @@ const Courses = () => {
         backgroundColor: "#fffaf5",
       }}
     >
-      {}
       <CardMedia
         component="img"
         height="140"
@@ -131,7 +147,6 @@ const Courses = () => {
         }}
       />
 
-      {}
       {ad.text && (
         <Box
           sx={{
