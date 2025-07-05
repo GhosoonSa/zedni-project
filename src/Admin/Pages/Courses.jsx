@@ -37,15 +37,17 @@ const Courses = () => {
       content: "/course.png",
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
     },
-     {
+    {
       id: 2,
       content: "/course.png",
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    }, {
+    },
+    {
       id: 2,
       content: "/course.png",
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    }, {
+    },
+    {
       id: 2,
       content: "/course.png",
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
@@ -68,10 +70,9 @@ const Courses = () => {
     { id: 4, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 5, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-        { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-
+    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
   ];
 
   const handleCourseClick = (course, event) => {
@@ -183,8 +184,8 @@ const Courses = () => {
         }}
       />
 
-      {/*ads section*/}
       <Box sx={{ mt: 12, px: 4 }}>
+        {/*ads section*/}
         <Paper
           elevation={3}
           sx={{
@@ -209,7 +210,6 @@ const Courses = () => {
           >
             الإعلانات
           </Typography>
-
           <Box
             sx={{
               display: "flex",
@@ -299,7 +299,11 @@ const Courses = () => {
                   }}
                 >
                   {list.map((course) => (
-                    <CourseCard key={course.id} course={course} />
+                    <CourseCard
+                      key={course.id}
+                      course={course}
+                      onClick={(e) => handleCourseClick(course, e)}
+                    />
                   ))}
                 </Box>
               ) : (
@@ -312,7 +316,11 @@ const Courses = () => {
                   }}
                 >
                   {list.map((course) => (
-                    <CourseCard key={course.id} course={course} />
+                    <CourseCard
+                      key={course.id}
+                      course={course}
+                      onClick={(e) => handleCourseClick(course, e)}
+                    />
                   ))}
                 </Box>
               )}
