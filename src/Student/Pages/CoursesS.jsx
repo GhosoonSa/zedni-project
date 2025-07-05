@@ -24,6 +24,15 @@ const CoursesS = () => {
       text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
     },
     {
+      id: 1,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    }, {
+      id: 1,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
+    },
+    {
       id: 2,
       content: "/course.png",
     },
@@ -127,7 +136,7 @@ const CoursesS = () => {
             backgroundColor: "rgba(255, 255, 255, 0.95)",
             borderRadius: 4,
             m: { xs: 2, sm: 3, md: 4 },
-            p: { xs: 3, sm: 4, md: 5 }, 
+            p: { xs: 3, sm: 4, md: 5 },
             width: {
               xs: "calc(100% - 32px)",
               sm: "calc(100% - 48px)",
@@ -143,13 +152,13 @@ const CoursesS = () => {
         >
           <Fade in timeout={1000}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              {}
-              <Box sx={{ mb: 6 }}> {}
+              { }
+              <Box sx={{ mb: 6 }}> { }
                 <AdsSection ads={ads} />
               </Box>
-              
-              {}
-              <Box sx={{ 
+
+              { }
+              <Box sx={{
                 backgroundColor: "rgba(255, 248, 235, 0.5)",
                 borderRadius: 3,
                 p: 3,
@@ -181,7 +190,7 @@ const CoursesS = () => {
                   <Fade in timeout={800}>
                     <Box>
                       <Typography
-                        variant="h5" 
+                        variant="h5"
                         sx={{
                           mb: 4,
                           color: "#7b3f00",
@@ -200,7 +209,7 @@ const CoursesS = () => {
                   <Fade in timeout={800}>
                     <Box>
                       <Typography
-                        variant="h5" 
+                        variant="h5"
                         sx={{
                           mb: 4,
                           color: "#7b3f00",

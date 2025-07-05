@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from "react";
 import TeacherHeader from "../Components/TeacherHeader";
 import TeacherCourseCard from "../Components/TeacherCourseCard";
+import TeacherLevelsModal from "../Components/TeacherLevelsModal";
 import {
   Box,
   Typography,
   Grid,
   Fade,
-  Tabs,
-  Tab,
   CssBaseline,
   Stack,
   Paper,
+  CardMedia,
 } from "@mui/material";
 import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 
 const CoursesT = () => {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [openLevelsModal, setOpenLevelsModal] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     console.log("Received token: ", authToken);
   }, []);
+
   const currentCourses = [
     {
       id: 1,
@@ -41,17 +46,50 @@ const CoursesT = () => {
     },
   ];
 
-  const newCourses = [
+  const ads = [
+    {
+      id: 1,
+      content: "/course.png",
+      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن"
+    },
+    {
+      id: 2,
+      content: "/course.png",
+      text: "ورشة عمل جديدة الأسبوع القادم"
+    },
+    {
+      id: 3,
+      content: "/course.png",
+    },
     {
       id: 4,
-      title: "دورة التفسير الموضوعي",
-      image: "/course.png",
-      delay: "100ms",
+      content: "/course.png",
+      text: "إعلان عن مسابقة حفظ القرآن"
+    },
+    {
+      id: 5,
+      content: "/course.png",
+      text: "  مسابقة حفظ القرآن"
+    },
+    {
+      id: 6,
+      content: "/course.png",
     },
   ];
 
-  const handleChange = (event, newValue) => {
-    setTabIndex(newValue);
+  const handleCourseClick = (course) => {
+    setSelectedCourse(course);
+    setOpenLevelsModal(true);
+  };
+
+  const handleLevelSelect = (level) => {
+    setOpenLevelsModal(false);
+    navigate(`/teacher/course/${selectedCourse.id}`, {
+      state: {
+        course: selectedCourse,
+        level: level
+      }
+    });
   };
 
   const sliderSettings = {
@@ -84,7 +122,10 @@ const CoursesT = () => {
           <Slider {...sliderSettings}>
             {courses.map((course, index) => (
               <Box key={index} sx={{ px: 2 }}>
-                <TeacherCourseCard course={course} />
+                <TeacherCourseCard
+                  course={course}
+                  onClick={() => handleCourseClick(course)}
+                />
               </Box>
             ))}
           </Slider>
@@ -105,7 +146,10 @@ const CoursesT = () => {
                   paddingLeft: { xs: "0 !important", sm: "24px !important" },
                 }}
               >
-                <TeacherCourseCard course={course} />
+                <TeacherCourseCard
+                  course={course}
+                  onClick={() => handleCourseClick(course)}
+                />
               </Grid>
             ))}
           </Grid>
@@ -180,78 +224,106 @@ const CoursesT = () => {
             <Box
               sx={{ display: "flex", flexDirection: "column", height: "100%" }}
             >
-              <Tabs
-                value={tabIndex}
-                onChange={handleChange}
-                variant="fullWidth"
-                textColor="primary"
-                indicatorColor="primary"
-                sx={{
-                  mb: 3,
-                  borderBottom: "1px solid #e0a96d",
-                  "& .MuiTab-root": {
+              {}
+              <Box sx={{
+                mb: 6,
+                p: 3,
+                borderRadius: 3,
+                backgroundColor: "#f9f5f0",
+                border: "1px solid #E7BC91",
+                boxShadow: "0 4px 12px rgba(122, 81, 22, 0.1)",
+              }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 3,
+                    color: "#7b3f00",
                     fontWeight: "bold",
-                    color: "#5a3e1b",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      color: "#7b3f00",
+                    textAlign: "right",
+                  }}
+                >
+                  الإعلانات
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    overflowX: "auto",
+                    gap: 3,
+                    py: 2,
+                    "&::-webkit-scrollbar": {
+                      height: "8px",
                     },
-                  },
-                  direction: "rtl",
+                    "&::-webkit-scrollbar-thumb": {
+                      backgroundColor: "#E7BC91",
+                      borderRadius: "4px",
+                    },
+                  }}
+                >
+                  {ads.map((ad) => (
+                    <Box
+                      key={ad.id}
+                      sx={{
+                        minWidth: 320,
+                        borderRadius: 3,
+                        overflow: "hidden",
+                        boxShadow: 3,
+                        border: "2px solid #E7BC91",
+                        backgroundColor: "#fffaf5",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-5px)",
+                          boxShadow: "0 6px 16px rgba(122, 81, 22, 0.2)",
+                        }
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="160"
+                        image={ad.content}
+                        alt="إعلان"
+                        sx={{
+                          width: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      {ad.text && (
+                        <Box sx={{ p: 3, textAlign: "center" }}>
+                          <Typography variant="body1" sx={{ color: "#555" }}>
+                            {ad.text}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              {}
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 4,
+                  color: "#7b3f00",
+                  fontWeight: "bold",
+                  textAlign: "right",
                 }}
               >
-                <Tab label="الدورات الحالية" />
-                <Tab label="الدورات الجديدة" />
-              </Tabs>
-
-              {tabIndex === 0 && (
-                <Fade in timeout={800}>
-                  <div>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        mb: 3,
-                        color: "#7b3f00",
-                        fontWeight: "bold",
-                        textAlign: "right",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          transform: "translateX(-5px)",
-                        },
-                      }}
-                    >
-                      الدورات الحالية
-                    </Typography>
-                    {renderCourses(currentCourses)}
-                  </div>
-                </Fade>
-              )}
-
-              {tabIndex === 1 && (
-                <Fade in timeout={800}>
-                  <div>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        mb: 3,
-                        color: "#7b3f00",
-                        fontWeight: "bold",
-                        textAlign: "right",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          transform: "translateX(-5px)",
-                        },
-                      }}
-                    >
-                      الدورات الجديدة
-                    </Typography>
-                    {renderCourses(newCourses)}
-                  </div>
-                </Fade>
-              )}
+                الدورات الحالية
+              </Typography>
+              {renderCourses(currentCourses)}
             </Box>
           </Fade>
         </Paper>
+
+        {}
+        {selectedCourse && (
+          <TeacherLevelsModal
+            open={openLevelsModal}
+            onClose={() => setOpenLevelsModal(false)}
+            course={selectedCourse}
+            onLevelSelect={handleLevelSelect}
+          />
+        )}
       </Stack>
     </>
   );

@@ -7,7 +7,7 @@ export const userContext = createContext();
 
 const ContextProvider = ({ children }) => {
 
-    // const [role, setRole] = useState("student");
+    // const [role, setRole] = useState("teacher");
     // const [authenticated, setAuthenticated] = useState(true);
 
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");

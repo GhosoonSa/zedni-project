@@ -7,25 +7,24 @@ import {
   Zoom,
   Box,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const ANIMATION_DURATION = 400;     
-const HOVER_SCALE        = 1.05;    
-const CLICK_SCALE        = 1.07;    
-const IMG_HOVER_SCALE    = 1.10;    
-const IMG_CLICK_SCALE    = 1.15;    
-const TeacherCourseCard = ({ course }) => {
+const HOVER_SCALE = 1.05;    
+const CLICK_SCALE = 1.07;    
+const IMG_HOVER_SCALE = 1.10;    
+const IMG_CLICK_SCALE = 1.15;    
+
+const TeacherCourseCard = ({ course, onClick }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const navigate = useNavigate();
 
   const handleClick = () => {
     if (clicked) return;                    
     setClicked(true);
-    setTimeout(
-      () => navigate(`/teacher/course/${course.id}`, { state: { course } }),
-      ANIMATION_DURATION
-    );
+    setTimeout(() => {
+      onClick();
+      setClicked(false);
+    }, ANIMATION_DURATION);
   };
 
   const cardScale = clicked
@@ -54,11 +53,8 @@ const TeacherCourseCard = ({ course }) => {
           cursor: "pointer",
           border: "2px solid transparent",
           position: "relative",
-
-          /* التحويلات */
           transform: `scale(${cardScale})`,
           transition: `transform ${ANIMATION_DURATION}ms ease`,
-
           "&:hover": {
             boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
             borderColor: "#d2a679",
