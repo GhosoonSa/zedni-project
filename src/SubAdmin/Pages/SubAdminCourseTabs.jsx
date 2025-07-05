@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -8,13 +8,24 @@ import SubAdminResultsTab from "../Components/SubAdminResultsTab";
 import SubAdminBooksTab from "../Components/SubAdminBooksTab";
 import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminPosterTab from "../Components/SubAdminPosterTab";
-import { Paper, useMediaQuery, useTheme, Box } from "@mui/material";
+import { Paper, useMediaQuery, useTheme, Box, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const SubAdminCourseTabs = () => {
   const [key, setKey] = useState("ClassesPlanTab");
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseLevel, setCourseLevel] = useState(null);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      setCourseTitle(location.state.courseTitle || "الدورة");
+      setCourseLevel(location.state.level || null);
+    }
+  }, [location.state]);
 
   return (
     <>
@@ -38,6 +49,7 @@ const SubAdminCourseTabs = () => {
             left: 0,
             width: "100%",
             height: "100%",
+            background: "linear-gradient(to bottom, rgba(255, 253, 250, 0.8), rgba(248, 244, 233, 0.9))"
           },
         }}
       />
@@ -53,26 +65,50 @@ const SubAdminCourseTabs = () => {
           padding: isSmallScreen ? "0 10px" : "0",
         }}
       >
-        <h2
-          style={{
-            marginBottom: "30px",
-            marginRight: "10px",
-            fontSize: isSmallScreen ? "1.5rem" : "2rem",
-            textAlign: isSmallScreen ? "center" : "right",
-            color: "#7b3f00",
-          }}
-        >
-          course name
-        </h2>
+        <Box sx={{
+          textAlign: "right",
+          mb: 4,
+          px: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          flexDirection: "row-reverse",
+          gap: 2
+        }}>
+          {courseLevel && (
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: isSmallScreen ? "1.2rem" : "1.5rem",
+                color: "#7b3f00",
+                fontWeight: "bold",
+                marginLeft: "10px"
+              }}
+            >
+              {`المستوى ${courseLevel}`}
+            </Typography>
+          )}
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: isSmallScreen ? "1.8rem" : "2.4rem",
+              color: "#5a3e1b",
+              fontWeight: "bold",
+            }}
+          >
+            {courseTitle}
+          </Typography>
+        </Box>
+
         <Paper
-          // key={Course.id}
           elevation={3}
           sx={{
-            marginTop: isSmallScreen ? 2 : 4,
-            marginBottom: isSmallScreen ? 2 : 4,
-            marginLeft: isSmallScreen ? 0 : 4,
+            margin: isSmallScreen ? 2 : 4,
             padding: isSmallScreen ? 2 : 3,
-            backgroundColor: "#fffaf5",
+            backgroundColor: "rgba(255, 253, 250, 0.95)",
+            border: "1px solid #e0d6c2",
+            borderRadius: "12px",
+            backdropFilter: "blur(2px)"
           }}
         >
           <Tabs
@@ -82,12 +118,12 @@ const SubAdminCourseTabs = () => {
             className="mb-3 items-center"
             justify
           >
-            <Tab eventKey="ClassesPlanTab" title="الإعلانات ">
+            <Tab eventKey="ClassesPlanTab" title="الإعلانات">
               <div style={{ flex: 1, overflow: "auto" }}>
                 <SubAdminPosterTab />
               </div>
             </Tab>
-            <Tab eventKey="SubjectsTab" title=" الحضور">
+            <Tab eventKey="SubjectsTab" title="الحضور">
               <div style={{ flex: 1, overflow: "auto" }}>
                 <SubAdminJoiningRequestsTab />
               </div>
@@ -102,7 +138,7 @@ const SubAdminCourseTabs = () => {
                 <SubAdminPeopleTab />
               </div>
             </Tab>
-            <Tab eventKey="JoiningRequestsTab" title="النتائج ">
+            <Tab eventKey="JoiningRequestsTab" title="النتائج">
               <div style={{ flex: 1, overflow: "auto" }}>
                 <SubAdminResultsTab />
               </div>
