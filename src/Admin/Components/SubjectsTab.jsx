@@ -18,24 +18,27 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import UploadIcon from '@mui/icons-material/Upload';
 import DescriptionIcon from '@mui/icons-material/Description';
+import EditIcon from '@mui/icons-material/Edit';
 
 const SubjectsTab = () => {
   const teachers = [
-    { id: 1, name: " أحمد " },
-    { id: 2, name: " علي " },
-    { id: 3, name: "  خالد" },
-    { id: 2, name: "  حسن" },
-    { id: 2, name: "  محمد" },
-    { id: 2, name: "  سعيد" },
-    { id: 2, name: "  حسين" },
-    { id: 2, name: "  نور" },
-
+    { id: 1, name: "أحمد" },
+    { id: 2, name: "علي" },
+    { id: 3, name: "خالد" },
+    { id: 4, name: "حسن" },
+    { id: 5, name: "محمد" },
+    { id: 6, name: "سعيد" },
+    { id: 7, name: "حسين" },
+    { id: 8, name: "نور" },
   ];
 
   const [subjects, setSubjects] = useState([
-    { id: 1, name: "الفقه", teacher: " نور ", syllabus: "DB2EndProject.pdf" },
-    { id: 4, name: "السيرة", teacher: " خالد ", syllabus: null },
-    { id: 5, name: "التفسير", teacher: "  علي", syllabus: null }
+    { id: 1, name: "الفقه", teacher: "نور", syllabus: "DB2EndProject.pdf" },
+    { id: 2, name: "السيرة", teacher: "خالد", syllabus: null },
+    { id: 3, name: "التفسير", teacher: "علي", syllabus: null },
+    { id: 4, name: "الحديث", teacher: "أحمد", syllabus: "حديث.pdf" },
+        { id: 4, name: "الحديث", teacher: "أحمد", syllabus: "حديث.pdf" }
+
   ]);
 
   const [newSubject, setNewSubject] = useState("");
@@ -82,7 +85,7 @@ const SubjectsTab = () => {
   return (
     <Box sx={{ p: 3 }}>
       {}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -115,7 +118,7 @@ const SubjectsTab = () => {
       }}>
         {subjects.map((subject, index) => (
           <Box key={subject.id} sx={{
-            minWidth: { xs: '80%', sm: '45%', md: '30%' },
+            minWidth: { xs: '45%', sm: '30%', md: '22%' }, 
             flexShrink: 0
           }}>
             <Grow in={true} timeout={index * 200}>
@@ -137,7 +140,11 @@ const SubjectsTab = () => {
                 }}
               >
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  <Typography variant="h6" sx={{ 
+                    fontWeight: 'bold', 
+                    textAlign: 'center',
+                    fontSize: '1rem' 
+                  }}>
                     {subject.name}
                   </Typography>
                 </CardContent>
@@ -152,7 +159,6 @@ const SubjectsTab = () => {
         <Box sx={{
           mt: 3,
           width: '100%',
-          height: '100%',
           border: '2px solid #E7BC91',
           borderRadius: 2,
           backgroundColor: '#fffaf5',
@@ -160,7 +166,6 @@ const SubjectsTab = () => {
           boxShadow: 3,
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'visible'
         }}>
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ color: '#5a3e1b' }}>
@@ -174,29 +179,53 @@ const SubjectsTab = () => {
             gap: 2,
             width: '100%'
           }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#5a3e1b' }}>
+            <Typography variant="subtitle1" sx={{ 
+              fontWeight: 'bold', 
+              color: '#5a3e1b'
+            }}>
               المنهاج:
             </Typography>
 
             {selectedSubject.syllabus ? (
               <Box sx={{
                 display: 'flex',
-                alignItems: 'flex-start',
+                alignItems: 'center',
                 backgroundColor: '#f8f4e9',
                 p: 2,
                 borderRadius: 1,
                 gap: 2,
-                width: '100%'
+                width: '100%',
+                position: 'relative'
               }}>
                 <DescriptionIcon color="primary" sx={{ fontSize: '2rem' }} />
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body1" sx={{
                     wordBreak: 'break-word',
-                    whiteSpace: 'normal'
+                    whiteSpace: 'normal',
+                      pr: 4
                   }}>
                     {selectedSubject.syllabus}
                   </Typography>
                 </Box>
+                {}
+                <IconButton
+                  component="label"
+                  sx={{
+                    position: 'absolute',
+                    left: 8,
+                    top: 8,
+                    color: '#5a3e1b',
+                    '&:hover': { backgroundColor: 'rgba(90, 62, 27, 0.1)' }
+                  }}
+                >
+                  <EditIcon />
+                  <input
+                    accept=".pdf"
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={(e) => handleFileUpload(selectedSubject.id, e)}
+                  />
+                </IconButton>
               </Box>
             ) : (
               <Box sx={{
@@ -208,29 +237,26 @@ const SubjectsTab = () => {
                 <Typography variant="body1">
                   لا يوجد منهاج مرفوع حالياً
                 </Typography>
-                <input
-                  accept=".pdf"
-                  id={`upload-syllabus-${selectedSubject.id}`}
-                  type="file"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileUpload(selectedSubject.id, e)}
-                />
-                <label htmlFor={`upload-syllabus-${selectedSubject.id}`}>
-                  <Button
-                    variant="contained"
-                    startIcon={<UploadIcon />}
-                    component="span"
-                    sx={{
-                      backgroundColor: '#5a3e1b',
-                      color: 'white',
-                      '&:hover': { backgroundColor: '#7b3f00' },
-                      px: 3,
-                      py: 1
-                    }}
-                  >
-                    رفع المنهاج
-                  </Button>
-                </label>
+                <Button
+                  variant="contained"
+                  startIcon={<UploadIcon />}
+                  component="label"
+                  sx={{
+                    backgroundColor: '#5a3e1b',
+                    color: 'white',
+                    '&:hover': { backgroundColor: '#7b3f00' },
+                    px: 3,
+                    py: 1
+                  }}
+                >
+                  رفع المنهاج
+                  <input
+                    accept=".pdf"
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={(e) => handleFileUpload(selectedSubject.id, e)}
+                  />
+                </Button>
               </Box>
             )}
           </Box>
@@ -266,7 +292,7 @@ const SubjectsTab = () => {
         <DialogContent sx={{
           py: 3,
           backgroundColor: '#fffaf5',
-          overflow: 'visible'
+          '& .MuiTextField-root': { mt: 2 } 
         }}>
           <TextField
             fullWidth
