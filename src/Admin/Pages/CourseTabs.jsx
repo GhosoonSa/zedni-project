@@ -1,4 +1,4 @@
-import{ useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tab from "react-bootstrap/Tab";
@@ -20,7 +20,7 @@ import {
 
 const CourseTabs = () => {
   const location = useLocation();
-  
+
   const level = location.state?.level || null;
   const courseName = location.state?.courseName || "اسم الدورة";
 
@@ -62,7 +62,7 @@ const CourseTabs = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: "visible",
           height: isSmallScreen ? "auto" : "500px",
           width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
@@ -89,6 +89,8 @@ const CourseTabs = () => {
             ml: isSmallScreen ? 0 : 4,
             p: isSmallScreen ? 2 : 3,
             backgroundColor: "#fffaf5",
+            minHeight: "auto",
+            overflow: "visible"
           }}
         >
           <Tabs
