@@ -58,45 +58,45 @@ const TeacherCourseTabs = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: "visible",
           height: isSmallScreen ? "auto" : "500px",
           width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
           padding: isSmallScreen ? "0 10px" : "0",
         }}
       >
-   <Box sx={{ 
-  textAlign: "right",
-  mb: 4,
-  px: 3,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end", 
-  flexDirection: "row-reverse",
-  gap: 2 
-}}>
-  <Typography
-    variant="h5"
-    sx={{
-      fontSize: isSmallScreen ? "1.2rem" : "1.5rem",
-      color: "#7b3f00",
-      fontWeight: "bold",
-      marginLeft: "10px" 
-    }}
-  >
-    {courseLevel ? `المستوى ${courseLevel}` : ""}
-  </Typography>
-  <Typography
-    variant="h3"
-    sx={{
-      fontSize: isSmallScreen ? "1.8rem" : "2.4rem",
-      color: "#5a3e1b",
-      fontWeight: "bold",
-    }}
-  >
-    {courseTitle || "الدورة التعليمية"}
-  </Typography>
-</Box>
+        <Box sx={{
+          textAlign: "right",
+          mb: 4,
+          px: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          flexDirection: "row-reverse",
+          gap: 2
+        }}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontSize: isSmallScreen ? "1.2rem" : "1.5rem",
+              color: "#7b3f00",
+              fontWeight: "bold",
+              marginLeft: "10px"
+            }}
+          >
+            {courseLevel ? `المستوى ${courseLevel}` : ""}
+          </Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: isSmallScreen ? "1.8rem" : "2.4rem",
+              color: "#5a3e1b",
+              fontWeight: "bold",
+            }}
+          >
+            {courseTitle || "الدورة التعليمية"}
+          </Typography>
+        </Box>
 
         <Paper
           elevation={3}
