@@ -53,7 +53,7 @@ const StudentCourseTabs = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: "visible",
           height: "500px",
           width: isSmallScreen ? "95%" : isMediumScreen ? "80%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
