@@ -58,7 +58,7 @@ const SubAdminCourseTabs = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: "visible",
           height: isSmallScreen ? "auto" : "500px",
           width: isSmallScreen ? "95%" : isMediumScreen ? "90%" : "1200px",
           margin: isSmallScreen ? "20px auto" : "100px auto",
