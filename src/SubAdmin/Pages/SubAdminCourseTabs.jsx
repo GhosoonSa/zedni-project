@@ -118,11 +118,6 @@ const SubAdminCourseTabs = () => {
             className="mb-3 items-center"
             justify
           >
-            <Tab eventKey="ClassesPlanTab" title="الإعلانات">
-              <div style={{ flex: 1, overflow: "auto" }}>
-                <SubAdminPosterTab />
-              </div>
-            </Tab>
             <Tab eventKey="SubjectsTab" title="الحضور">
               <div style={{ flex: 1, overflow: "auto" }}>
                 <SubAdminJoiningRequestsTab />
