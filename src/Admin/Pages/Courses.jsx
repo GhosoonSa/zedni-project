@@ -12,6 +12,7 @@ import {
 import AddCourse from "../Components/AddCourse";
 import CourseOptionsModal from "../Components/CourseOptionsModal";
 import backgroundTabs from "/backgroundTabs.jpg";
+import axios from "axios";
 
 const CARD_WIDTH = 260;
 
@@ -21,42 +22,28 @@ const Courses = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showOnlyLevels, setShowOnlyLevels] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [ads, setAds] = useState([]);
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     console.log("Received token: ", authToken);
   }, []);
 
-  const ads = [
-    {
-      id: 1,
-      content: "/course.png",
-    },
-    {
-      id: 2,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 2,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 2,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 2,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 3,
-      content: "/course.png",
-    },
-  ];
+  // useEffect(() => {
+  //   const fetchAds = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:8000/api/getAllAnnouncements",
+  //         { headers: { Accept: "application/json" } }
+  //       );
+  //       setAds(response.data.announcements);
+  //       console.log("get ads " + ads);
+  //     } catch (error) {
+  //       console.error("Error getting ads :", error);
+  //     }
+  //   };
+  //   fetchAds();
+  // }, [ads]);
 
   const courses = [
     { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
@@ -70,9 +57,9 @@ const Courses = () => {
     { id: 4, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 5, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
     { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 9, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 7, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
+    { id: 10, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
   ];
 
   const handleCourseClick = (course, event) => {
@@ -140,7 +127,7 @@ const Courses = () => {
       <CardMedia
         component="img"
         height="140"
-        image={ad.content}
+        // image={`http://localhost:8000/${ad.announcementCourseImage}`}
         alt="إعلان"
         sx={{
           width: "100%",
@@ -148,7 +135,7 @@ const Courses = () => {
         }}
       />
 
-      {ad.text && (
+      {ad.description && (
         <Box
           sx={{
             p: 2,
@@ -156,7 +143,7 @@ const Courses = () => {
           }}
         >
           <Typography variant="body1" sx={{ lineHeight: 1.5, color: "#555" }}>
-            {ad.text}
+            {ad.description}
           </Typography>
         </Box>
       )}

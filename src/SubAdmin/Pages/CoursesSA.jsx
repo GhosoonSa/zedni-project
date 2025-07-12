@@ -7,7 +7,7 @@ import {
   Paper,
   Card,
   CardContent,
-  CardMedia
+  CardMedia,
 } from "@mui/material";
 import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminLevelsModal from "../Components/SubAdminLevelsModal";
@@ -36,8 +36,8 @@ const CoursesSA = () => {
       navigate("/SubAdminCourseTabs", {
         state: {
           courseTitle: course.title,
-          level: null
-        }
+          level: null,
+        },
       });
     }
   };
@@ -47,8 +47,8 @@ const CoursesSA = () => {
     navigate("/SubAdminCourseTabs", {
       state: {
         courseTitle: selectedCourse.title,
-        level: level
-      }
+        level: level,
+      },
     });
   };
 
@@ -75,32 +75,41 @@ const CoursesSA = () => {
             left: 0,
             width: "100%",
             height: "100%",
-            background: "linear-gradient(to bottom, rgba(255, 253, 250, 0.8), rgba(248, 244, 233, 0.9))"
+            background:
+              "linear-gradient(to bottom, rgba(255, 253, 250, 0.8), rgba(248, 244, 233, 0.9))",
           },
         }}
       />
 
-      <Box sx={{
-        mt: 12,
-        px: { xs: 2, sm: 4, md: 6, lg: 10 },
-        direction: "rtl",
-        position: "relative",
-        zIndex: 1
-      }}>
+      <Box
+        sx={{
+          mt: 12,
+          px: { xs: 2, sm: 4, md: 6, lg: 10 },
+          direction: "rtl",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <AdsSection />
 
-        <Paper elevation={3} sx={{
-          p: 3,
-          mb: 6,
-          backgroundColor: "rgba(255, 250, 245, 0.95)",
-          border: "1px solid #e0d6c2",
-          backdropFilter: "blur(2px)"
-        }}>
-          <Typography variant="h5" sx={{
-            mb: 3,
-            color: "#7b3f00",
-            fontWeight: "bold"
-          }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            mb: 6,
+            backgroundColor: "rgba(255, 250, 245, 0.95)",
+            border: "1px solid #e0d6c2",
+            backdropFilter: "blur(2px)",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 3,
+              color: "#7b3f00",
+              fontWeight: "bold",
+            }}
+          >
             الدورات الحالية
           </Typography>
           <Grid container spacing={3}>
@@ -112,10 +121,10 @@ const CoursesSA = () => {
                     cursor: "pointer",
                     "&:hover": {
                       transform: "translateY(-5px)",
-                      boxShadow: 5
+                      boxShadow: 5,
                     },
                     transition: "all 0.3s ease",
-                    boxShadow: 3
+                    boxShadow: 3,
                   }}
                 >
                   <CardMedia
@@ -136,17 +145,24 @@ const CoursesSA = () => {
           </Grid>
         </Paper>
 
-        <Paper elevation={3} sx={{
-          p: 3,
-          backgroundColor: "rgba(255, 250, 245, 0.95)",
-          border: "1px solid #e0d6c2",
-          backdropFilter: "blur(2px)"
-        }}>
-          <Typography variant="h5" sx={{
-            mb: 3,
-            color: "#7b3f00",
-            fontWeight: "bold"
-          }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            backgroundColor: "rgba(255, 250, 245, 0.95)",
+            border: "1px solid #e0d6c2",
+            backdropFilter: "blur(2px)",
+            marginBottom: "30px",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 3,
+              color: "#7b3f00",
+              fontWeight: "bold",
+            }}
+          >
             الدورات الجديدة
           </Typography>
           <Grid container spacing={3}>
@@ -158,10 +174,10 @@ const CoursesSA = () => {
                     cursor: "pointer",
                     "&:hover": {
                       transform: "translateY(-5px)",
-                      boxShadow: 5
+                      boxShadow: 5,
                     },
                     transition: "all 0.3s ease",
-                    boxShadow: 3
+                    boxShadow: 3,
                   }}
                 >
                   <CardMedia

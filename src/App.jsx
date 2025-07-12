@@ -66,21 +66,21 @@ function App() {
             <ProtectedRoute roles={["admin"]}>
               <CourseTabs />
             </ProtectedRoute>
-          } 
-          />
-            <Route
-  path="/admin/course/:id"
-  element={
-    <ProtectedRoute roles={["admin"]}>
-      <CourseTabs />
-    </ProtectedRoute>
-  }
+          }
+        />
+        <Route
+          path="/admin/course/:id"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <CourseTabs />
+            </ProtectedRoute>
+          }
         />
         {/*protected routes for SubAdmin */}
         <Route
           path="/CoursesSA"
           element={
-            <ProtectedRoute roles={["subAdmin"]}>
+            <ProtectedRoute roles={["subadmin"]}>
               <CoursesSA />
             </ProtectedRoute>
           }
@@ -88,7 +88,7 @@ function App() {
         <Route
           path="/ProfileSA"
           element={
-            <ProtectedRoute roles={["subAdmin"]}>
+            <ProtectedRoute roles={["subadmin"]}>
               <ProfileSA />
             </ProtectedRoute>
           }
@@ -96,7 +96,7 @@ function App() {
         <Route
           path="/MailsSA"
           element={
-            <ProtectedRoute roles={["subAdmin"]}>
+            <ProtectedRoute roles={["subadmin"]}>
               <MailsSA />
             </ProtectedRoute>
           }
@@ -104,7 +104,7 @@ function App() {
         <Route
           path="/SubAdminCourseTabs"
           element={
-            <ProtectedRoute roles={["subAdmin"]}>
+            <ProtectedRoute roles={["subadmin"]}>
               <SubAdminCourseTabs />
             </ProtectedRoute>
           }
@@ -141,15 +141,14 @@ function App() {
               <TeacherCourseTabs />
             </ProtectedRoute>
           }
-            />
+        />
         <Route
-  path="/teacher/course/:id"
-  element={
-    <ProtectedRoute roles={["teacher"]}>
-      <TeacherCourseTabs />
-    </ProtectedRoute>
-  }
-          
+          path="/teacher/course/:id"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <TeacherCourseTabs />
+            </ProtectedRoute>
+          }
         />
         {/*protected routes for Student */}
         <Route

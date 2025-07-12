@@ -5,15 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 export const userContext = createContext();
 
- const ContextProvider = ({ children }) => {
+const ContextProvider = ({ children }) => {
+  const [role, setRole] = useState("subadmin");
+  // const [authenticated, setAuthenticated] = useState(true);
 
-    const [role, setRole] = useState("subAdmin");
-    const [authenticated, setAuthenticated] = useState(true);
-
-  // const [role, setRole] = useState(() => localStorage.getItem("role") || "");
-  // const [authenticated, setAuthenticated] = useState(
-  //   () => !!localStorage.getItem("authToken")
-  // );
+  //const [role, setRole] = useState(() => localStorage.getItem("role") || "");
+  const [authenticated, setAuthenticated] = useState(
+    () => !!localStorage.getItem("authToken")
+  );
 
   const navigate = useNavigate();
 
@@ -49,7 +48,7 @@ export const userContext = createContext();
           case "teacher":
             navigate("/CoursesT", { state: { account, access_token } });
             break;
-          case "subAdmin":
+          case "supervisor":
             navigate("/CoursesSA", { state: { account, access_token } });
             break;
           default:
@@ -97,7 +96,7 @@ export const userContext = createContext();
           case "teacher":
             navigate("/CoursesT", { state: { account, access_token } });
             break;
-          case "subAdmin":
+          case "subadmin":
             navigate("/CoursesSA", { state: { account, access_token } });
             break;
           default:

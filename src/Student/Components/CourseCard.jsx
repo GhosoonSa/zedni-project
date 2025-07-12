@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardMedia,
@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import axios from "axios";
 
 const ANIMATION_DURATION = 400;
 const HOVER_SCALE = 1.05;
@@ -27,6 +28,11 @@ const CourseCard = ({ course, isNew = false }) => {
   const [snackPosition, setSnackPosition] = useState({ top: 0 });
   const cardRef = useRef(null);
   const navigate = useNavigate();
+  const authToken = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    console.log("Received token: ", authToken);
+  }, [authToken]);
 
   const handleCardClick = () => {
     if (clicked || isNew) return;
@@ -36,15 +42,33 @@ const CourseCard = ({ course, isNew = false }) => {
     }, ANIMATION_DURATION);
   };
 
-  const handleJoinClick = (e) => {
+  const handleJoinClick = async (e, courseID) => {
     e.stopPropagation();
-    if (cardRef.current) {
-      const rect = cardRef.current.getBoundingClientRect();
-      setSnackPosition({
-        top: rect.height + 32,
-      });
+    try {
+      console.log("token: " + authToken);
+      const response = await axios.get(
+        `http://localhost:8000/api/createJoiningRequest/${courseID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      console.log("response :" + response.message);
+      if (response.status === 200) {
+        if (cardRef.current) {
+          const rect = cardRef.current.getBoundingClientRect();
+          setSnackPosition({
+            top: rect.height + 32,
+          });
+        }
+        setSnackOpen(true);
+      }
+    } catch (error) {
+      console.error("Error sending user id:", error);
     }
-    setSnackOpen(true);
   };
 
   const handleSnackClose = (_, reason) => {
@@ -116,7 +140,7 @@ const CourseCard = ({ course, isNew = false }) => {
                 <Button
                   size="small"
                   variant="contained"
-                  onClick={handleJoinClick}
+                  onClick={(e) => handleJoinClick(e, course.id)}
                   sx={{
                     px: 2.5,
                     backgroundColor: "#f9e6cd",

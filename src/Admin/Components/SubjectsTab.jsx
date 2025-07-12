@@ -12,13 +12,13 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
-  Dialog
+  Dialog,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import UploadIcon from '@mui/icons-material/Upload';
-import DescriptionIcon from '@mui/icons-material/Description';
-import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@mui/icons-material/Upload";
+import DescriptionIcon from "@mui/icons-material/Description";
+import EditIcon from "@mui/icons-material/Edit";
 
 const SubjectsTab = () => {
   const teachers = [
@@ -37,8 +37,6 @@ const SubjectsTab = () => {
     { id: 2, name: "السيرة", teacher: "خالد", syllabus: null },
     { id: 3, name: "التفسير", teacher: "علي", syllabus: null },
     { id: 4, name: "الحديث", teacher: "أحمد", syllabus: "حديث.pdf" },
-        { id: 4, name: "الحديث", teacher: "أحمد", syllabus: "حديث.pdf" }
-
   ]);
 
   const [newSubject, setNewSubject] = useState("");
@@ -52,7 +50,7 @@ const SubjectsTab = () => {
         id: Date.now(),
         name: newSubject,
         teacher: selectedTeacher,
-        syllabus: null
+        syllabus: null,
       };
       setSubjects([...subjects, newSubjectObj]);
       handleCloseDialog();
@@ -62,9 +60,13 @@ const SubjectsTab = () => {
   const handleFileUpload = (subjectId, event) => {
     const file = event.target.files[0];
     if (file) {
-      setSubjects(subjects.map(subject =>
-        subject.id === subjectId ? { ...subject, syllabus: file.name } : subject
-      ));
+      setSubjects(
+        subjects.map((subject) =>
+          subject.id === subjectId
+            ? { ...subject, syllabus: file.name }
+            : subject
+        )
+      );
       if (selectedSubject && selectedSubject.id === subjectId) {
         setSelectedSubject({ ...selectedSubject, syllabus: file.name });
       }
@@ -72,7 +74,7 @@ const SubjectsTab = () => {
   };
 
   const handleSelectSubject = (subjectId) => {
-    const subject = subjects.find(s => s.id === subjectId);
+    const subject = subjects.find((s) => s.id === subjectId);
     setSelectedSubject(subject);
   };
 
@@ -85,14 +87,14 @@ const SubjectsTab = () => {
   return (
     <Box sx={{ p: 3 }}>
       {}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3 }}>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setOpenAddDialog(true)}
           sx={{
-            backgroundColor: '#5a3e1b',
-            '&:hover': { backgroundColor: '#7b3f00' }
+            backgroundColor: "#5a3e1b",
+            "&:hover": { backgroundColor: "#7b3f00" },
           }}
         >
           إضافة مادة
@@ -100,51 +102,63 @@ const SubjectsTab = () => {
       </Box>
 
       {}
-      <Box sx={{
-        display: 'flex',
-        overflowX: 'auto',
-        gap: 2,
-        py: 2,
-        '&::-webkit-scrollbar': {
-          height: '8px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#E7BC91',
-          borderRadius: '4px',
-        },
-        '&::-webkit-scrollbar-track': {
-          backgroundColor: '#f8f4e9',
-        }
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          overflowX: "auto",
+          gap: 2,
+          py: 2,
+          "&::-webkit-scrollbar": {
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#E7BC91",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f8f4e9",
+          },
+        }}
+      >
         {subjects.map((subject, index) => (
-          <Box key={subject.id} sx={{
-            minWidth: { xs: '45%', sm: '30%', md: '22%' }, 
-            flexShrink: 0
-          }}>
+          <Box
+            key={subject.id}
+            sx={{
+              minWidth: { xs: "45%", sm: "30%", md: "22%" },
+              flexShrink: 0,
+            }}
+          >
             <Grow in={true} timeout={index * 200}>
               <Card
                 onClick={() => handleSelectSubject(subject.id)}
                 sx={{
-                  backgroundColor: selectedSubject?.id === subject.id ? '#f8f4e9' : '#fffaf5',
-                  border: selectedSubject?.id === subject.id ? '2px solid #E7BC91' : '1px solid #e0d6c2',
+                  backgroundColor:
+                    selectedSubject?.id === subject.id ? "#f8f4e9" : "#fffaf5",
+                  border:
+                    selectedSubject?.id === subject.id
+                      ? "2px solid #E7BC91"
+                      : "1px solid #e0d6c2",
                   borderRadius: 2,
                   boxShadow: 3,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    borderColor: '#E7BC91'
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "translateY(-5px)",
+                    borderColor: "#E7BC91",
                   },
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   mb: 2,
-                  height: '100%'
+                  height: "100%",
                 }}
               >
                 <CardContent>
-                  <Typography variant="h6" sx={{ 
-                    fontWeight: 'bold', 
-                    textAlign: 'center',
-                    fontSize: '1rem' 
-                  }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: "1rem",
+                    }}
+                  >
                     {subject.name}
                   </Typography>
                 </CardContent>
@@ -156,54 +170,66 @@ const SubjectsTab = () => {
 
       {}
       {selectedSubject && (
-        <Box sx={{
-          mt: 3,
-          width: '100%',
-          border: '2px solid #E7BC91',
-          borderRadius: 2,
-          backgroundColor: '#fffaf5',
-          p: 3,
-          boxShadow: 3,
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
+        <Box
+          sx={{
+            mt: 3,
+            width: "100%",
+            border: "2px solid #E7BC91",
+            borderRadius: 2,
+            backgroundColor: "#fffaf5",
+            p: 3,
+            boxShadow: 3,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" sx={{ color: '#5a3e1b' }}>
+            <Typography variant="h6" sx={{ color: "#5a3e1b" }}>
               الأستاذ: {selectedSubject.teacher}
             </Typography>
           </Box>
 
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            width: '100%'
-          }}>
-            <Typography variant="subtitle1" sx={{ 
-              fontWeight: 'bold', 
-              color: '#5a3e1b'
-            }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: "bold",
+                color: "#5a3e1b",
+              }}
+            >
               المنهاج:
             </Typography>
 
             {selectedSubject.syllabus ? (
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: '#f8f4e9',
-                p: 2,
-                borderRadius: 1,
-                gap: 2,
-                width: '100%',
-                position: 'relative'
-              }}>
-                <DescriptionIcon color="primary" sx={{ fontSize: '2rem' }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#f8f4e9",
+                  p: 2,
+                  borderRadius: 1,
+                  gap: 2,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                <DescriptionIcon color="primary" sx={{ fontSize: "2rem" }} />
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="body1" sx={{
-                    wordBreak: 'break-word',
-                    whiteSpace: 'normal',
-                      pr: 4
-                  }}>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      wordBreak: "break-word",
+                      whiteSpace: "normal",
+                      pr: 4,
+                    }}
+                  >
                     {selectedSubject.syllabus}
                   </Typography>
                 </Box>
@@ -211,29 +237,31 @@ const SubjectsTab = () => {
                 <IconButton
                   component="label"
                   sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     left: 8,
                     top: 8,
-                    color: '#5a3e1b',
-                    '&:hover': { backgroundColor: 'rgba(90, 62, 27, 0.1)' }
+                    color: "#5a3e1b",
+                    "&:hover": { backgroundColor: "rgba(90, 62, 27, 0.1)" },
                   }}
                 >
                   <EditIcon />
                   <input
                     accept=".pdf"
                     type="file"
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={(e) => handleFileUpload(selectedSubject.id, e)}
                   />
                 </IconButton>
               </Box>
             ) : (
-              <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                alignItems: 'flex-start'
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  alignItems: "flex-start",
+                }}
+              >
                 <Typography variant="body1">
                   لا يوجد منهاج مرفوع حالياً
                 </Typography>
@@ -242,18 +270,18 @@ const SubjectsTab = () => {
                   startIcon={<UploadIcon />}
                   component="label"
                   sx={{
-                    backgroundColor: '#5a3e1b',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#7b3f00' },
+                    backgroundColor: "#5a3e1b",
+                    color: "white",
+                    "&:hover": { backgroundColor: "#7b3f00" },
                     px: 3,
-                    py: 1
+                    py: 1,
                   }}
                 >
                   رفع المنهاج
                   <input
                     accept=".pdf"
                     type="file"
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={(e) => handleFileUpload(selectedSubject.id, e)}
                   />
                 </Button>
@@ -267,21 +295,23 @@ const SubjectsTab = () => {
       <Dialog
         open={openAddDialog}
         onClose={(event, reason) => {
-          if (reason !== 'backdropClick') {
+          if (reason !== "backdropClick") {
             handleCloseDialog();
           }
         }}
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle sx={{
-          backgroundColor: '#f8f4e9',
-          borderBottom: '1px solid #E7BC91',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        <DialogTitle
+          sx={{
+            backgroundColor: "#f8f4e9",
+            borderBottom: "1px solid #E7BC91",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             إضافة مادة جديدة
           </Typography>
           <IconButton onClick={handleCloseDialog}>
@@ -289,11 +319,13 @@ const SubjectsTab = () => {
           </IconButton>
         </DialogTitle>
 
-        <DialogContent sx={{
-          py: 3,
-          backgroundColor: '#fffaf5',
-          '& .MuiTextField-root': { mt: 2 } 
-        }}>
+        <DialogContent
+          sx={{
+            py: 3,
+            backgroundColor: "#fffaf5",
+            "& .MuiTextField-root": { mt: 2 },
+          }}
+        >
           <TextField
             fullWidth
             label="اسم المادة"
@@ -313,7 +345,7 @@ const SubjectsTab = () => {
                 PaperProps: {
                   style: {
                     maxHeight: 300,
-                    overflow: 'auto',
+                    overflow: "auto",
                   },
                 },
               },
@@ -327,16 +359,15 @@ const SubjectsTab = () => {
           </TextField>
         </DialogContent>
 
-        <DialogActions sx={{
-          backgroundColor: '#f8f4e9',
-          borderTop: '1px solid #E7BC91',
-          px: 3,
-          py: 2
-        }}>
-          <Button
-            onClick={handleCloseDialog}
-            sx={{ color: '#5a3e1b' }}
-          >
+        <DialogActions
+          sx={{
+            backgroundColor: "#f8f4e9",
+            borderTop: "1px solid #E7BC91",
+            px: 3,
+            py: 2,
+          }}
+        >
+          <Button onClick={handleCloseDialog} sx={{ color: "#5a3e1b" }}>
             إلغاء
           </Button>
           <Button
@@ -344,9 +375,9 @@ const SubjectsTab = () => {
             disabled={!newSubject || !selectedTeacher}
             variant="contained"
             sx={{
-              backgroundColor: '#5a3e1b',
-              '&:hover': { backgroundColor: '#7b3f00' },
-              '&:disabled': { backgroundColor: '#e0d6c2' }
+              backgroundColor: "#5a3e1b",
+              "&:hover": { backgroundColor: "#7b3f00" },
+              "&:disabled": { backgroundColor: "#e0d6c2" },
             }}
           >
             حفظ

@@ -13,7 +13,6 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 const SubAdminPeopleTab = () => {
-
   const students = [
     {
       id: 1,
@@ -124,14 +123,17 @@ const SubAdminPeopleTab = () => {
   };
 
   return (
-    <Box sx={{ direction: 'rtl' }}>
-      <Paper elevation={0} sx={{
-        backgroundColor: '#f8f4e9',
-        borderRadius: 2,
-        p: 2,
-        mb: 3,
-        border: '1px solid #e0d6c2'
-      }}>
+    <Box sx={{ direction: "rtl" }}>
+      <Paper
+        elevation={0}
+        sx={{
+          backgroundColor: "#f8f4e9",
+          borderRadius: 2,
+          p: 2,
+          mb: 3,
+          border: "1px solid #e0d6c2",
+        }}
+      >
         <Grid container spacing={2}>
           {students.map((student) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={student.id}>
@@ -139,41 +141,48 @@ const SubAdminPeopleTab = () => {
                 elevation={0}
                 sx={{
                   p: 2,
-                  direction: 'rtl',
-                  backgroundColor: 'transparent',
+                  direction: "rtl",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
-                  border: '1px solid #e0d6c2',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    backgroundColor: 'rgba(231, 188, 145, 0.2)',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  border: "1px solid #e0d6c2",
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "rgba(231, 188, 145, 0.2)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                   },
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
                 onClick={() => handleStudentClick(student)}
               >
-                <Box sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2
-                }}>
-                  <Avatar sx={{
-                    bgcolor: '#E7BC91',
-                    width: 40,
-                    height: 40,
-                    fontSize: '1.1rem'
-                  }}>
-                    {student.name.split(' ')[0].charAt(0)}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      bgcolor: "#E7BC91",
+                      width: 40,
+                      height: 40,
+                      fontSize: "1.1rem",
+                    }}
+                  >
+                    {student.name.split(" ")[0].charAt(0)}
                   </Avatar>
                   <Box>
-                    <Typography variant="subtitle1" sx={{
-                      fontWeight: 'medium',
-                      color: '#5a3e1b',
-                      fontSize: '1.1rem'
-                    }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: "medium",
+                        color: "#5a3e1b",
+                        fontSize: "1.1rem",
+                      }}
+                    >
                       {student.name}
                     </Typography>
                   </Box>
@@ -188,10 +197,11 @@ const SubAdminPeopleTab = () => {
       <Dialog
         open={Boolean(selectedStudent)}
         onClose={(event, reason) => {
-          if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+          if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
             handleCloseModal();
           }
-        }} fullWidth
+        }}
+        fullWidth
         maxWidth="sm"
         dir="rtl"
         sx={{
@@ -208,7 +218,7 @@ const SubAdminPeopleTab = () => {
             color: "#5E3023",
             borderBottom: "1px solid #E7BC91",
             position: "relative",
-            py: 3
+            py: 3,
           }}
         >
           <IconButton
@@ -233,14 +243,20 @@ const SubAdminPeopleTab = () => {
         <DialogContent sx={{ pt: 3, pb: 4 }}>
           <Box sx={{ mb: 3 }}>
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 الاسم:
               </Typography>
               <Typography variant="body1">{selectedStudent?.name}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 اسم الأب:
               </Typography>
               <Typography variant="body1">
@@ -249,7 +265,10 @@ const SubAdminPeopleTab = () => {
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 تاريخ الميلاد:
               </Typography>
               <Typography variant="body1">
@@ -258,21 +277,30 @@ const SubAdminPeopleTab = () => {
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 البريد الإلكتروني:
               </Typography>
               <Typography variant="body1">{selectedStudent?.email}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 رقم الهاتف:
               </Typography>
               <Typography variant="body1">{selectedStudent?.phone}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 العنوان:
               </Typography>
               <Typography variant="body1">
@@ -281,7 +309,10 @@ const SubAdminPeopleTab = () => {
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
@@ -290,7 +321,10 @@ const SubAdminPeopleTab = () => {
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 120 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
                 حاصل على إجازة:
               </Typography>
               <Typography variant="body1">

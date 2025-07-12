@@ -66,7 +66,7 @@ const SignUp = () => {
 
   const renderAdditionalFields = () => {
     switch (formData.role) {
-      case "subAdmin":
+      case "subadmin":
         return (
           <>
             <TextareaAutosize
@@ -354,7 +354,7 @@ const SignUp = () => {
                   fullWidth
                   color="warning"
                 >
-                  <MenuItem value="subAdmin">مشرف</MenuItem>
+                  <MenuItem value="subadmin">مشرف</MenuItem>
                   <MenuItem value="teacher">أستاذ</MenuItem>
                   <MenuItem value="student">طالب</MenuItem>
                 </TextField>

@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 
 const CourseOptionsModal = ({
   open,
@@ -35,103 +36,41 @@ const CourseOptionsModal = ({
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [requests, setRequests] = useState([
-    {
-      name: "أحمد محمد",
-      email: "ahmed@example.com",
-      fatherName: "محمد عبدالله",
-      phone: "0912345678",
-      address: "دمشق - المزة",
-      birthDate: "1995-05-15",
-      qualification: "بكالوريوس في الشريعة",
-      isCertified: true,
-      previousCourses: ["الفقه الأساسي", "أصول الفقه"],
-    },
-    {
-      name: "سارة علي",
-      email: "sara@example.com",
-      fatherName: "علي محمود",
-      phone: "0934567890",
-      address: "دمشق - القابون",
-      birthDate: "1998-08-22",
-      qualification: "طالبة جامعية",
-      isCertified: false,
-      previousCourses: ["التجويد"],
-    },
-    {
-      name: "خالد عبدالله",
-      email: "khaled@example.com",
-      fatherName: "عبدالله أحمد",
-      phone: "0945678901",
-      address: "دمشق - قدسيا",
-      birthDate: "1990-03-10",
-      qualification: "إمام مسجد",
-      isCertified: true,
-      previousCourses: ["الفقه", "التفسير", "الحديث"],
-    },
-    {
-      name: "بيان",
-      email: "bayyan@example.com",
-      fatherName: "محمود حسن",
-      phone: "0956789012",
-      address: "دمشق - الميدان",
-      birthDate: "1993-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-    },
-    {
-      name: "نور",
-      email: "nour@example.com",
-      fatherName: "محمود ",
-      phone: "0956779012",
-      address: "دمشق ",
-      birthDate: "1983-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-    },
-    {
-      name: "اية",
-      email: "aya@example.com",
-      fatherName: " حسن",
-      phone: "0956749012",
-      address: " الميدان",
-      birthDate: "1999-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-    },
-    {
-      name: "راية",
-      email: "raya@example.com",
-      fatherName: "محمود ",
-      phone: "0996789012",
-      address: " الميدان",
-      birthDate: "1999-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-    },
-      {
-      name: "شمس",
-      email: "ya@example.com",
-      fatherName: "محمود ",
-      phone: "0906789012",
-      address: " الميدان",
-      birthDate: "1979-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-    },
-  ]);
+  const [requests, setRequests] = useState([{}]);
+  const authToken = localStorage.getItem("authToken");
+  const courseID = course.id;
 
+  useEffect(() => {
+    //get requests:
+    const fetchRequests = async (courseID) => {
+      try {
+        console.log("Received token: ", authToken);
+        const response = await axios.get(
+          `http://localhost:8000/api/admin/getJoiningRequests/${courseID}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setRequests(response.data);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+      }
+    };
+    fetchRequests();
+  }, [authToken]);
+
+  //if the course is old show only the levels without requests
   useEffect(() => {
     setTab(showOnlyLevels ? 1 : 0);
   }, [showOnlyLevels, open]);
 
   const handleTabChange = (_, newVal) => setTab(newVal);
 
+  //navigate and show the choosen level
   const handleLevelClick = (level) => {
     onClose();
     navigate("/CourseTabs", {
@@ -143,8 +82,26 @@ const CourseOptionsModal = ({
     });
   };
 
-  const handleRequestClick = (request) => {
+  //get the student info
+  const handleRequestClick = async (request) => {
     setSelectedRequest(request);
+    const studentID = request.student_id;
+    try {
+      console.log("Received token: ", authToken);
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/getStudentInfo/${studentID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSelectedRequest(response.data);
+    } catch (error) {
+      console.error("Error getting user info:", error);
+    }
     setSelectedLevel("");
   };
 
@@ -152,16 +109,42 @@ const CourseOptionsModal = ({
     setSelectedRequest(null);
   };
 
-  const handleAssignLevel = () => {
-    if (selectedRequest && selectedLevel) {
-      console.log(
-        `تم تعيين المستوى ${selectedLevel} للطالب ${selectedRequest.name}`
+  //assign a level for a student
+  const handleAssignLevel = async (request) => {
+    const studentID = request.student_id;
+    //? const courseID = request.course_id;
+    const formData = new FormData();
+    formData.append("student_id", studentID);
+    formData.append("course_id", courseID);
+    formData.append("level", level);
+
+    try {
+      console.log("Received token: ", authToken);
+      const response = await axios.post(
+        `http://localhost:8000/api/admin/enrollStudentToLevel`,
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
       );
-      setSnackbarOpen(true);
-      setRequests(
-        requests.filter((req) => req.email !== selectedRequest.email)
-      );
-      handleCloseRequestModal();
+      setSelectedRequest(response.data);
+      // if(response.status===200)
+      if (selectedRequest && selectedLevel) {
+        console.log(
+          `تم تعيين المستوى ${selectedLevel} للطالب ${selectedRequest.name}`
+        );
+        setSnackbarOpen(true);
+        setRequests(
+          requests.filter((req) => req.email !== selectedRequest.email)
+        );
+        handleCloseRequestModal();
+      }
+    } catch (error) {
+      console.error("Error getting user info:", error);
     }
   };
 
@@ -170,26 +153,28 @@ const CourseOptionsModal = ({
   };
 
   const LevelsList = () => (
-    <Box sx={{ 
-      mt: 1,
-      height: '45vh',
-      overflowY: 'auto',
-      "&::-webkit-scrollbar": {
-        width: "8px",
-      },
-      "&::-webkit-scrollbar-thumb": {
-        backgroundColor: "#E7BC91",
-        borderRadius: "4px",
-      },
-    }}>
+    <Box
+      sx={{
+        mt: 1,
+        height: "45vh",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#E7BC91",
+          borderRadius: "4px",
+        },
+      }}
+    >
       {[...Array(7)].map((_, i) => (
-        <ListItemButton 
-          key={i + 1} 
+        <ListItemButton
+          key={i + 1}
           onClick={() => handleLevelClick(i + 1)}
           sx={{
-            '&:hover': {
-              backgroundColor: '#f5f5f5',
-            }
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
           }}
         >
           <ListItemText
@@ -205,7 +190,7 @@ const CourseOptionsModal = ({
     <Box
       sx={{
         mt: 1,
-        height: '45vh',
+        height: "45vh",
         overflowY: "auto",
         "&::-webkit-scrollbar": {
           width: "8px",
@@ -236,7 +221,8 @@ const CourseOptionsModal = ({
                 height: 32,
               }}
             >
-              {request.name.charAt(0)}
+              {/* {request.name.charAt(0)} */}
+              {request.name}
             </Avatar>
           </ListItemAvatar>
           <ListItemText
@@ -282,7 +268,7 @@ const CourseOptionsModal = ({
             name: "preventOverflow",
             options: {
               padding: 16,
-              boundariesElement: 'viewport',
+              boundariesElement: "viewport",
             },
           },
         ]}
@@ -296,18 +282,18 @@ const CourseOptionsModal = ({
           border: "1px solid #E7BC91",
           marginLeft: "100px",
           marginTop: "200px",
-          maxHeight: '70vh',
+          maxHeight: "70vh",
         }}
       >
         <Paper
           elevation={0}
-          sx={{ 
-            p: 1, 
-            backgroundColor: "#fffaf5", 
+          sx={{
+            p: 1,
+            backgroundColor: "#fffaf5",
             position: "relative",
-            height: '65vh',
-            display: 'flex',
-            flexDirection: 'column',
+            height: "65vh",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <IconButton
@@ -354,7 +340,7 @@ const CourseOptionsModal = ({
             <Tab label="مستويات الدورة" sx={{ fontSize: "0.85rem" }} />
           </Tabs>
 
-          <Box sx={{ flex: 1, overflow: 'hidden' }}>
+          <Box sx={{ flex: 1, overflow: "hidden" }}>
             {tab === 0 && <JoinRequestsList />}
             {tab === 1 && <LevelsList />}
           </Box>
@@ -365,7 +351,7 @@ const CourseOptionsModal = ({
         open={Boolean(selectedRequest)}
         onClose={handleCloseRequestModal}
         fullWidth
-        maxWidth="sm"
+        maxWidth="xs"
         dir="rtl"
         sx={{
           "& .MuiDialog-paper": {
@@ -403,14 +389,20 @@ const CourseOptionsModal = ({
         <DialogContent sx={{ pt: 6 }}>
           <Box sx={{ mb: 3 }}>
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 الاسم:
               </Typography>
               <Typography variant="body1">{selectedRequest?.name}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 اسم الأب:
               </Typography>
               <Typography variant="body1">
@@ -419,7 +411,10 @@ const CourseOptionsModal = ({
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 تاريخ الميلاد:
               </Typography>
               <Typography variant="body1">
@@ -428,21 +423,30 @@ const CourseOptionsModal = ({
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 البريد الإلكتروني:
               </Typography>
               <Typography variant="body1">{selectedRequest?.email}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 رقم الهاتف:
               </Typography>
               <Typography variant="body1">{selectedRequest?.phone}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 العنوان:
               </Typography>
               <Typography variant="body1">
@@ -451,7 +455,10 @@ const CourseOptionsModal = ({
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
@@ -460,7 +467,10 @@ const CourseOptionsModal = ({
             </Box>
 
             <Box sx={{ display: "flex", mb: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: "bold", minWidth: 100 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
                 حاصل على إجازة:
               </Typography>
               <Typography variant="body1">
@@ -515,7 +525,7 @@ const CourseOptionsModal = ({
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
             <Button
               variant="contained"
-              onClick={handleAssignLevel}
+              onClick={handleAssignLevel(selectedRequest)}
               disabled={!selectedLevel}
               sx={{
                 backgroundColor: "#E7BC91",

@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import SubAdminJoiningRequestsTab from "../Components/SubAdminJoiningRequestsTab";
 import SubAdminPeopleTab from "../Components/SubAdminPeopleTab";
 import SubAdminResultsTab from "../Components/SubAdminResultsTab";
 import SubAdminBooksTab from "../Components/SubAdminBooksTab";
 import SubAdminHeader from "../Components/SubAdminHeader";
-import SubAdminPosterTab from "../Components/SubAdminPosterTab";
+import SubAdminJoiningRequestsTab from "../Components/SubAdminJoiningRequestsTab";
 import { Paper, useMediaQuery, useTheme, Box, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 const SubAdminCourseTabs = () => {
-  const [key, setKey] = useState("ClassesPlanTab");
+  const [key, setKey] = useState("SubjectsTab");
   const [courseTitle, setCourseTitle] = useState("");
   const [courseLevel, setCourseLevel] = useState(null);
   const theme = useTheme();
@@ -49,7 +48,8 @@ const SubAdminCourseTabs = () => {
             left: 0,
             width: "100%",
             height: "100%",
-            background: "linear-gradient(to bottom, rgba(255, 253, 250, 0.8), rgba(248, 244, 233, 0.9))"
+            background:
+              "linear-gradient(to bottom, rgba(255, 253, 250, 0.8), rgba(248, 244, 233, 0.9))",
           },
         }}
       />
@@ -65,16 +65,18 @@ const SubAdminCourseTabs = () => {
           padding: isSmallScreen ? "0 10px" : "0",
         }}
       >
-        <Box sx={{
-          textAlign: "right",
-          mb: 4,
-          px: 3,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          flexDirection: "row-reverse",
-          gap: 2
-        }}>
+        <Box
+          sx={{
+            textAlign: "right",
+            mb: 4,
+            px: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            flexDirection: "row-reverse",
+            gap: 2,
+          }}
+        >
           {courseLevel && (
             <Typography
               variant="h5"
@@ -82,7 +84,7 @@ const SubAdminCourseTabs = () => {
                 fontSize: isSmallScreen ? "1.2rem" : "1.5rem",
                 color: "#7b3f00",
                 fontWeight: "bold",
-                marginLeft: "10px"
+                marginLeft: "10px",
               }}
             >
               {`المستوى ${courseLevel}`}
@@ -108,7 +110,7 @@ const SubAdminCourseTabs = () => {
             backgroundColor: "rgba(255, 253, 250, 0.95)",
             border: "1px solid #e0d6c2",
             borderRadius: "12px",
-            backdropFilter: "blur(2px)"
+            backdropFilter: "blur(2px)",
           }}
         >
           <Tabs
