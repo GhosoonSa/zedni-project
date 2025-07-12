@@ -25,6 +25,7 @@ const SubAdminPeopleTab = () => {
       qualification: "بكالوريوس في الشريعة",
       isCertified: true,
       previousCourses: ["الفقه الأساسي", "أصول الفقه"],
+      lecturesAttended: "7/8",
     },
     {
       id: 2,
@@ -37,6 +38,7 @@ const SubAdminPeopleTab = () => {
       qualification: "طالبة جامعية",
       isCertified: false,
       previousCourses: ["التجويد"],
+      lecturesAttended: "4/8",
     },
     {
       id: 3,
@@ -49,6 +51,7 @@ const SubAdminPeopleTab = () => {
       qualification: "إمام مسجد",
       isCertified: true,
       previousCourses: ["الفقه", "التفسير", "الحديث"],
+      lecturesAttended: "5/7",
     },
     {
       id: 4,
@@ -61,6 +64,8 @@ const SubAdminPeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
+      lecturesAttended: "",
+
     },
     {
       id: 5,
@@ -73,6 +78,8 @@ const SubAdminPeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
+      lecturesAttended: "",
+
     },
     {
       id: 6,
@@ -85,6 +92,8 @@ const SubAdminPeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
+      lecturesAttended: "1/8",
+
     },
     {
       id: 7,
@@ -97,6 +106,9 @@ const SubAdminPeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
+      lecturesAttended: "8/8",
+
+
     },
     {
       id: 8,
@@ -109,6 +121,7 @@ const SubAdminPeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
+      lecturesAttended: "7/8",
     },
   ];
 
@@ -193,7 +206,7 @@ const SubAdminPeopleTab = () => {
         </Grid>
       </Paper>
 
-      {}
+      { }
       <Dialog
         open={Boolean(selectedStudent)}
         onClose={(event, reason) => {
@@ -347,6 +360,17 @@ const SubAdminPeopleTab = () => {
               ) : (
                 <Typography variant="body1">لا يوجد دورات سابقة</Typography>
               )}
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                المحاضرات الحاضرة:
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended}
+              </Typography>
             </Box>
           </Box>
         </DialogContent>
