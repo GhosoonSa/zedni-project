@@ -25,10 +25,13 @@ const TeacherPeopleTab = () => {
       qualification: "بكالوريوس في الشريعة",
       isCertified: true,
       previousCourses: ["الفقه الأساسي", "أصول الفقه"],
-      lecturesAttended: "7/8",
+      lecturesAttended1: "7/8",
+      lecturesAttended2: "5/8",
+      lecturesAttended3: "8/8",
+      lecturesAttended4: "7/8"
     },
     {
-      id: 1,
+      id: 2,
       name: "اية ",
       email: "aya@example.com",
       fatherName: " عبدالله",
@@ -38,7 +41,10 @@ const TeacherPeopleTab = () => {
       qualification: "بكالوريوس في الشريعة",
       isCertified: true,
       previousCourses: ["أصول الفقه"],
-      lecturesAttended: "8/8",
+      lecturesAttended1: "7/8",
+      lecturesAttended2: "5/8",
+      lecturesAttended3: "8/8",
+      lecturesAttended4: "7/8"
     },
   ];
 
@@ -278,16 +284,48 @@ const TeacherPeopleTab = () => {
                 <Typography variant="body1">لا يوجد دورات سابقة</Typography>
               )}
             </Box>
-
             <Box sx={{ display: "flex", mb: 2 }}>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: "bold", minWidth: 120 }}
               >
-                المحاضرات الحاضرة:
+                الحضور للمادة الاولى:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.lecturesAttended}
+                {selectedStudent?.lecturesAttended1}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الثانية :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended2}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الثالثة :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended3}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الرابعة :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended4}
               </Typography>
             </Box>
           </Box>

@@ -25,8 +25,10 @@ const PeopleTab = () => {
       qualification: "بكالوريوس في الشريعة",
       isCertified: true,
       previousCourses: ["الفقه الأساسي", "أصول الفقه"],
-      lecturesAttended: "8/8",
-
+      lecturesAttended1: "7/8",
+      lecturesAttended2: "8/8",
+      lecturesAttended3: "4/8",
+      lecturesAttended4: "6/8",
     },
     {
       id: 2,
@@ -39,7 +41,11 @@ const PeopleTab = () => {
       qualification: "طالبة جامعية",
       isCertified: false,
       previousCourses: ["التجويد"],
-      lecturesAttended: "",
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
+
 
     },
     {
@@ -53,8 +59,10 @@ const PeopleTab = () => {
       qualification: "إمام مسجد",
       isCertified: true,
       previousCourses: ["الفقه", "التفسير", "الحديث"],
-      lecturesAttended: "6/8",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
     {
       id: 4,
@@ -67,8 +75,10 @@ const PeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
-      lecturesAttended: "7/8",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
     {
       id: 5,
@@ -81,8 +91,10 @@ const PeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
-      lecturesAttended: "5/8",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
     {
       id: 6,
@@ -95,8 +107,10 @@ const PeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
-      lecturesAttended: "3/8",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
     {
       id: 7,
@@ -109,8 +123,10 @@ const PeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
-      lecturesAttended: "",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
     {
       id: 8,
@@ -123,8 +139,10 @@ const PeopleTab = () => {
       qualification: "مدرسة",
       isCertified: false,
       previousCourses: [],
-      lecturesAttended: "8/8",
-
+      lecturesAttended1: "",
+      lecturesAttended2: "",
+      lecturesAttended3: "",
+      lecturesAttended4: "",
     },
   ];
 
@@ -363,16 +381,48 @@ const PeopleTab = () => {
                 <Typography variant="body1">لا يوجد دورات سابقة</Typography>
               )}
             </Box>
-
             <Box sx={{ display: "flex", mb: 2 }}>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: "bold", minWidth: 120 }}
               >
-                المحاضرات الحاضرة:
+                الحضور للمادة الاولى:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.lecturesAttended}
+                {selectedStudent?.lecturesAttended1}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الثانية :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended2}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الثالثة :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended3}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", minWidth: 120 }}
+              >
+                الحضور للمادة الرابعة :
+              </Typography>
+              <Typography variant="body1">
+                {selectedStudent?.lecturesAttended4}
               </Typography>
             </Box>
           </Box>
