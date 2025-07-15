@@ -23,27 +23,32 @@ const Courses = () => {
   const [showOnlyLevels, setShowOnlyLevels] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [ads, setAds] = useState([]);
+  const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
     console.log("Received token: ", authToken);
-  }, []);
+  }, [authToken]);
 
-  // useEffect(() => {
-  //   const fetchAds = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:8000/api/getAllAnnouncements",
-  //         { headers: { Accept: "application/json" } }
-  //       );
-  //       setAds(response.data.announcements);
-  //       console.log("get ads " + ads);
-  //     } catch (error) {
-  //       console.error("Error getting ads :", error);
-  //     }
-  //   };
-  //   fetchAds();
-  // }, [ads]);
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/getAllAnnouncements",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+            },
+          }
+        );
+        setAds(response.data.announcements);
+        console.log("get ads " + ads);
+      } catch (error) {
+        console.error("Error getting ads :", error);
+      }
+    };
+    fetchAds();
+  }, [authToken]);
 
   const courses = [
     { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
@@ -127,7 +132,7 @@ const Courses = () => {
       <CardMedia
         component="img"
         height="140"
-        // image={`http://localhost:8000/${ad.announcementCourseImage}`}
+        image={ad.image}
         alt="إعلان"
         sx={{
           width: "100%",
@@ -263,6 +268,7 @@ const Courses = () => {
                   <AddCourse
                     isOpen={isAddOpen}
                     onClose={() => setIsAddOpen(false)}
+                    token={authToken}
                   />
                 </Box>
               )}

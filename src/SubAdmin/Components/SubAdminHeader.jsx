@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import {
-  Typography,
-  Button,
-  Stack,
-  TextField,
-  Box,
-  MenuItem,
-  Checkbox,
-  TextareaAutosize,
-  FormControlLabel,
-  InputAdornment,
-} from "@mui/material";
+import { Button, Stack } from "@mui/material";
+import { userContext } from "../../Auth/ContextProvider";
+
 const SubAdminHeader = () => {
+  const { logout } = useContext(userContext);
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveredC, setIsHoveredC] = useState(false);
   const [isHoveredP, setIsHoveredP] = useState(false);
@@ -21,21 +13,21 @@ const SubAdminHeader = () => {
 
   const handleScroll = () => {
     const scroll = window.scrollY;
-    setIsScrolled(scroll > 200);
+    setIsScrolled(scroll > 100);
   };
   useEffect(() => {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const navigate = useNavigate();
-  //navigate to login
-  const handleLogIn = () => {
-    navigate("/LogIn");
-  };
-  //naviget to sign in
-  const handleSignIn = () => {
-    navigate("/SignUp");
+
+  //naviget to / for logout
+  const handleLogOut = () => {
+    try {
+      logout();
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
   };
   return (
     <>
@@ -110,13 +102,10 @@ const SubAdminHeader = () => {
         <Stack
           direction="row"
           spacing={2}
-          className="col-span-1 gap-2 items-center h-8 w-xl flex pt-8 mr-24"
+          className="col-span-1 items-center h-8 w-xl flex pt-8 mr-24"
         >
-          <Button onClick={handleSignIn} style={{ color: "#BC8A5F" }}>
-            إنشاء حساب
-          </Button>
-          <Button onClick={handleLogIn} style={{ color: "#BC8A5F" }}>
-            تسجيل دخول
+          <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>
+            تسجيل خروج
           </Button>
         </Stack>
       </nav>

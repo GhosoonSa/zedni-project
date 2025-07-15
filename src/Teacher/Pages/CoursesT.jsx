@@ -14,14 +14,15 @@ import {
 } from "@mui/material";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CoursesT = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [openLevelsModal, setOpenLevelsModal] = useState(false);
   const navigate = useNavigate();
+  const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
     console.log("Received token: ", authToken);
   }, []);
 
@@ -46,36 +47,29 @@ const CoursesT = () => {
     },
   ];
 
-  const ads = [
-    {
-      id: 1,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن"
-    },
-    {
-      id: 2,
-      content: "/course.png",
-      text: "ورشة عمل جديدة الأسبوع القادم"
-    },
-    {
-      id: 3,
-      content: "/course.png",
-    },
-    {
-      id: 4,
-      content: "/course.png",
-      text: "إعلان عن مسابقة حفظ القرآن"
-    },
-    {
-      id: 5,
-      content: "/course.png",
-      text: "  مسابقة حفظ القرآن"
-    },
-    {
-      id: 6,
-      content: "/course.png",
-    },
-  ];
+  const [ads, setAds] = useState([]);
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/getAllAnnouncements",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setAds(response.data.announcements);
+        console.log(response.data.announcements);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchAds();
+  }, [authToken]);
 
   const handleCourseClick = (course) => {
     setSelectedCourse(course);
@@ -87,8 +81,8 @@ const CoursesT = () => {
     navigate(`/teacher/course/${selectedCourse.id}`, {
       state: {
         course: selectedCourse,
-        level: level
-      }
+        level: level,
+      },
     });
   };
 
@@ -224,15 +218,16 @@ const CoursesT = () => {
             <Box
               sx={{ display: "flex", flexDirection: "column", height: "100%" }}
             >
-              {}
-              <Box sx={{
-                mb: 6,
-                p: 3,
-                borderRadius: 3,
-                backgroundColor: "#f9f5f0",
-                border: "1px solid #E7BC91",
-                boxShadow: "0 4px 12px rgba(122, 81, 22, 0.1)",
-              }}>
+              <Box
+                sx={{
+                  mb: 6,
+                  p: 3,
+                  borderRadius: 3,
+                  backgroundColor: "#f9f5f0",
+                  border: "1px solid #E7BC91",
+                  boxShadow: "0 4px 12px rgba(122, 81, 22, 0.1)",
+                }}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -263,7 +258,7 @@ const CoursesT = () => {
                     <Box
                       key={ad.id}
                       sx={{
-                        minWidth: 320,
+                        minWidth: 360,
                         borderRadius: 3,
                         overflow: "hidden",
                         boxShadow: 3,
@@ -273,23 +268,23 @@ const CoursesT = () => {
                         "&:hover": {
                           transform: "translateY(-5px)",
                           boxShadow: "0 6px 16px rgba(122, 81, 22, 0.2)",
-                        }
+                        },
                       }}
                     >
                       <CardMedia
                         component="img"
                         height="160"
-                        image={ad.content}
+                        image={ad.image}
                         alt="إعلان"
                         sx={{
                           width: "100%",
                           objectFit: "cover",
                         }}
                       />
-                      {ad.text && (
+                      {ad.description && (
                         <Box sx={{ p: 3, textAlign: "center" }}>
                           <Typography variant="body1" sx={{ color: "#555" }}>
-                            {ad.text}
+                            {ad.description}
                           </Typography>
                         </Box>
                       )}
@@ -298,7 +293,6 @@ const CoursesT = () => {
                 </Box>
               </Box>
 
-              {}
               <Typography
                 variant="h6"
                 sx={{
@@ -315,7 +309,6 @@ const CoursesT = () => {
           </Fade>
         </Paper>
 
-        {}
         {selectedCourse && (
           <TeacherLevelsModal
             open={openLevelsModal}

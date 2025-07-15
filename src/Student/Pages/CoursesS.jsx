@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StudentHeader from "../Components/StudentHeader";
 import CourseCard from "../Components/CourseCard";
 import AdsSection from "../Components/AdsSection";
@@ -13,35 +13,34 @@ import {
   Stack,
   Paper,
 } from "@mui/material";
+import axios from "axios";
 
 const CoursesS = () => {
   const [tabIndex, setTabIndex] = useState(0);
+  const authToken = localStorage.getItem("authToken");
+  const [ads, setAds] = useState([]);
 
-  const ads = [
-    {
-      id: 1,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 1,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    }, {
-      id: 1,
-      content: "/course.png",
-      text: "سارع بالتسجيل في دوراتنا الجديدة قبل اكتمال الأماكن",
-    },
-    {
-      id: 2,
-      content: "/course.png",
-    },
-    {
-      id: 3,
-      content: "/course.png",
-      text: "ورشة عمل مجانية هذا الأسبوع",
-    },
-  ];
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/getAllAnnouncements",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setAds(response.data.announcements);
+        console.log(response.data.announcements);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchAds();
+  }, [authToken]);
 
   const enrolledCourses = [
     {
@@ -152,18 +151,22 @@ const CoursesS = () => {
         >
           <Fade in timeout={1000}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              { }
-              <Box sx={{ mb: 6 }}> { }
+              {}
+              <Box sx={{ mb: 6 }}>
+                {" "}
+                {}
                 <AdsSection ads={ads} />
               </Box>
 
-              { }
-              <Box sx={{
-                backgroundColor: "rgba(255, 248, 235, 0.5)",
-                borderRadius: 3,
-                p: 3,
-                border: "1px solid #f0e6d2",
-              }}>
+              {}
+              <Box
+                sx={{
+                  backgroundColor: "rgba(255, 248, 235, 0.5)",
+                  borderRadius: 3,
+                  p: 3,
+                  border: "1px solid #f0e6d2",
+                }}
+              >
                 <Tabs
                   value={tabIndex}
                   onChange={handleChange}

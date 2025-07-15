@@ -14,7 +14,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
 const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
-  const [newAdImage, setNewAdImage] = useState(null);
+  const [newAdImage, setNewAdImage] = useState({
+    image: "",
+  });
+  const [image, setImage] = useState(null);
   const [newAdText, setNewAdText] = useState("");
   const role = localStorage.getItem("role");
 
@@ -23,22 +26,23 @@ const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setNewAdImage(reader.result);
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
+    setNewAdImage(e.target.files[0]);
   };
 
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      formData.append("announcementCourseImage", newAdImage);
+      formData.append("image", newAdImage);
       formData.append("description", newAdText);
       console.log("formData: " + formData);
       console.log("token:" + authToken);
       console.log("role: " + role);
       const response = await axios.post(
-        "http://localhost:8000/api/createAnnouncementCourse",
+        "http://localhost:8000/api/subadmin/createAnnouncementCourse",
         formData,
         {
           headers: {
@@ -142,7 +146,7 @@ const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
           </label>
         </Box>
 
-        {newAdImage && (
+        {image && (
           <Box
             sx={{
               mb: 4,
@@ -154,7 +158,7 @@ const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
             }}
           >
             <img
-              src={newAdImage}
+              src={image}
               alt="معاينة الإعلان"
               style={{
                 width: "100%",

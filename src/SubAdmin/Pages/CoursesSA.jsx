@@ -20,12 +20,10 @@ const CoursesSA = () => {
 
   const currentCourses = [
     { id: 1, title: "دورة الفقه للمبتدئين", image: "/course.png" },
-    { id: 2, title: "دورة التجويد المتقدمة", image: "/course.png" },
   ];
 
   const newCourses = [
     { id: 3, title: "دورة التفسير الموضوعي", image: "/course.png" },
-    { id: 4, title: "دورة السيرة النبوية", image: "/course.png" },
   ];
 
   const handleCourseClick = (course, isCurrent) => {
@@ -100,6 +98,7 @@ const CoursesSA = () => {
             backgroundColor: "rgba(255, 250, 245, 0.95)",
             border: "1px solid #e0d6c2",
             backdropFilter: "blur(2px)",
+            width: "75%",
           }}
         >
           <Typography
@@ -129,7 +128,7 @@ const CoursesSA = () => {
                 >
                   <CardMedia
                     component="img"
-                    height="200"
+                    height="140"
                     image={course.image}
                     alt={course.title}
                     sx={{ objectFit: "cover" }}
@@ -153,6 +152,7 @@ const CoursesSA = () => {
             border: "1px solid #e0d6c2",
             backdropFilter: "blur(2px)",
             marginBottom: "30px",
+            width: "75%",
           }}
         >
           <Typography
@@ -182,7 +182,7 @@ const CoursesSA = () => {
                 >
                   <CardMedia
                     component="img"
-                    height="200"
+                    height="140"
                     image={course.image}
                     alt={course.title}
                     sx={{ objectFit: "cover" }}

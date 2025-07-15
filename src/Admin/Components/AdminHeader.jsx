@@ -22,7 +22,7 @@ const AdminHeader = () => {
 
   const handleScroll = () => {
     const scroll = window.scrollY;
-    setIsScrolled(scroll > 200);
+    setIsScrolled(scroll > 100);
   };
   useEffect(() => {
     handleScroll();

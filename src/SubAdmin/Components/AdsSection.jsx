@@ -19,26 +19,42 @@ const AdsSection = () => {
 
   const [openAddAdDialog, setOpenAddAdDialog] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchAds = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:8000/api/getAllAnnouncements",
-  //         {
-  //           headers: {
-  //             Accept: "application/json",
-  //             Authorization: `Bearer ` + authToken,
-  //             ContentType: "application/json",
-  //           },
-  //         }
-  //       );
-  //       setAds(response.data);
-  //     } catch (error) {
-  //       console.error("Error posting Ad info:", error);
-  //     }
-  //   };
-  //   fetchAds();
-  // }, [ads]);
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/getAllAnnouncements",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setAds(response.data.announcements);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchAds();
+  }, [authToken]);
+
+  const handleDelete = async (adID) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/subadmin/deleteAnnouncementCourse/${adID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error delete Ad :", error);
+    }
+  };
 
   const handleAddAd = (newAd) => {
     const newAdWithId = {
@@ -138,7 +154,7 @@ const AdsSection = () => {
             >
               <CardMedia
                 component="img"
-                image={ad.content}
+                image={ad.image}
                 alt="إعلان"
                 sx={{
                   width: "100%",
@@ -149,27 +165,44 @@ const AdsSection = () => {
               />
             </Box>
 
-            <CardContent
-              sx={{
-                height: "30%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#fffaf5",
-              }}
-            >
-              <Typography
-                variant="h6"
+            <Stack direction="column" spacing={2} sx={{ alignItems: "center" }}>
+              <CardContent
                 sx={{
-                  fontWeight: "bold",
-                  color: "#5a3e1b",
-                  textAlign: "center",
-                  lineHeight: 1.4,
+                  height: "30%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#fffaf5",
                 }}
               >
-                {ad.text}
-              </Typography>
-            </CardContent>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#5a3e1b",
+                    textAlign: "center",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {ad.description}
+                </Typography>
+              </CardContent>
+              <Button
+                type="button"
+                variant="outlined"
+                color="error"
+                style={{
+                  backgroundColor: "#E7BC91",
+                  color: "black",
+                  border: "#DAE2ED",
+                  margin: "10px",
+                  width: "100px",
+                }}
+                onClick={() => handleDelete(ad.id)}
+              >
+                حذف الإعلان
+              </Button>
+            </Stack>
           </Card>
         ))}
       </Box>
