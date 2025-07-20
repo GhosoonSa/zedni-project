@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -17,6 +17,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import InfoIcon from "@mui/icons-material/Info";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import Header from "./Header";
+import axios from "axios";
 
 const LandingPage = () => {
   const [showAbout, setShowAbout] = useState(false);
@@ -51,39 +52,27 @@ const LandingPage = () => {
       scrollToSection(contactRef);
     }
   };
+  const [courses, setCourses] = useState([]);
 
-  const courses = [
-    {
-      id: 1,
-      title: "دورة الفقه للمبتدئين",
-      image: "/course.png",
-    },
-    {
-      id: 2,
-      title: "دورة التجويد المتقدمة",
-      image: "/course.png",
-    },
-    {
-      id: 3,
-      title: "دورة التفسير الموضوعي",
-      image: "/course.png",
-    },
-    {
-      id: 4,
-      title: "دورة السيرة النبوية",
-      image: "/course.png",
-    },
-    {
-      id: 5,
-      title: "دورة العقيدة الإسلامية",
-      image: "/course.png",
-    },
-    {
-      id: 6,
-      title: "دورة أحكام الأسرة",
-      image: "/course.png",
-    },
-  ];
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/getAllAnnouncements",
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+        setCourses(response.data.announcements);
+        console.log("get ads " + ads);
+      } catch (error) {
+        console.error("Error getting ads :", error);
+      }
+    };
+    fetchAds();
+  }, []);
 
   return (
     <>

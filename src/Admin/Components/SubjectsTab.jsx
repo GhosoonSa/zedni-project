@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -19,43 +19,97 @@ import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
+import axios from "axios";
 
-const SubjectsTab = () => {
-  const teachers = [
-    { id: 1, name: "أحمد" },
-    { id: 2, name: "علي" },
-    { id: 3, name: "خالد" },
-    { id: 4, name: "حسن" },
-    { id: 5, name: "محمد" },
-    { id: 6, name: "سعيد" },
-    { id: 7, name: "حسين" },
-    { id: 8, name: "نور" },
-  ];
+const SubjectsTab = (props) => {
+  const [teachers, setTeachers] = useState([]);
 
-  const [subjects, setSubjects] = useState([
-    { id: 1, name: "الفقه", teacher: "نور", syllabus: "DB2EndProject.pdf" },
-    { id: 2, name: "السيرة", teacher: "خالد", syllabus: null },
-    { id: 3, name: "التفسير", teacher: "علي", syllabus: null },
-    { id: 4, name: "الحديث", teacher: "أحمد", syllabus: "حديث.pdf" },
-  ]);
+  const [subjects, setSubjects] = useState([]);
 
   const [newSubject, setNewSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const authToken = localStorage.getItem("authToken");
+  const courseID = props.courseId;
+  const level = props.level;
 
-  const handleAddSubject = () => {
-    if (newSubject.trim() && selectedTeacher) {
-      const newSubjectObj = {
-        id: Date.now(),
-        name: newSubject,
-        teacher: selectedTeacher,
-        syllabus: null,
-      };
-      setSubjects([...subjects, newSubjectObj]);
-      handleCloseDialog();
+  //fetch teachers names to add a subject
+  const handleAddOpen = async () => {
+    setOpenAddDialog(true);
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/admin/getTeachers",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setTeachers(response.data.teachers);
+    } catch (error) {
+      console.error("Error getting teachers :", error);
     }
   };
+
+  const handleAddSubject = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("subjectName", newSubject);
+      formData.append("teacherID", selectedTeacher);
+      formData.append("courseID", courseID);
+      formData.append("levelName", level);
+      const response = await axios.post(
+        "http://localhost:8000/api/admin/addSubject",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      console.log("success add " + response.data.message);
+      if (newSubject.trim() && selectedTeacher) {
+        const newSubjectObj = {
+          id: Date.now(),
+          name: newSubject,
+          teacher: selectedTeacher,
+          syllabus: null,
+        };
+        setSubjects([...subjects, newSubjectObj]);
+        handleCloseDialog();
+      }
+    } catch (error) {
+      console.error("Error adding subject :", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchsubjects = async () => {
+      try {
+        console.log(courseID + " " + level);
+        const response = await axios.get(
+          `http://localhost:8000/api/admin/getSubjectDetails/${courseID}/${level}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setSubjects(response.data.subjects);
+        console.log(response.data.subjects);
+      } catch (error) {
+        console.error("Error getting subjects :", error);
+      }
+    };
+    fetchsubjects();
+  }, [authToken]);
 
   const handleFileUpload = (subjectId, event) => {
     const file = event.target.files[0];
@@ -91,7 +145,7 @@ const SubjectsTab = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => setOpenAddDialog(true)}
+          onClick={handleAddOpen}
           sx={{
             backgroundColor: "#5a3e1b",
             "&:hover": { backgroundColor: "#7b3f00" },
@@ -101,7 +155,6 @@ const SubjectsTab = () => {
         </Button>
       </Box>
 
-      {}
       <Box
         sx={{
           display: "flex",
@@ -168,7 +221,6 @@ const SubjectsTab = () => {
         ))}
       </Box>
 
-      {}
       {selectedSubject && (
         <Box
           sx={{
@@ -291,7 +343,6 @@ const SubjectsTab = () => {
         </Box>
       )}
 
-      {}
       <Dialog
         open={openAddDialog}
         onClose={(event, reason) => {
@@ -352,8 +403,8 @@ const SubjectsTab = () => {
             }}
           >
             {teachers.map((teacher) => (
-              <MenuItem key={teacher.id} value={teacher.name}>
-                {teacher.name}
+              <MenuItem key={teacher.id} value={teacher.id}>
+                {teacher.firstAndLastName}
               </MenuItem>
             ))}
           </TextField>

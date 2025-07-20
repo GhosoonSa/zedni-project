@@ -21,6 +21,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import { userContext } from "./ContextProvider";
 import background from "../assets/backgroundSignUp.png";
 import Header from "../Header";
+import axios from "axios";
 
 const SignUp = () => {
   const { signup } = useContext(userContext);
@@ -52,15 +53,20 @@ const SignUp = () => {
   };
 
   const handleCheck = (e) => {};
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     console.log("formDataLogin", formData);
     e.preventDefault();
     //with userContext :
     try {
-      signup(formData);
+      const error = await signup(formData);
+      if (error) {
+        setError("Something went wrong. Please try again.");
+      } else {
+        setError("");
+      }
     } catch (error) {
       console.error("Error:", error);
-      setError("Something went wrong: ", error, " ,Please try again. ");
+      setError("Something went wrong: ,Please try again. ");
     }
   };
 

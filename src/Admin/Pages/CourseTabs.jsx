@@ -10,21 +10,44 @@ import ResultsTab from "../Components/ResultsTab";
 import SubjectsTab from "../Components/SubjectsTab";
 import AdminHeader from "../Components/AdminHeader";
 import backgroundTabs from "/backgroundTabs.jpg";
-import {
-  Paper,
-  useMediaQuery,
-  useTheme,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Paper, useMediaQuery, useTheme, Box, Typography } from "@mui/material";
 
 const CourseTabs = () => {
   const location = useLocation();
-
+  const courseID = location.state?.courseId || null;
   const level = location.state?.level || null;
   const courseName = location.state?.courseName || "اسم الدورة";
 
   const [key, setKey] = useState("ClassesPlanTab");
+  const [showedLevel, setShowedLevel] = useState("");
+
+  useEffect(() => {
+    if (level) {
+      switch (level) {
+        case "level1":
+          setShowedLevel("المستوى 1");
+          break;
+        case "level2":
+          setShowedLevel("المستوى 2");
+          break;
+        case "level3":
+          setShowedLevel("المستوى 3");
+          break;
+        case "level4":
+          setShowedLevel("المستوى 4");
+          break;
+        case "level5":
+          setShowedLevel("المستوى 5");
+          break;
+        case "level6":
+          setShowedLevel("المستوى 6");
+          break;
+        case "level7":
+          setShowedLevel("المستوى 7");
+          break;
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -78,7 +101,7 @@ const CourseTabs = () => {
           }}
         >
           {courseName}
-          {level && ` – المستوى ${level}`}
+          {level && ` –  ${showedLevel}`}
         </Typography>
 
         <Paper
@@ -90,7 +113,7 @@ const CourseTabs = () => {
             p: isSmallScreen ? 2 : 3,
             backgroundColor: "#fffaf5",
             minHeight: "auto",
-            overflow: "visible"
+            overflow: "visible",
           }}
         >
           <Tabs
@@ -104,7 +127,7 @@ const CourseTabs = () => {
               <ClassesPlanTab level={level} />
             </Tab>
             <Tab eventKey="SubjectsTab" title="المواد">
-              <SubjectsTab level={level} />
+              <SubjectsTab level={level} courseId={courseID} />
             </Tab>
             <Tab eventKey="PeopleTab" title="الطلاب">
               <PeopleTab />

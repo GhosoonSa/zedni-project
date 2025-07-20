@@ -19,6 +19,8 @@ const CoursesS = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const authToken = localStorage.getItem("authToken");
   const [ads, setAds] = useState([]);
+  const [newCourses, setNewCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -42,29 +44,49 @@ const CoursesS = () => {
     fetchAds();
   }, [authToken]);
 
-  const enrolledCourses = [
-    {
-      id: 1,
-      title: "دورة الفقه للمبتدئين",
-      image: "/course.png",
-      delay: "100ms",
-    },
-  ];
+  useEffect(() => {
+    const fetchNewCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/student/getStudentNewCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setNewCourses(response.data.courses);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchNewCourses();
+  }, [authToken]);
 
-  const newCourses = [
-    {
-      id: 5,
-      title: "دورة التفسير الموضوعي",
-      image: "/course.png",
-      delay: "200ms",
-    },
-    {
-      id: 6,
-      title: "دورة التفسير",
-      image: "/course.png",
-      delay: "300ms",
-    },
-  ];
+  useEffect(() => {
+    const fetchEnrolledCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/student/getStudentEnrolledCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setEnrolledCourses(response.data.courses);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchEnrolledCourses();
+  }, [authToken]);
 
   const handleChange = (_, newValue) => setTabIndex(newValue);
 
@@ -151,14 +173,10 @@ const CoursesS = () => {
         >
           <Fade in timeout={1000}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              {}
               <Box sx={{ mb: 6 }}>
-                {" "}
-                {}
                 <AdsSection ads={ads} />
               </Box>
 
-              {}
               <Box
                 sx={{
                   backgroundColor: "rgba(255, 248, 235, 0.5)",
@@ -204,6 +222,9 @@ const CoursesS = () => {
                         دوراتي الحالية
                       </Typography>
                       {renderCourses(enrolledCourses)}
+                      {console.log(
+                        "courses s " + renderCourses(enrolledCourses)
+                      )}
                     </Box>
                   </Fade>
                 )}

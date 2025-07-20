@@ -23,12 +23,17 @@ const LogIn = () => {
     });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     console.log("formDataLogin", formData);
     e.preventDefault();
     //with userContext :
     try {
-      login(formData);
+      const error = await login(formData);
+      if (error) {
+        setError("Something went wrong. Please try again.");
+      } else {
+        setError("");
+      }
     } catch (error) {
       console.error("Error:", error);
       setError("Invalid email or password. Please try again.");

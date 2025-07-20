@@ -11,6 +11,7 @@ import Courses from "./Admin/Pages/Courses";
 import Profile from "./Admin/Pages/Profile";
 import Mails from "./Admin/Pages/Mails";
 import CourseTabs from "./Admin/Pages/CourseTabs";
+import People from "./Admin/Pages/People";
 //import subAdmin
 import CoursesSA from "./SubAdmin/Pages/CoursesSA";
 import ProfileSA from "./SubAdmin/Pages/ProfileSA";
@@ -26,6 +27,8 @@ import CoursesS from "./Student/Pages/CoursesS";
 import ProfileS from "./Student/Pages/ProfileS";
 import MailsS from "./Student/Pages/MailsS";
 import StudentCourseTabs from "./Student/Pages/StudentCourseTabs";
+import PeopleSA from "./SubAdmin/Pages/PeopleSA";
+import PeopleT from "./Teacher/Pages/PeopleT";
 
 function App() {
   return (
@@ -69,6 +72,14 @@ function App() {
           }
         />
         <Route
+          path="/People"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <People />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/course/:id"
           element={
             <ProtectedRoute roles={["admin"]}>
@@ -102,6 +113,14 @@ function App() {
           }
         />
         <Route
+          path="/PeopleSA"
+          element={
+            <ProtectedRoute roles={["subadmin"]}>
+              <PeopleSA />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/SubAdminCourseTabs"
           element={
             <ProtectedRoute roles={["subadmin"]}>
@@ -131,6 +150,14 @@ function App() {
           element={
             <ProtectedRoute roles={["teacher"]}>
               <MailsT />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/PeopleT"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <PeopleT />
             </ProtectedRoute>
           }
         />

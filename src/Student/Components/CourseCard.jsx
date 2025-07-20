@@ -47,7 +47,7 @@ const CourseCard = ({ course, isNew = false }) => {
     try {
       console.log("token: " + authToken);
       const response = await axios.get(
-        `http://localhost:8000/api/createJoiningRequest/${courseID}`,
+        `http://localhost:8000/api/student/createJoiningRequest/${courseID}`,
         {
           headers: {
             Accept: "application/json",
@@ -57,7 +57,7 @@ const CourseCard = ({ course, isNew = false }) => {
         }
       );
       console.log("response :" + response.message);
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         if (cardRef.current) {
           const rect = cardRef.current.getBoundingClientRect();
           setSnackPosition({
@@ -102,13 +102,12 @@ const CourseCard = ({ course, isNew = false }) => {
             },
           }}
         >
-          {}
           <Box sx={{ position: "relative", overflow: "hidden", height: 180 }}>
             <CardMedia
               component="img"
               height="180"
-              image={course.image}
-              alt={course.title}
+              image={course.courseImage}
+              alt={course.couresName}
               sx={{
                 objectFit: "cover",
                 borderBottom: "2px solid #e8d4b8",
@@ -118,7 +117,6 @@ const CourseCard = ({ course, isNew = false }) => {
             />
           </Box>
 
-          {}
           <CardContent
             sx={{
               textAlign: "center",
@@ -133,7 +131,7 @@ const CourseCard = ({ course, isNew = false }) => {
                 fontWeight="bold"
                 sx={{ color: "#6a4a2f", fontSize: "1.05rem" }}
               >
-                {course.title}
+                {course.courseName}
               </Typography>
 
               {isNew && (
@@ -160,7 +158,6 @@ const CourseCard = ({ course, isNew = false }) => {
         </Card>
       </Zoom>
 
-      {}
       <Snackbar
         open={snackOpen}
         onClose={handleSnackClose}
@@ -187,7 +184,7 @@ const CourseCard = ({ course, isNew = false }) => {
             py: 1.5,
           }}
         >
-          تم إرسال طلب الانضمام إلى «{course.title}»
+          تم إرسال طلب الانضمام إلى «{course.courseName}»
         </Alert>
       </Snackbar>
     </Box>

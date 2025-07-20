@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -12,19 +12,58 @@ import {
 import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminLevelsModal from "../Components/SubAdminLevelsModal";
 import AdsSection from "../Components/AdsSection";
-
+import axios from "axios";
 const CoursesSA = () => {
   const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [openLevelsModal, setOpenLevelsModal] = useState(false);
+  const [newCourses, setNewCourses] = useState([]);
+  const [currentCourses, setCurrentCourses] = useState([]);
+  const authToken = localStorage.getItem("authToken");
 
-  const currentCourses = [
-    { id: 1, title: "دورة الفقه للمبتدئين", image: "/course.png" },
-  ];
+  useEffect(() => {
+    const fetchNewCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/subadmin/getSubadminNewCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setNewCourses(response.data.courses);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchNewCourses();
+  }, [authToken]);
 
-  const newCourses = [
-    { id: 3, title: "دورة التفسير الموضوعي", image: "/course.png" },
-  ];
+  useEffect(() => {
+    const fetchCurrentCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/subadmin/getSubadminCurrentCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setCurrentCourses(response.data.courses);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchCurrentCourses();
+  }, [authToken]);
 
   const handleCourseClick = (course, isCurrent) => {
     if (isCurrent) {
@@ -129,13 +168,13 @@ const CoursesSA = () => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={course.image}
-                    alt={course.title}
+                    image={course.courseImage}
+                    alt={course.courseName}
                     sx={{ objectFit: "cover" }}
                   />
                   <CardContent>
                     <Typography variant="h6" align="center">
-                      {course.title}
+                      {course.courseName}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -183,13 +222,13 @@ const CoursesSA = () => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={course.image}
-                    alt={course.title}
+                    image={course.courseImage}
+                    alt={course.courseName}
                     sx={{ objectFit: "cover" }}
                   />
                   <CardContent>
                     <Typography variant="h6" align="center">
-                      {course.title}
+                      {course.courseName}
                     </Typography>
                   </CardContent>
                 </Card>

@@ -8,6 +8,7 @@ import {
   CardMedia,
   Paper,
   Box,
+  Stack,
 } from "@mui/material";
 import AddCourse from "../Components/AddCourse";
 import CourseOptionsModal from "../Components/CourseOptionsModal";
@@ -23,6 +24,7 @@ const Courses = () => {
   const [showOnlyLevels, setShowOnlyLevels] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [ads, setAds] = useState([]);
+  const [courses, setCourses] = useState([]);
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
@@ -50,27 +52,68 @@ const Courses = () => {
     fetchAds();
   }, [authToken]);
 
-  const courses = [
-    { id: 1, title: "دورة الفقه", image: "/course.png", status: "الجديدة" },
-    {
-      id: 2,
-      title: "دورة التفسير الموضوعي",
-      image: "/course.png",
-      status: "الحالية",
-    },
-    { id: 3, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 4, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 5, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 8, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 9, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 7, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-    { id: 10, title: "دورة التجويد", image: "/course.png", status: "السابقة" },
-  ];
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/admin/getAdminCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+            },
+          }
+        );
+        setCourses(response.data.courses);
+        console.log("get courses " + courses);
+      } catch (error) {
+        console.error("Error getting courses :", error);
+      }
+    };
+    fetchCourses();
+  }, [authToken]);
+
+  const handleChangeNew = async (courseID) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/startNewCourse/${courseID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+          },
+        }
+      );
+      setIsOptionsOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error starting course :", error);
+    }
+  };
+
+  const handleChangeCurrent = async (courseID) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/endCurrentCourse/${courseID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+          },
+        }
+      );
+      setIsOptionsOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error ending course :", error);
+    }
+  };
 
   const handleCourseClick = (course, event) => {
     setSelectedCourse(course);
-    setShowOnlyLevels(course.status === "السابقة");
+    setShowOnlyLevels(course.status === "previous");
     setAnchorEl(event.currentTarget);
+    //problem is here
     setIsOptionsOpen(true);
   };
 
@@ -99,19 +142,55 @@ const Courses = () => {
         <CardMedia
           component="img"
           height="140"
-          image={course.image}
-          alt={course.title}
+          image={course.courseImage}
+          alt={course.courseName}
           sx={{
             objectFit: "cover",
             transition: "transform .5s",
             "&:hover": { transform: "scale(1.05)" },
           }}
         />
-        <CardContent sx={{ textAlign: "center", pb: 2 }}>
-          <Typography variant="subtitle1" fontWeight="bold">
-            {course.title}
-          </Typography>
-        </CardContent>
+        <Stack direction="column" spacing={2} sx={{ alignItems: "center" }}>
+          <CardContent sx={{ textAlign: "center", pb: 1 }}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              {course.courseName}
+            </Typography>
+          </CardContent>
+          {course.status === "new" && (
+            <Button
+              type="button"
+              variant="outlined"
+              color="primary"
+              style={{
+                backgroundColor: "#E7BC91",
+                color: "black",
+                border: "#DAE2ED",
+                margin: "10px",
+                width: "100px",
+              }}
+              onClick={() => handleChangeNew(course.id)}
+            >
+              بدأ الدورة
+            </Button>
+          )}
+          {course.status === "current" && (
+            <Button
+              type="button"
+              variant="outlined"
+              color="primary"
+              style={{
+                backgroundColor: "#E7BC91",
+                color: "black",
+                border: "#DAE2ED",
+                margin: "10px",
+                width: "100px",
+              }}
+              onClick={() => handleChangeCurrent(course.id)}
+            >
+              إنهاء الدورة
+            </Button>
+          )}
+        </Stack>
       </Card>
     </Box>
   );
@@ -155,7 +234,7 @@ const Courses = () => {
     </Box>
   );
 
-  const statuses = ["الجديدة", "الحالية", "السابقة"];
+  const statuses = ["new", "current", "previous"];
 
   return (
     <>
@@ -181,13 +260,13 @@ const Courses = () => {
         <Paper
           elevation={3}
           sx={{
-            my: 4,
+            my: 1,
             py: 3,
-            px: 4,
+            px: 5,
             direction: "rtl",
             backgroundColor: "#fffaf5",
-            mr: 4,
-            ml: 4,
+            mr: 1,
+            ml: 1,
             borderTop: "4px solid #E7BC91",
           }}
         >
@@ -240,40 +319,51 @@ const Courses = () => {
                 direction: "rtl",
                 backgroundColor: "#fffaf5",
                 width: list.length <= 2 ? "50%" : "auto",
-                mr: 4,
+                mr: 2,
                 ml: list.length <= 2 ? "auto" : 4,
                 boxSizing: "border-box",
               }}
             >
-              <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
-                {status}
-              </Typography>
-
-              {/* add button only for new courses */}
-              {status == "الجديدة" && (
-                <Box sx={{ textAlign: "right", pr: 1, mb: 4 }}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => setIsAddOpen(true)}
-                    sx={{
-                      backgroundColor: "#E7BC91",
-                      color: "black",
-                      border: "#DAE2ED",
-                      "&:hover": { borderColor: "#8B5E34" },
-                    }}
-                    size="large"
-                  >
-                    إضافة دورة
-                  </Button>
-                  <AddCourse
-                    isOpen={isAddOpen}
-                    onClose={() => setIsAddOpen(false)}
-                    token={authToken}
-                  />
-                </Box>
+              {status == "new" ? (
+                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                  الجديدة
+                </Typography>
+              ) : status == "previous" ? (
+                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                  السابقة
+                </Typography>
+              ) : (
+                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                  الحالية
+                </Typography>
               )}
 
-              {status == "السابقة" ? (
+              {/* add button only for new courses */}
+              {status == "الجديدة" ||
+                (status == "new" && (
+                  <Box sx={{ textAlign: "right", pr: 1, mb: 4 }}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setIsAddOpen(true)}
+                      sx={{
+                        backgroundColor: "#E7BC91",
+                        color: "black",
+                        border: "#DAE2ED",
+                        "&:hover": { borderColor: "#8B5E34" },
+                      }}
+                      size="large"
+                    >
+                      إضافة دورة
+                    </Button>
+                    <AddCourse
+                      isOpen={isAddOpen}
+                      onClose={() => setIsAddOpen(false)}
+                      token={authToken}
+                    />
+                  </Box>
+                ))}
+
+              {status == "السابقة" || status == "previous" ? (
                 <Box
                   sx={{
                     display: "flex",

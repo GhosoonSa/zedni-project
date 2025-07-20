@@ -7,7 +7,7 @@ export const userContext = createContext();
 
 const ContextProvider = ({ children }) => {
   // const [role, setRole] = useState("student");
-  const [authenticated, setAuthenticated] = useState(true);
+  //const [authenticated, setAuthenticated] = useState(true);
 
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");
   const [authenticated, setAuthenticated] = useState(
@@ -48,7 +48,7 @@ const ContextProvider = ({ children }) => {
           case "teacher":
             navigate("/CoursesT", { state: { account, access_token } });
             break;
-          case "supervisor":
+          case "subadmin":
             navigate("/CoursesSA", { state: { account, access_token } });
             break;
           default:
@@ -85,7 +85,7 @@ const ContextProvider = ({ children }) => {
       localStorage.setItem("role", account);
       console.log(role);
 
-      if (response.status === 201 || 200) {
+      if (response.status === 201 || response.status === 200) {
         switch (account) {
           case "admin":
             navigate("/Courses", { state: { account, access_token } });
@@ -103,6 +103,7 @@ const ContextProvider = ({ children }) => {
             break;
         }
       }
+      return null;
     } catch (error) {
       console.error("Error registering user:", error);
       return error;
@@ -125,11 +126,11 @@ const ContextProvider = ({ children }) => {
         console.log(
           "i am out of the application " + localStorage.getItem("authToken")
         );
+        navigate("/");
         localStorage.removeItem("authToken");
         localStorage.removeItem("role");
         setAuthenticated(false);
         setRole("");
-        navigate("/");
       }
     } catch (error) {
       console.error("Error loging out user:", error);
