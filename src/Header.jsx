@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import {
-  Typography,
-  Button,
-  Stack,
-  TextField,
-  Box,
-  MenuItem,
-  Checkbox,
-  TextareaAutosize,
-  FormControlLabel,
-  InputAdornment,
-} from "@mui/material";
+import { Button, Stack, IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Header = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isHoveredC, setIsHoveredC] = useState(false);
-  const [isHoveredP, setIsHoveredP] = useState(false);
-  const [isHoveredM, setIsHoveredM] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = () => {
@@ -41,32 +29,56 @@ const Header = () => {
   return (
     <>
       <nav
-        className={`grid grid-cols-4 mx-auto fixed top-0 left-0 right-0 z-50 transition-all ease-linear ${
-          isScrolled ? "bg-amber-100 py-1 h-14" : "py-2"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 items-center justify-between  ${
+          isScrolled || open ? "bg-amber-100 h-16" : "h-20"
         }`}
       >
-        <Stack className="col-span-1 h-6 w-xl flex pt-6 mr-20">
-          <img src="/small-logo.png" alt="logo" className="w-24 ml-28" />
-        </Stack>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-full">
+            <div className="flex-shrink-0">
+              <img src="/small-logo.png" alt="logo" className="w-24" />
+            </div>
 
-        <Stack
-          direction="row"
-          spacing={2}
-          className="gap-4 items-center h-6 w-xl flex col-span-2 pt-8 mr-60"
-        ></Stack>
+            {/* Desktop Menu */}
+            <div className="hidden sm:flex space-x-14 items-center  pt-4">
+              <Button onClick={handleSignIn} style={{ color: "#BC8A5F" }}>
+                إنشاء حساب
+              </Button>
+              <Button onClick={handleLogIn} style={{ color: "#BC8A5F" }}>
+                تسجيل دخول
+              </Button>
+            </div>
 
-        <Stack
-          direction="row"
-          spacing={2}
-          className="col-span-1 gap-3 items-center h-8 w-xl flex pt-8 mr-24"
+            {/* Mobile Hamburger */}
+            <div className="sm:hidden">
+              <IconButton onClick={() => setOpen(!open)}>
+                <MenuIcon />
+              </IconButton>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`sm:hidden transition-all ${
+            open ? "block" : "hidden"
+          } bg-amber-100 px-4 pt-2 pb-4`}
         >
-          <Button onClick={handleSignIn} style={{ color: "#BC8A5F" }}>
+          <Button
+            onClick={handleSignIn}
+            className="block"
+            style={{ color: "#BC8A5F" }}
+          >
             إنشاء حساب
           </Button>
-          <Button onClick={handleLogIn} style={{ color: "#BC8A5F" }}>
+          <Button
+            onClick={handleLogIn}
+            className="block"
+            style={{ color: "#BC8A5F" }}
+          >
             تسجيل دخول
           </Button>
-        </Stack>
+        </div>
       </nav>
     </>
   );

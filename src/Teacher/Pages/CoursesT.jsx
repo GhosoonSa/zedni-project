@@ -26,26 +26,29 @@ const CoursesT = () => {
     console.log("Received token: ", authToken);
   }, []);
 
-  const currentCourses = [
-    {
-      id: 1,
-      title: "دورة الفقه للمبتدئين",
-      image: "/course.png",
-      delay: "100ms",
-    },
-    {
-      id: 2,
-      title: "دورة التجويد المتقدم",
-      image: "/course.png",
-      delay: "200ms",
-    },
-    {
-      id: 3,
-      title: "أصول الفقه",
-      image: "/course.png",
-      delay: "300ms",
-    },
-  ];
+  const [currentCourses, setCurrentCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/teacher/getTeacherCourses",
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setCurrentCourses(response.data.courses);
+        console.log(response.data.courses);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchCourses();
+  }, [authToken]);
 
   const [ads, setAds] = useState([]);
 
@@ -80,8 +83,9 @@ const CoursesT = () => {
     setOpenLevelsModal(false);
     navigate(`/teacher/course/${selectedCourse.id}`, {
       state: {
-        course: selectedCourse,
+        courseId: selectedCourse.id,
         level: level,
+        courseName: selectedCourse.courseName,
       },
     });
   };
@@ -258,7 +262,8 @@ const CoursesT = () => {
                     <Box
                       key={ad.id}
                       sx={{
-                        minWidth: 360,
+                        height: { xs: 260, sm: 320 },
+                        width: { xs: 180, sm: 300 },
                         borderRadius: 3,
                         overflow: "hidden",
                         boxShadow: 3,
@@ -273,7 +278,7 @@ const CoursesT = () => {
                     >
                       <CardMedia
                         component="img"
-                        height="160"
+                        height="180"
                         image={ad.image}
                         alt="إعلان"
                         sx={{

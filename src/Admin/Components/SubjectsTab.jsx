@@ -23,17 +23,19 @@ import axios from "axios";
 
 const SubjectsTab = (props) => {
   const [teachers, setTeachers] = useState([]);
-
   const [subjects, setSubjects] = useState([]);
-
   const [newSubject, setNewSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [uploadFile, setUploadFile] = useState("");
   const authToken = localStorage.getItem("authToken");
   const courseID = props.courseId;
   const level = props.level;
 
+  useEffect(() => {
+    console.log("from use effect " + subjects);
+  }, [subjects]);
   //fetch teachers names to add a subject
   const handleAddOpen = async () => {
     setOpenAddDialog(true);
@@ -73,16 +75,8 @@ const SubjectsTab = (props) => {
         }
       );
       console.log("success add " + response.data.message);
-      if (newSubject.trim() && selectedTeacher) {
-        const newSubjectObj = {
-          id: Date.now(),
-          name: newSubject,
-          teacher: selectedTeacher,
-          syllabus: null,
-        };
-        setSubjects([...subjects, newSubjectObj]);
-        handleCloseDialog();
-      }
+      setOpenAddDialog(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error adding subject :", error);
     }
@@ -111,19 +105,57 @@ const SubjectsTab = (props) => {
     fetchsubjects();
   }, [authToken]);
 
-  const handleFileUpload = (subjectId, event) => {
+  const handleFileUpload = async (subjectId, event) => {
     const file = event.target.files[0];
-    if (file) {
-      setSubjects(
-        subjects.map((subject) =>
-          subject.id === subjectId
-            ? { ...subject, syllabus: file.name }
-            : subject
-        )
+    const formData = new FormData();
+    formData.append("subjectID", subjectId);
+    formData.append("curriculumFile", file);
+    console.log("file form upload " + file);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/admin/addCurriculum",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
       );
-      if (selectedSubject && selectedSubject.id === subjectId) {
-        setSelectedSubject({ ...selectedSubject, syllabus: file.name });
+      if (response.status === 200 || response.status === 201) {
+        alert("تم رفع الملف بنجاح!");
       }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding curriculumFile :", error);
+    }
+  };
+
+  const handleFileUpdate = async (subjectId, event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("subjectID", subjectId);
+    formData.append("curriculumFile", file);
+    console.log("file form upload " + uploadFile);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/admin/updateCurriculum",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      if (response.status === 200 || response.status === 201) {
+        alert("تم رفع الملف بنجاح!");
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding curriculumFile :", error);
     }
   };
 
@@ -212,7 +244,7 @@ const SubjectsTab = (props) => {
                       fontSize: "1rem",
                     }}
                   >
-                    {subject.name}
+                    {subject.subjectName}
                   </Typography>
                 </CardContent>
               </Card>
@@ -237,7 +269,7 @@ const SubjectsTab = (props) => {
         >
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ color: "#5a3e1b" }}>
-              الأستاذ: {selectedSubject.teacher}
+              الأستاذ: {selectedSubject.teacherName}
             </Typography>
           </Box>
 
@@ -259,7 +291,7 @@ const SubjectsTab = (props) => {
               المنهاج:
             </Typography>
 
-            {selectedSubject.syllabus ? (
+            {selectedSubject.curriculumFile ? (
               <Box
                 sx={{
                   display: "flex",
@@ -282,10 +314,9 @@ const SubjectsTab = (props) => {
                       pr: 4,
                     }}
                   >
-                    {selectedSubject.syllabus}
+                    {selectedSubject.curriculumName}
                   </Typography>
                 </Box>
-                {}
                 <IconButton
                   component="label"
                   sx={{
@@ -298,10 +329,10 @@ const SubjectsTab = (props) => {
                 >
                   <EditIcon />
                   <input
-                    accept=".pdf"
                     type="file"
+                    name="uploadFile"
                     style={{ display: "none" }}
-                    onChange={(e) => handleFileUpload(selectedSubject.id, e)}
+                    onChange={(e) => handleFileUpdate(selectedSubject.id, e)}
                   />
                 </IconButton>
               </Box>
@@ -331,8 +362,9 @@ const SubjectsTab = (props) => {
                 >
                   رفع المنهاج
                   <input
-                    accept=".pdf"
+                    accept=".pdf,.docx"
                     type="file"
+                    name="uploadFile"
                     style={{ display: "none" }}
                     onChange={(e) => handleFileUpload(selectedSubject.id, e)}
                   />

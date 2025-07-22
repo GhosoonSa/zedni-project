@@ -8,18 +8,18 @@ import {
   Box,
 } from "@mui/material";
 
-const ANIMATION_DURATION = 400;     
-const HOVER_SCALE = 1.05;    
-const CLICK_SCALE = 1.07;    
-const IMG_HOVER_SCALE = 1.10;    
-const IMG_CLICK_SCALE = 1.15;    
+const ANIMATION_DURATION = 400;
+const HOVER_SCALE = 1.05;
+const CLICK_SCALE = 1.07;
+const IMG_HOVER_SCALE = 1.1;
+const IMG_CLICK_SCALE = 1.15;
 
 const TeacherCourseCard = ({ course, onClick }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   const handleClick = () => {
-    if (clicked) return;                    
+    if (clicked) return;
     setClicked(true);
     setTimeout(() => {
       onClick();
@@ -27,17 +27,9 @@ const TeacherCourseCard = ({ course, onClick }) => {
     }, ANIMATION_DURATION);
   };
 
-  const cardScale = clicked
-    ? CLICK_SCALE
-    : hovered
-    ? HOVER_SCALE
-    : 1;
+  const cardScale = clicked ? CLICK_SCALE : hovered ? HOVER_SCALE : 1;
 
-  const imgScale = clicked
-    ? IMG_CLICK_SCALE
-    : hovered
-    ? IMG_HOVER_SCALE
-    : 1;
+  const imgScale = clicked ? IMG_CLICK_SCALE : hovered ? IMG_HOVER_SCALE : 1;
 
   return (
     <Zoom in timeout={500} style={{ transitionDelay: course.delay || "0ms" }}>
@@ -83,8 +75,8 @@ const TeacherCourseCard = ({ course, onClick }) => {
           <CardMedia
             component="img"
             height="180"
-            image={course.image || "/course.png"}
-            alt={course.title}
+            image={course.courseImage || "/course.png"}
+            alt={course.courseName}
             sx={{
               objectFit: "cover",
               borderBottom: "2px solid #d2a679",
@@ -113,7 +105,7 @@ const TeacherCourseCard = ({ course, onClick }) => {
               "&:hover": { color: "#7b3f00" },
             }}
           >
-            {course.title}
+            {course.courseName}
           </Typography>
         </CardContent>
       </Card>

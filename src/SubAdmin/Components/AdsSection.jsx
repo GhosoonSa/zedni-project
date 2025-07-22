@@ -51,6 +51,10 @@ const AdsSection = () => {
           },
         }
       );
+      if (response.status === 200 || response.status === 201) {
+        alert("تم حذف الإعلان بنجاح!");
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Error delete Ad :", error);
     }

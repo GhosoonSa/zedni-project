@@ -58,7 +58,7 @@ const LandingPage = () => {
     const fetchAds = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/getAllAnnouncements",
+          "http://localhost:8000/api/getAllAnnouncementsWithoutToken",
           {
             headers: {
               Accept: "application/json",
@@ -66,7 +66,7 @@ const LandingPage = () => {
           }
         );
         setCourses(response.data.announcements);
-        console.log("get ads " + ads);
+        console.log("get ads " + courses);
       } catch (error) {
         console.error("Error getting ads :", error);
       }
@@ -403,7 +403,7 @@ const LandingPage = () => {
                           component="img"
                           height="200"
                           image={course.image}
-                          alt={course.title}
+                          alt={course.description}
                           sx={{
                             objectFit: "cover",
                             borderBottom: "2px solid #e0a96d",
@@ -431,7 +431,7 @@ const LandingPage = () => {
                               },
                             }}
                           >
-                            {course.title}
+                            {course.description}
                           </Typography>
                         </CardContent>
                       </Card>

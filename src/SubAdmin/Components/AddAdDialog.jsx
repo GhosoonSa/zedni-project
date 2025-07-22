@@ -52,6 +52,10 @@ const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
           },
         }
       );
+      if (response.status === 200 || response.status === 201) {
+        alert("تم إضافة الإعلان بنجاح!");
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Error posting Ad info:", error);
     }

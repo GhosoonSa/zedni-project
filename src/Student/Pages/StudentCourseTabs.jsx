@@ -16,7 +16,7 @@ const StudentCourseTabs = () => {
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const { id } = useParams();
-  const location = useLocation(); 
+  const location = useLocation();
 
   const course = location.state?.course;
 
@@ -42,9 +42,9 @@ const StudentCourseTabs = () => {
             left: 0,
             width: "100%",
             height: "100%",
-          background: "linear-gradient(135deg, rgba(255, 253, 248, 0.95) 0%, rgba(252, 250, 245, 0.95) 100%)" ,
-      backdropFilter: "blur(2px)",
-            
+            background:
+              "linear-gradient(135deg, rgba(255, 253, 248, 0.95) 0%, rgba(252, 250, 245, 0.95) 100%)",
+            backdropFilter: "blur(2px)",
           },
         }}
       />
@@ -68,7 +68,7 @@ const StudentCourseTabs = () => {
             color: "#7b3f00",
           }}
         >
-          {course?.title || `Course ID: ${id}`}
+          {course?.courseName || `Course ID: ${id}`}
         </h2>
         <Paper
           // key={Course?.id}
