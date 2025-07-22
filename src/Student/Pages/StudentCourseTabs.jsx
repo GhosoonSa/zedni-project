@@ -43,8 +43,8 @@ const StudentCourseTabs = () => {
             width: "100%",
             height: "100%",
             background:
-              "linear-gradient(135deg, rgba(255, 253, 248, 0.95) 0%, rgba(252, 250, 245, 0.95) 100%)",
-            backdropFilter: "blur(2px)",
+              "linear-gradient(135deg, rgba(255, 253, 248, 0.5) 0%, rgba(252, 250, 245, 0.5) 100%)",
+            backdropFilter: "blur(1px)",
           },
         }}
       />
