@@ -45,8 +45,6 @@ const PeopleTab = () => {
       lecturesAttended2: "",
       lecturesAttended3: "",
       lecturesAttended4: "",
-
-
     },
     {
       id: 3,

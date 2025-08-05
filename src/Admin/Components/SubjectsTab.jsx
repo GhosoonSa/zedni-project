@@ -18,6 +18,8 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
 import DescriptionIcon from "@mui/icons-material/Description";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 
@@ -85,7 +87,6 @@ const SubjectsTab = (props) => {
   useEffect(() => {
     const fetchsubjects = async () => {
       try {
-        console.log(courseID + " " + level);
         const response = await axios.get(
           `http://localhost:8000/api/admin/getSubjectDetails/${courseID}/${level}`,
           {
@@ -110,7 +111,6 @@ const SubjectsTab = (props) => {
     const formData = new FormData();
     formData.append("subjectID", subjectId);
     formData.append("curriculumFile", file);
-    console.log("file form upload " + file);
     try {
       const response = await axios.post(
         "http://localhost:8000/api/admin/addCurriculum",
@@ -172,7 +172,6 @@ const SubjectsTab = (props) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {}
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3 }}>
         <Button
           variant="contained"
@@ -320,9 +319,33 @@ const SubjectsTab = (props) => {
                 <IconButton
                   component="label"
                   sx={{
-                    position: "absolute",
+                    position: "relative",
                     left: 8,
                     top: 8,
+                    color: "#5a3e1b",
+                    "&:hover": { backgroundColor: "rgba(90, 62, 27, 0.1)" },
+                  }}
+                  onClick={() => {
+                    const fileName = selectedSubject.curriculumName;
+                    const fileUrl = selectedSubject.curriculumFile;
+                    if (!fileUrl) return;
+
+                    const link = document.createElement("a");
+                    link.href = fileUrl;
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                  }}
+                >
+                  <DownloadRoundedIcon />
+                </IconButton>
+                <IconButton
+                  component="label"
+                  sx={{
+                    position: "relative",
+                    left: 8,
+                    top: 4,
                     color: "#5a3e1b",
                     "&:hover": { backgroundColor: "rgba(90, 62, 27, 0.1)" },
                   }}

@@ -30,17 +30,23 @@ const SubAdminHeader = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 items-center justify-between  ${
-        isScrolled || open ? "bg-amber-100 h-16" : "h-20"
+        isScrolled || open ? "bg-amber-100 h-20" : "h-20"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-full">
           <div className="flex-shrink-0">
-            <img src="/small-logo.png" alt="logo" className="w-24" />
+            <img
+              src="/logo.png"
+              alt="logo"
+              className={`w-16 h-20 ${
+                isScrolled || open ? "pt-1 mr-0 " : "pt-2 sm:mr-10"
+              } `}
+            />
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden sm:flex space-x-14 items-center  pt-4">
+          <div className="hidden sm:flex space-x-14 items-center  pt-2">
             <NavLink
               to="/CoursesSA"
               style={{
@@ -86,7 +92,7 @@ const SubAdminHeader = () => {
               الطلاب
             </NavLink>
           </div>
-          <div className="hidden sm:flex space-x-14 items-center ml-10 pt-4">
+          <div className="hidden sm:flex space-x-14 items-center ml-10 pt-2">
             <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>
               تسجيل خروج
             </Button>

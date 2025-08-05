@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import axios from "axios";
 
 const ANIMATION_DURATION = 400;
@@ -25,6 +26,7 @@ const CourseCard = ({ course, isNew = false }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
+  const [snackOpenError, setSnackOpenError] = useState(false);
   const [snackPosition, setSnackPosition] = useState({ top: 0 });
   const cardRef = useRef(null);
   const navigate = useNavigate();
@@ -68,6 +70,18 @@ const CourseCard = ({ course, isNew = false }) => {
       }
     } catch (error) {
       console.error("Error sending user id:", error);
+
+      if (error.response && error.response.status === 409) {
+        if (cardRef.current) {
+          const rect = cardRef.current.getBoundingClientRect();
+          setSnackPosition({
+            top: rect.height + 32,
+          });
+        }
+        setSnackOpenError(true);
+      } else {
+        console.error("Other error occurred:", error);
+      }
     }
   };
 
@@ -76,6 +90,10 @@ const CourseCard = ({ course, isNew = false }) => {
     setSnackOpen(false);
   };
 
+  const handleSnackCloseError = (_, reason) => {
+    if (reason === "clickaway") return;
+    setSnackOpenError(false);
+  };
   const cardScale = clicked ? CLICK_SCALE : hovered ? HOVER_SCALE : 1;
   const imgScale = clicked ? IMG_CLICK_SCALE : hovered ? IMG_HOVER_SCALE : 1;
 
@@ -185,6 +203,36 @@ const CourseCard = ({ course, isNew = false }) => {
           }}
         >
           تم إرسال طلب الانضمام إلى «{course.courseName}»
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={snackOpenError}
+        onClose={handleSnackCloseError}
+        autoHideDuration={2500}
+        sx={{
+          position: "absolute",
+          top: `${snackPosition.top}px`,
+          right: "16px",
+          transform: "none",
+          zIndex: 1300,
+        }}
+      >
+        <Alert
+          icon={<WarningRoundedIcon fontSize="small" />}
+          severity="warning"
+          variant="filled"
+          sx={{
+            backgroundColor: "#f9e8d7",
+            color: "#5e4627",
+            fontWeight: "bold",
+            borderRadius: 3,
+            boxShadow: "0 4px 10px rgba(0,0,0,0.06)",
+            px: 3,
+            py: 1.5,
+          }}
+        >
+          تم إرسال طلب الانضمام إلى «{course.courseName}»مسبقاً
         </Alert>
       </Snackbar>
     </Box>

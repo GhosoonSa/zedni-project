@@ -15,10 +15,13 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import axios from "axios";
 
 const TeacherSubjectsTab = (props) => {
   const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
   const [showSyllabus, setShowsyllabus] = useState(false);
   const authToken = localStorage.getItem("authToken");
   const courseID = props.courseId;
@@ -32,7 +35,6 @@ const TeacherSubjectsTab = (props) => {
   useEffect(() => {
     const fetchsubjects = async () => {
       try {
-        console.log(courseID + " " + level);
         const response = await axios.get(
           `http://localhost:8000/api/teacher/getSubjectDetails/${courseID}/${level}`,
           {
@@ -51,7 +53,6 @@ const TeacherSubjectsTab = (props) => {
     };
     fetchsubjects();
   }, [authToken, uploaded]);
-  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const handleAttachmentUpload = async (subjectId, event) => {
     const file = event.target.files[0];
@@ -83,7 +84,6 @@ const TeacherSubjectsTab = (props) => {
 
   const handleDeleteExtension = async (exID) => {
     try {
-      console.log("form delete " + exID);
       const response = await axios.delete(
         `http://localhost:8000/api/teacher/deleteExtension/${exID}`,
         {
@@ -137,7 +137,6 @@ const TeacherSubjectsTab = (props) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {}
       <Box
         sx={{
           display: "flex",
@@ -260,19 +259,47 @@ const TeacherSubjectsTab = (props) => {
                   borderRadius: 1,
                   gap: 2,
                   width: "100%",
+                  position: "relative",
                 }}
               >
                 <DescriptionIcon color="primary" sx={{ fontSize: "2rem" }} />
-                <Typography
-                  variant="body1"
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      wordBreak: "break-word",
+                      whiteSpace: "normal",
+                      flex: 1,
+                    }}
+                  >
+                    {selectedSubject.curriculumName}
+                  </Typography>
+                </Box>
+                <IconButton
+                  component="label"
                   sx={{
-                    wordBreak: "break-word",
-                    whiteSpace: "normal",
-                    flex: 1,
+                    position: "relative",
+                    left: 8,
+                    top: 8,
+                    color: "#5a3e1b",
+                    "&:hover": { backgroundColor: "rgba(90, 62, 27, 0.1)" },
+                  }}
+                  onClick={() => {
+                    console.log("form onClick");
+                    const fileName = selectedSubject.curriculumName;
+                    const fileUrl = selectedSubject.curriculumFile;
+                    if (!fileUrl) return;
+
+                    const link = document.createElement("a");
+                    link.href = fileUrl;
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
                   }}
                 >
-                  {selectedSubject.curriculumName}
-                </Typography>
+                  <DownloadRoundedIcon />
+                </IconButton>
               </Box>
             ) : !selectedSubject.curriculumFile ? (
               <Typography variant="body1">

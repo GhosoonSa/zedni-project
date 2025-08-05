@@ -275,6 +275,7 @@ const Courses = () => {
             sx={{
               fontWeight: "bold",
               mb: 3,
+              mr: 3,
               color: "#333",
               textAlign: "right",
             }}
@@ -325,15 +326,24 @@ const Courses = () => {
               }}
             >
               {status == "new" ? (
-                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 4, mr: 1, fontWeight: "bold" }}
+                >
                   الجديدة
                 </Typography>
               ) : status == "previous" ? (
-                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 4, mr: 1, fontWeight: "bold" }}
+                >
                   السابقة
                 </Typography>
               ) : (
-                <Typography variant="h5" sx={{ mb: 4, fontWeight: "bold" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 4, mr: 1, fontWeight: "bold" }}
+                >
                   الحالية
                 </Typography>
               )}

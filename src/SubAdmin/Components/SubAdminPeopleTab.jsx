@@ -28,7 +28,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "7/8",
       lecturesAttended2: "5/8",
       lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8"
+      lecturesAttended4: "7/8",
     },
     {
       id: 2,
@@ -44,7 +44,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "7/8",
       lecturesAttended2: "8/8",
       lecturesAttended3: "8/8",
-      lecturesAttended4: "8/8"
+      lecturesAttended4: "8/8",
     },
     {
       id: 3,
@@ -60,7 +60,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "7/8",
       lecturesAttended2: "5/8",
       lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8"
+      lecturesAttended4: "7/8",
     },
     {
       id: 4,
@@ -76,8 +76,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "",
       lecturesAttended2: "",
       lecturesAttended3: "",
-      lecturesAttended4: ""
-
+      lecturesAttended4: "",
     },
     {
       id: 5,
@@ -93,7 +92,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "",
       lecturesAttended2: "",
       lecturesAttended3: "",
-      lecturesAttended4: ""
+      lecturesAttended4: "",
     },
     {
       id: 6,
@@ -109,7 +108,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "5/8",
       lecturesAttended2: "2/8",
       lecturesAttended3: "8/8",
-      lecturesAttended4: "4/8"
+      lecturesAttended4: "4/8",
     },
     {
       id: 7,
@@ -125,8 +124,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "",
       lecturesAttended2: "",
       lecturesAttended3: "",
-      lecturesAttended4: ""
-
+      lecturesAttended4: "",
     },
     {
       id: 8,
@@ -142,7 +140,7 @@ const SubAdminPeopleTab = () => {
       lecturesAttended1: "3/8",
       lecturesAttended2: "1/8",
       lecturesAttended3: "7/8",
-      lecturesAttended4: "8/8"
+      lecturesAttended4: "8/8",
     },
   ];
 
@@ -227,7 +225,7 @@ const SubAdminPeopleTab = () => {
         </Grid>
       </Paper>
 
-      { }
+      {}
       <Dialog
         open={Boolean(selectedStudent)}
         onClose={(event, reason) => {

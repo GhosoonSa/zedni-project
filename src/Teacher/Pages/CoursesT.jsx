@@ -236,6 +236,7 @@ const CoursesT = () => {
                   variant="h6"
                   sx={{
                     mb: 3,
+                    mr: 1,
                     color: "#7b3f00",
                     fontWeight: "bold",
                     textAlign: "right",
