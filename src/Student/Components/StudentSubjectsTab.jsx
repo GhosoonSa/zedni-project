@@ -15,60 +15,43 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import axios from "axios";
 
 const StudentSubjectsTab = ({ courseId }) => {
+  const courseID = courseId;
+  const [showSyllabus, setShowsyllabus] = useState(false);
+  const [showAttachments, setShowAttachments] = useState(false);
+  const [isRecommended, setIsRecommended] = useState(false);
+  const authToken = localStorage.getItem("authToken");
+
   useEffect(() => {
     console.log("Current course ID:", courseId);
   }, [courseId]);
 
-  const [subjects, setSubjects] = useState([
-    {
-      id: 1,
-      name: "الفقه",
-      teacher: "نور",
-      syllabus: "",
-      attachments: ["ملاحظات الفقه.pdf"],
-      showSyllabus: false,
-      showAttachments: false,
-      recommendedBooks: [
-        { id: 1, title: "الفقه الميسر", isRecommended: false },
-      ],
-    },
-    {
-      id: 2,
-      name: "التفسير",
-      teacher: "علي",
-      syllabus: null,
-      attachments: [],
-      showSyllabus: false,
-      showAttachments: false,
-      recommendedBooks: [
-        { id: 1, title: "تفسير السعدي", isRecommended: false },
-      ],
-    },
-    {
-      id: 3,
-      name: "الحديث",
-      teacher: "أحمد",
-      syllabus: "حديث.pdf",
-      attachments: ["ملخص الحديث.pdf"],
-      showSyllabus: false,
-      showAttachments: false,
-      recommendedBooks: [],
-    },
-    {
-      id: 4,
-      name: "التجويد",
-      teacher: "محمد",
-      syllabus: "تجويد.pdf",
-      attachments: ["ملاحظات.pdf", "تمارين.pdf"],
-      showSyllabus: false,
-      showAttachments: false,
-      recommendedBooks: [
-        { id: 1, title: "التحفة التجويدية", isRecommended: false },
-      ],
-    },
-  ]);
+  const [subjects, setSubjects] = useState([]);
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchsubjects = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/teacher/getSubjectDetails/${courseID}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setSubjects(response.data.subjects);
+        setBooks(response.data.requested_books);
+      } catch (error) {
+        console.error("Error getting subjects :", error);
+      }
+    };
+    fetchsubjects();
+  }, [authToken]);
 
   const [selectedSubject, setSelectedSubject] = useState(null);
 
@@ -152,7 +135,6 @@ const StudentSubjectsTab = ({ courseId }) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {}
       <Box
         sx={{
           display: "flex",
@@ -206,7 +188,7 @@ const StudentSubjectsTab = ({ courseId }) => {
                       fontSize: "1rem",
                     }}
                   >
-                    {subject.name}
+                    {subject.subjectName}
                   </Typography>
                 </CardContent>
               </Card>
@@ -215,7 +197,6 @@ const StudentSubjectsTab = ({ courseId }) => {
         ))}
       </Box>
 
-      {}
       {selectedSubject && (
         <Box
           sx={{
@@ -230,19 +211,17 @@ const StudentSubjectsTab = ({ courseId }) => {
             flexDirection: "column",
           }}
         >
-          {}
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ color: "#5a3e1b" }}>
-              الأستاذ: {selectedSubject.teacher}
+              الأستاذ: {selectedSubject.teacherName}
             </Typography>
           </Box>
 
-          {}
           <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
             <Button
               variant="contained"
               onClick={() => handleShowSyllabus(selectedSubject.id)}
-              disabled={!selectedSubject.syllabus}
+              disabled={!selectedSubject.curriculumName}
               sx={{
                 backgroundColor: "#5a3e1b",
                 color: "white",
@@ -261,7 +240,7 @@ const StudentSubjectsTab = ({ courseId }) => {
             <Button
               variant="contained"
               onClick={() => handleShowAttachments(selectedSubject.id)}
-              disabled={selectedSubject.attachments.length === 0}
+              disabled={selectedSubject.extensions.length === 0}
               sx={{
                 backgroundColor: "#5a3e1b",
                 color: "white",
@@ -278,7 +257,7 @@ const StudentSubjectsTab = ({ courseId }) => {
             </Button>
           </Box>
 
-          {selectedSubject.showSyllabus && selectedSubject.syllabus && (
+          {selectedSubject.showSyllabus && selectedSubject.curriculumName && (
             <Box sx={{ mb: 4 }}>
               <Typography
                 variant="subtitle1"
@@ -306,15 +285,14 @@ const StudentSubjectsTab = ({ courseId }) => {
                     flex: 1,
                   }}
                 >
-                  {selectedSubject.syllabus}
+                  {selectedSubject.curriculumName}
                 </Typography>
               </Box>
             </Box>
           )}
 
-          {}
           {selectedSubject.showAttachments &&
-            selectedSubject.attachments.length > 0 && (
+            selectedSubject.extensions.length > 0 && (
               <Box sx={{ mb: 4 }}>
                 <Typography
                   variant="subtitle1"
@@ -330,7 +308,7 @@ const StudentSubjectsTab = ({ courseId }) => {
                     p: 0,
                   }}
                 >
-                  {selectedSubject.attachments.map((attachment, index) => (
+                  {selectedSubject.extensions.map((attachment, index) => (
                     <React.Fragment key={index}>
                       <ListItem>
                         <ListItemIcon>
@@ -343,7 +321,7 @@ const StudentSubjectsTab = ({ courseId }) => {
                           {attachment}
                         </Typography>
                       </ListItem>
-                      {index < selectedSubject.attachments.length - 1 && (
+                      {index < selectedSubject.extensions.length - 1 && (
                         <Divider component="li" />
                       )}
                     </React.Fragment>
@@ -352,7 +330,6 @@ const StudentSubjectsTab = ({ courseId }) => {
               </Box>
             )}
 
-          {}
           <Box>
             <Typography
               variant="subtitle1"
@@ -361,9 +338,9 @@ const StudentSubjectsTab = ({ courseId }) => {
               الكتب:
             </Typography>
 
-            {selectedSubject.recommendedBooks.length > 0 ? (
+            {selectedSubject && books.length > 0 ? (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {selectedSubject.recommendedBooks.map((book) => (
+                {books.map((book) => (
                   <Box
                     key={book.id}
                     sx={{
