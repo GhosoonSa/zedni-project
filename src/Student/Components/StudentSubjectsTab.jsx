@@ -6,6 +6,7 @@ import {
   Box,
   Grow,
   Button,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -15,18 +16,17 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const StudentSubjectsTab = ({ courseId }) => {
-  const courseID = courseId;
   const [showSyllabus, setShowsyllabus] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [isRecommended, setIsRecommended] = useState(false);
   const authToken = localStorage.getItem("authToken");
-
-  useEffect(() => {
-    console.log("Current course ID:", courseId);
-  }, [courseId]);
+  const location = useLocation();
 
   const [subjects, setSubjects] = useState([]);
   const [books, setBooks] = useState([]);
@@ -35,7 +35,7 @@ const StudentSubjectsTab = ({ courseId }) => {
     const fetchsubjects = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/teacher/getSubjectDetails/${courseID}`,
+          `http://localhost:8000/api/student/getSubjectDetailsStudent/${courseId}`,
           {
             headers: {
               Accept: "application/json",
@@ -46,6 +46,7 @@ const StudentSubjectsTab = ({ courseId }) => {
         );
         setSubjects(response.data.subjects);
         setBooks(response.data.requested_books);
+        console.log("from books", books);
       } catch (error) {
         console.error("Error getting subjects :", error);
       }
@@ -104,32 +105,48 @@ const StudentSubjectsTab = ({ courseId }) => {
     }
   };
 
-  const handleBookRecommendation = (subjectId, bookId) => {
-    const updatedSubjects = subjects.map((subject) => {
-      if (subject.id === subjectId) {
-        const updatedBooks = subject.recommendedBooks.map((book) => {
-          if (book.id === bookId) {
-            return { ...book, isRecommended: !book.isRecommended };
-          }
-          return book;
-        });
-        return { ...subject, recommendedBooks: updatedBooks };
-      }
-      return subject;
-    });
-    setSubjects(updatedSubjects);
-
-    if (selectedSubject?.id === subjectId) {
-      const updatedBooks = selectedSubject.recommendedBooks.map((book) => {
-        if (book.id === bookId) {
-          return { ...book, isRecommended: !book.isRecommended };
+  const handleBookRecommendation = async (curriculumID, subjectId, bookId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/student/requestBook/${curriculumID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
         }
-        return book;
-      });
-      setSelectedSubject({
-        ...selectedSubject,
-        recommendedBooks: updatedBooks,
-      });
+      );
+      if (response.status === 201 || response.status === 200) {
+        const updatedSubjects = subjects.map((subject) => {
+          if (subject.id === subjectId) {
+            const updatedBooks = subject.recommendedBooks.map((book) => {
+              if (book.id === bookId) {
+                return { ...book, isRecommended: !book.isRecommended };
+              }
+              return book;
+            });
+            return { ...subject, recommendedBooks: updatedBooks };
+          }
+          return subject;
+        });
+        setSubjects(updatedSubjects);
+
+        if (selectedSubject?.id === subjectId) {
+          const updatedBooks = selectedSubject.recommendedBooks.map((book) => {
+            if (book.id === bookId) {
+              return { ...book, isRecommended: !book.isRecommended };
+            }
+            return book;
+          });
+          setSelectedSubject({
+            ...selectedSubject,
+            recommendedBooks: updatedBooks,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error sending request book :", error);
     }
   };
 
@@ -287,6 +304,29 @@ const StudentSubjectsTab = ({ courseId }) => {
                 >
                   {selectedSubject.curriculumName}
                 </Typography>
+                <IconButton
+                  sx={{
+                    position: "relative",
+                    color: "#5a3e1b",
+                    "&:hover": {
+                      backgroundColor: "rgba(90, 62, 27, 0.1)",
+                    },
+                  }}
+                  onClick={() => {
+                    const fileName = selectedSubject.curriculumName;
+                    const fileUrl = selectedSubject.curriculumFile;
+                    if (!fileUrl) return;
+
+                    const link = document.createElement("a");
+                    link.href = fileUrl;
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                  }}
+                >
+                  <DownloadRoundedIcon />
+                </IconButton>
               </Box>
             </Box>
           )}
@@ -309,17 +349,49 @@ const StudentSubjectsTab = ({ courseId }) => {
                   }}
                 >
                   {selectedSubject.extensions.map((attachment, index) => (
-                    <React.Fragment key={index}>
-                      <ListItem>
-                        <ListItemIcon>
-                          <DescriptionIcon color="primary" />
-                        </ListItemIcon>
-                        <Typography
-                          variant="body1"
-                          sx={{ flex: 1, textAlign: "right" }}
+                    <React.Fragment key={attachment.id}>
+                      <ListItem
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          px: 2,
+                        }}
+                      >
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
-                          {attachment}
-                        </Typography>
+                          <DescriptionIcon color="primary" />
+                          <Typography
+                            variant="body1"
+                            sx={{ textAlign: "right" }}
+                          >
+                            {attachment.extensionName}
+                          </Typography>
+                        </Box>
+                        <IconButton
+                          sx={{
+                            position: "relative",
+                            color: "#5a3e1b",
+                            "&:hover": {
+                              backgroundColor: "rgba(90, 62, 27, 0.1)",
+                            },
+                          }}
+                          onClick={() => {
+                            const fileName = attachment.extensionName;
+                            const fileUrl = attachment.extensionFile;
+                            if (!fileUrl) return;
+                            console.log("from icon button ", fileName, fileUrl);
+                            const link = document.createElement("a");
+                            link.href = fileUrl;
+                            link.setAttribute("download", fileName);
+                            document.body.appendChild(link);
+                            link.click();
+                            link.remove();
+                          }}
+                        >
+                          <DownloadRoundedIcon />
+                        </IconButton>
                       </ListItem>
                       {index < selectedSubject.extensions.length - 1 && (
                         <Divider component="li" />
@@ -338,11 +410,11 @@ const StudentSubjectsTab = ({ courseId }) => {
               الكتب:
             </Typography>
 
-            {selectedSubject && books.length > 0 ? (
+            {selectedSubject ? (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {books.map((book) => (
+                {subjects.map((subject) => (
                   <Box
-                    key={book.id}
+                    key={subject.curriculumID}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -366,24 +438,24 @@ const StudentSubjectsTab = ({ courseId }) => {
                         textAlign: "right",
                       }}
                     >
-                      {book.title}
+                      {subject.curriculumName}
                     </Typography>
                     <Chip
                       label={
-                        book.isRecommended ? " تمت التوصية" : " توصية كتاب"
+                        subject.is_requested ? " تمت التوصية" : " توصية كتاب"
                       }
                       onClick={() =>
-                        handleBookRecommendation(selectedSubject.id, book.id)
+                        handleBookRecommendation(subject.curriculumID)
                       }
-                      color={book.isRecommended ? "success" : "default"}
+                      color={subject.is_requested ? "success" : "default"}
                       sx={{
                         cursor: "pointer",
-                        backgroundColor: book.isRecommended
+                        backgroundColor: subject.is_requested
                           ? "#4caf50"
                           : "#7a6248",
-                        color: book.isRecommended ? "white" : "white",
+                        color: subject.is_requested ? "white" : "white",
                         "&:hover": {
-                          backgroundColor: book.isRecommended
+                          backgroundColor: subject.is_requested
                             ? "#388e3c"
                             : "#d5c9b1",
                         },

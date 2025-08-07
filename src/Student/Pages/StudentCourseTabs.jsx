@@ -71,7 +71,7 @@ const StudentCourseTabs = () => {
           {course?.courseName || `Course ID: ${id}`}
         </h2>
         <Paper
-          // key={Course?.id}
+          key={course?.id}
           elevation={3}
           sx={{
             marginTop: isSmallScreen ? 2 : 4,

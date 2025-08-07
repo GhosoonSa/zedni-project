@@ -222,9 +222,6 @@ const CoursesS = () => {
                         دوراتي الحالية
                       </Typography>
                       {renderCourses(enrolledCourses)}
-                      {console.log(
-                        "courses s " + renderCourses(enrolledCourses)
-                      )}
                     </Box>
                   </Fade>
                 )}
