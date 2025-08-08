@@ -11,20 +11,44 @@ import { Paper, useMediaQuery, useTheme, Box, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 const SubAdminCourseTabs = () => {
+  const location = useLocation();
   const [key, setKey] = useState("SubjectsTab");
-  const [courseTitle, setCourseTitle] = useState("");
-  const [courseLevel, setCourseLevel] = useState(null);
+  const courseTitle = location.state.courseTitle || null;
+  const courseLevel = location.state.level || null;
+  const courseId = location.state.courseId;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
-  const location = useLocation();
+  const [showedLevel, setShowedLevel] = useState("");
 
   useEffect(() => {
-    if (location.state) {
-      setCourseTitle(location.state.courseTitle || "الدورة");
-      setCourseLevel(location.state.level || null);
+    console.log("from tabs ", courseLevel);
+    if (courseLevel) {
+      switch (courseLevel) {
+        case "level1":
+          setShowedLevel("المستوى 1");
+          break;
+        case "level2":
+          setShowedLevel("المستوى 2");
+          break;
+        case "level3":
+          setShowedLevel("المستوى 3");
+          break;
+        case "level4":
+          setShowedLevel("المستوى 4");
+          break;
+        case "level5":
+          setShowedLevel("المستوى 5");
+          break;
+        case "level6":
+          setShowedLevel("المستوى 6");
+          break;
+        case "level7":
+          setShowedLevel("المستوى 7");
+          break;
+      }
     }
-  }, [location.state]);
+  }, []);
 
   return (
     <>
@@ -87,7 +111,7 @@ const SubAdminCourseTabs = () => {
                 marginLeft: "10px",
               }}
             >
-              {`المستوى ${courseLevel}`}
+              {showedLevel}
             </Typography>
           )}
           <Typography
@@ -127,7 +151,7 @@ const SubAdminCourseTabs = () => {
             </Tab>
             <Tab eventKey="PeopleTab" title="الكتب">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <SubAdminBooksTab />
+                <SubAdminBooksTab courseId={courseId} level={courseLevel} />
               </div>
             </Tab>
             <Tab eventKey="ResultsTab" title="الطلاب">

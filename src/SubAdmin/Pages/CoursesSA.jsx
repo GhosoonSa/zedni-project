@@ -72,7 +72,7 @@ const CoursesSA = () => {
     } else {
       navigate("/SubAdminCourseTabs", {
         state: {
-          courseTitle: course.title,
+          courseTitle: course.courseName,
           level: null,
         },
       });
@@ -83,7 +83,8 @@ const CoursesSA = () => {
     setOpenLevelsModal(false);
     navigate("/SubAdminCourseTabs", {
       state: {
-        courseTitle: selectedCourse.title,
+        courseId: selectedCourse.id,
+        courseTitle: selectedCourse.courseName,
         level: level,
       },
     });
