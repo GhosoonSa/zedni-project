@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import StudentHeader from "../Components/StudentHeader";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,6 +19,37 @@ const StudentCourseTabs = () => {
   const location = useLocation();
 
   const course = location.state?.course;
+  const level = course.levelName;
+  const courseId = course.id;
+  const [showedLevel, setShowedLevel] = useState("");
+
+  useEffect(() => {
+    if (level) {
+      switch (level) {
+        case "level1":
+          setShowedLevel("المستوى 1");
+          break;
+        case "level2":
+          setShowedLevel("المستوى 2");
+          break;
+        case "level3":
+          setShowedLevel("المستوى 3");
+          break;
+        case "level4":
+          setShowedLevel("المستوى 4");
+          break;
+        case "level5":
+          setShowedLevel("المستوى 5");
+          break;
+        case "level6":
+          setShowedLevel("المستوى 6");
+          break;
+        case "level7":
+          setShowedLevel("المستوى 7");
+          break;
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -68,7 +99,8 @@ const StudentCourseTabs = () => {
             color: "#7b3f00",
           }}
         >
-          {course?.courseName || `Course ID: ${id}`}
+          {course?.courseName}
+          {level && ` –  ${showedLevel}`}
         </h2>
         <Paper
           key={course?.id}
@@ -100,7 +132,7 @@ const StudentCourseTabs = () => {
             </Tab>
             <Tab eventKey="ResultsTab" title="النتائج">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <StudentResultsTab courseId={id} />
+                <StudentResultsTab courseId={courseId} level={level} />
               </div>
             </Tab>
           </Tabs>

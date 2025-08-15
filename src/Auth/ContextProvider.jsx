@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 export const userContext = createContext();
 
 const ContextProvider = ({ children }) => {
-  const [role, setRole] = useState("admin");
-  const [authenticated, setAuthenticated] = useState(true);
+  // const [role, setRole] = useState("admin");
+  // const [authenticated, setAuthenticated] = useState(true);
 
-  // const [role, setRole] = useState(() => localStorage.getItem("role") || "");
-  // const [authenticated, setAuthenticated] = useState(
-  //   () => !!localStorage.getItem("authToken")
-  // );
+  const [role, setRole] = useState(() => localStorage.getItem("role") || "");
+  const [authenticated, setAuthenticated] = useState(
+    () => !!localStorage.getItem("authToken")
+  );
 
   const navigate = useNavigate();
 

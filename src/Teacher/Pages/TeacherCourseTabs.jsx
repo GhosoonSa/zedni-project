@@ -160,7 +160,7 @@ const TeacherCourseTabs = () => {
             </Tab>
             <Tab eventKey="ResultsTab" title="النتائج">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <TeacherResultsTab />
+                <TeacherResultsTab courseID={courseID} level={level} />
               </div>
             </Tab>
           </Tabs>

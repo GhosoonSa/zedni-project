@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -17,35 +17,14 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import ResultsTable from "./ResultsTable";
+import axios from "axios";
 
-const SubAdminResultsTab = () => {
-  const subjects = [
-    { id: 1, name: "الفقه" },
-    { id: 2, name: "السيرة" },
-    { id: 3, name: "التفسير" },
-    { id: 4, name: "الحديث" },
-  ];
-
-  const students = [
-    { id: 1, name: "أحمد" },
-    { id: 2, name: "سارة" },
-    { id: 3, name: "عبدالله" },
-    { id: 4, name: "بيان" },
-    { id: 5, name: "نور" },
-  ];
-
-  // بيانات تجريبية كاملة
-  const initialMarks = {
-    study: { 1: 25, 2: 28, 3: 20, 4: 30, 5: 30 }, // علامات المذاكرة (من 30)
-    exam: { 1: 40, 2: 45, 3: 35, 4: 50, 5: 22 }, // علامات الامتحان (من 50)
-    attendance: { 1: 15, 2: 18, 3: 12, 4: 20, 5: 10 }, // علامات الحضور (من 20)
-    total: { 1: 44, 2: 33, 3: 67, 4: 100, 5: 60 }, // المجموع الكلي (من 100)
-    status: { 1: "راسب", 2: "راسب", 3: "راسب", 4: "ناجح", 5: "ناجح" }, // النتيجة
-  };
-
-  // حالة التطبيق
+const SubAdminResultsTab = ({ courseId, level }) => {
+  const authToken = localStorage.getItem("authToken");
+  const [subjects, setSubjects] = useState([]);
+  const [students, setStudents] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const [marks, setMarks] = useState(initialMarks);
+  const [marks, setMarks] = useState({});
   const [activeView, setActiveView] = useState(null);
   const [errors, setErrors] = useState({});
   const [snackbar, setSnackbar] = useState({
@@ -53,26 +32,89 @@ const SubAdminResultsTab = () => {
     message: "",
     severity: "success",
   });
+  const subjectId = selectedSubject?.id;
+
+  //get subjects
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/getSubjects/${courseId}/${level}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setSubjects(response.data.subjects);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchSubjects();
+  }, [authToken]);
+
+  //get students in level
+  const fetchStudents = async (subjectId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/subadmin/getStudentInLevel/${subjectId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("fetch student error : ", error);
+    }
+  };
+
+  //marks backend initialization
+  const addEmptyMarks = async (subjectId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/subadmin/addEmptyMarks/${subjectId}`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("success");
+      }
+    } catch (error) {
+      console.error("initialize results error ", error.response.data.message);
+    }
+  };
 
   // إغلاق التنبيه
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  // تهيئة العلامات
-  const initializeMarks = () => {
-    const newMarks = { ...marks };
+  //marks frontend initialization
+  const initializeMarks = (type) => {
+    const initial = {};
     students.forEach((student) => {
-      if (!newMarks.study[student.id]) newMarks.study[student.id] = "";
-      if (!newMarks.exam[student.id]) newMarks.exam[student.id] = "";
+      initial[student.studentID] = "";
     });
-    setMarks(newMarks);
+    setMarks(initial);
     setErrors({});
   };
 
   // تغيير العلامات
-  const handleMarkChange = (studentId, value, type) => {
-    const maxValue = type === "study" ? 30 : 50;
+  const handleMarkChange = (studentId, value) => {
+    const maxValue = activeView === "study" ? 30 : 50;
     const numValue =
       value === ""
         ? ""
@@ -80,64 +122,129 @@ const SubAdminResultsTab = () => {
 
     setMarks((prev) => ({
       ...prev,
-      [type]: { ...prev[type], [studentId]: numValue },
+      [studentId]: numValue,
     }));
+    console.log("marks ", marks);
 
-    if (errors[`${type}-${studentId}`]) {
+    if (errors[studentId]) {
       const newErrors = { ...errors };
-      delete newErrors[`${type}-${studentId}`];
+      delete newErrors[studentId];
       setErrors(newErrors);
     }
   };
 
-  // التحقق من صحة البيانات
+  //marks validation
   const validateMarks = () => {
     const newErrors = {};
     let isValid = true;
+    const maxValue = activeView === "study" ? 30 : 50;
 
-    if (activeView === "study" || activeView === "exam") {
-      const maxValue = activeView === "study" ? 30 : 50;
-      students.forEach((student) => {
-        const mark = marks[activeView][student.id];
-        if (mark === "" || mark === undefined) {
-          newErrors[`${activeView}-${student.id}`] = "يجب إدخال العلامة";
-          isValid = false;
-        } else if (mark < 0 || mark > maxValue) {
-          newErrors[
-            `${activeView}-${student.id}`
-          ] = `يجب أن تكون العلامة بين 0 و ${maxValue}`;
-          isValid = false;
-        }
-      });
-    }
+    students.forEach((student) => {
+      const mark = marks[student.studentID];
+      if (mark === "" || mark === undefined) {
+        newErrors[student.studentID] = "يجب إدخال العلامة";
+        isValid = false;
+      } else if (mark < 0 || mark > maxValue) {
+        newErrors[
+          student.studentID
+        ] = `يجب أن تكون العلامة بين 0 و ${maxValue}`;
+        isValid = false;
+      }
+    });
 
     setErrors(newErrors);
     return isValid;
   };
 
-  // إرسال البيانات (محاكاة بدون رفع حقيقي)
-  const handleSubmit = () => {
+  //save test marks
+  const handleSubmitTest = async () => {
     if (!validateMarks()) {
       setSnackbar({
         open: true,
-        message: "يوجد أخطاء في البيانات المدخلة، الرجاء التأكد من العلامات",
+        message: "يرجى إدخال علامات المذاكرة بشكل صحيح",
         severity: "error",
       });
       return;
     }
+    try {
+      const marksArray = Object.entries(marks).map(([studentID, mark]) => ({
+        studentID: parseInt(studentID, 10),
+        mark: mark,
+      }));
+      const formData = new FormData();
+      formData.append("subjectID", subjectId);
+      marksArray.forEach((item, index) => {
+        formData.append(`testMarks[${index}][studentID]`, item.studentID);
+        formData.append(`testMarks[${index}][mark]`, item.mark);
+      });
+      const response = await axios.post(
+        `http://localhost:8000/api/subadmin/addTestMarks/${subjectId}`,
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      if (response.status === 201 || response.status === 200) {
+        console.log("إرسال علامات المذاكرة:", marks);
+        setSnackbar({
+          open: true,
+          message: "تم حفظ علامات المذاكرة",
+          severity: "success",
+        });
+      }
+    } catch (error) {
+      console.error("submit test marks error ", error);
+    }
+  };
 
-    // هنا سيتم لاحقًا استدعاء API للباك إند
-    console.log("بيانات جاهزة للإرسال للباك إند:", {
-      study: marks.study,
-      exam: marks.exam,
-    });
-
-    // محاكاة لحفظ البيانات محليًا
-    setSnackbar({
-      open: true,
-      message: "تم حفظ العلامات بنجاح",
-      severity: "success",
-    });
+  //save exam marks
+  const handleSubmitExam = async () => {
+    if (!validateMarks()) {
+      setSnackbar({
+        open: true,
+        message: "يرجى إدخال علامات الامتحان بشكل صحيح",
+        severity: "error",
+      });
+      return;
+    }
+    try {
+      const marksArray = Object.entries(marks).map(([studentID, mark]) => ({
+        studentID: parseInt(studentID, 10),
+        mark: mark,
+      }));
+      console.log("exam marks ", marks, " exam array mark ", marksArray);
+      const formData = new FormData();
+      formData.append("subjectID", subjectId);
+      marksArray.forEach((item, index) => {
+        formData.append(`examMarks[${index}][studentID]`, item.studentID);
+        formData.append(`examMarks[${index}][mark]`, item.mark);
+      });
+      const response = await axios.post(
+        `http://localhost:8000/api/subadmin/addExamMarks/${subjectId}`,
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      if (response.status === 201 || response.status === 200) {
+        console.log("إرسال علامات الامتحان:", marks);
+        setSnackbar({
+          open: true,
+          message: "تم حفظ علامات الامتحان",
+          severity: "success",
+        });
+      }
+    } catch (error) {
+      console.error("submit exam marks ", error);
+    }
   };
 
   // عرض قائمة المواد
@@ -162,8 +269,9 @@ const SubAdminResultsTab = () => {
             <Card
               onClick={() => {
                 setSelectedSubject(subject);
-                initializeMarks();
+                addEmptyMarks(subject.id);
                 setActiveView(null);
+                fetchStudents(subject.id);
               }}
               sx={{
                 backgroundColor:
@@ -196,7 +304,7 @@ const SubAdminResultsTab = () => {
                     fontSize: "1.1rem",
                   }}
                 >
-                  {subject.name}
+                  {subject.subjectName}
                 </Typography>
               </CardContent>
             </Card>
@@ -222,7 +330,7 @@ const SubAdminResultsTab = () => {
         variant={activeView === "study" ? "contained" : "outlined"}
         onClick={() => {
           setActiveView("study");
-          initializeMarks();
+          initializeMarks("study");
         }}
         sx={{
           backgroundColor: activeView === "study" ? "#5a3e1b" : "transparent",
@@ -242,7 +350,7 @@ const SubAdminResultsTab = () => {
         variant={activeView === "exam" ? "contained" : "outlined"}
         onClick={() => {
           setActiveView("exam");
-          initializeMarks();
+          initializeMarks("exam");
         }}
         sx={{
           backgroundColor: activeView === "exam" ? "#5a3e1b" : "transparent",
@@ -283,7 +391,12 @@ const SubAdminResultsTab = () => {
   // زر الحفظ
   const renderSaveButton = () => {
     if (!activeView || activeView === "results") return null;
-
+    const onSave =
+      activeView === "study"
+        ? handleSubmitTest
+        : activeView === "exam"
+        ? handleSubmitExam
+        : null;
     return (
       <Box
         sx={{
@@ -296,7 +409,7 @@ const SubAdminResultsTab = () => {
       >
         <Button
           variant="contained"
-          onClick={handleSubmit}
+          onClick={onSave}
           startIcon={<SaveIcon />}
           sx={{
             backgroundColor: "#2E7D32",
@@ -369,7 +482,7 @@ const SubAdminResultsTab = () => {
     return (
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {students.map((student) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={student.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={student.studentID}>
             <Paper
               sx={{
                 p: 2,
@@ -392,12 +505,12 @@ const SubAdminResultsTab = () => {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {student.name}
+                  {student.firstAndLastName}
                 </Typography>
 
-                {errors[`${activeView}-${student.id}`] && (
+                {errors[`${activeView}-${student.studentID}`] && (
                   <Typography color="error" sx={{ fontSize: "0.8rem", mb: 1 }}>
-                    {errors[`${activeView}-${student.id}`]}
+                    {errors[`${activeView}-${student.studentID}`]}
                   </Typography>
                 )}
               </Box>
@@ -405,11 +518,11 @@ const SubAdminResultsTab = () => {
               <TextField
                 label={label}
                 type="number"
-                value={marks[activeView][student.id] || ""}
+                value={marks[student.studentID] || ""}
                 onChange={(e) =>
-                  handleMarkChange(student.id, e.target.value, activeView)
+                  handleMarkChange(student.studentID, e.target.value)
                 }
-                error={!!errors[`${activeView}-${student.id}`]}
+                error={!!errors[student.studentID]}
                 inputProps={{
                   min: 0,
                   max: maxValue,
@@ -458,7 +571,7 @@ const SubAdminResultsTab = () => {
           {renderControlButtons()}
 
           {activeView === "results" && (
-            <ResultsTable students={students} marks={marks} />
+            <ResultsTable students={students} subjectId={subjectId} />
           )}
 
           {renderMarksEntry()}

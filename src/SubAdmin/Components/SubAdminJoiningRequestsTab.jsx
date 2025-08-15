@@ -16,51 +16,38 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HistoryIcon from "@mui/icons-material/History";
 import AttendanceForm from "./AttendanceForm";
 import AttendanceHistory from "./AttendanceHistory";
+import axios from "axios";
 
-const SubAdminJoiningRequestsTab = () => {
+const SubAdminJoiningRequestsTab = ({ courseId, level }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
-  const [subjects] = useState([
-    { id: 1, name: "أصول الفقه" },
-    { id: 2, name: "تفسير القرآن الكريم" },
-    { id: 3, name: "صحيح البخاري" },
-    { id: 4, name: "الفقه الميسر" },
-  ]);
-
-  const [students] = useState([
-    { id: 1, name: "أحمد ", subjectId: 1 },
-    { id: 2, name: "سارة ", subjectId: 1 },
-    { id: 3, name: "خالد ", subjectId: 1 },
-    { id: 4, name: "فاطمة ", subjectId: 2 },
-    { id: 5, name: "محمود ", subjectId: 2 },
-    { id: 6, name: "نورا ", subjectId: 3 },
-    { id: 7, name: "باسل ", subjectId: 3 },
-    { id: 8, name: "هبة ", subjectId: 4 },
-  ]);
-
+  const authToken = localStorage.getItem("authToken");
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [view, setView] = useState("form");
   const [attendanceHistory, setAttendanceHistory] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    const mockHistory = [
-      {
-        id: 1,
-        date: "2023-06-15",
-        subjectId: 1,
-        presentStudents: [1, 2, 3],
-      },
-      {
-        id: 2,
-        date: "2023-06-10",
-        subjectId: 1,
-        presentStudents: [1, 3],
-      },
-    ];
-    setAttendanceHistory(mockHistory);
-  }, []);
+    const fetchSubjects = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/getSubjects/${courseId}/${level}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ` + authToken,
+              ContentType: "application/json",
+            },
+          }
+        );
+        setSubjects(response.data.subjects);
+      } catch (error) {
+        console.error("Error posting Ad info:", error);
+      }
+    };
+    fetchSubjects();
+  }, [authToken]);
 
   const handleSelectSubject = (subjectId) => {
     const subject = subjects.find((s) => s.id === subjectId);
@@ -68,14 +55,42 @@ const SubAdminJoiningRequestsTab = () => {
     setView("form");
   };
 
-  const handleSubmitAttendance = (date, presentStudents) => {
+  const handleSubmitAttendance = async (date, presentStudentIds, subjectId) => {
     const newRecord = {
       id: attendanceHistory.length + 1,
       date: date,
       subjectId: selectedSubject.id,
-      presentStudents: presentStudents.map((s) => s.id),
+      presentStudentIds: presentStudentIds,
     };
     setAttendanceHistory([newRecord, ...attendanceHistory]);
+    try {
+      const formData = new FormData();
+      formData.append("date", date);
+      presentStudentIds.forEach((id) => {
+        formData.append("studentIDs[]", id);
+      });
+      formData.append("subjectID", subjectId);
+      console.log("ids ", presentStudentIds);
+      const response = await axios.post(
+        "http://localhost:8000/api/subadmin/addPresence",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error("submit attendance error", error);
+      if (error.response.status === 409) {
+        alert("تم تسجيل الحضور مسبقا من أجل هذا التاريخ!");
+      }
+    }
   };
 
   return (
@@ -87,7 +102,6 @@ const SubAdminJoiningRequestsTab = () => {
         backgroundColor: "#f9f5f0",
       }}
     >
-      {}
       <Box
         sx={{
           display: "flex",
@@ -152,7 +166,7 @@ const SubAdminJoiningRequestsTab = () => {
                       color: "#5a3e1b",
                     }}
                   >
-                    {subject.name}
+                    {subject.subjectName}
                   </Typography>
                 </CardContent>
               </Card>
@@ -161,7 +175,6 @@ const SubAdminJoiningRequestsTab = () => {
         ))}
       </Box>
 
-      {}
       {selectedSubject && (
         <Paper
           elevation={3}
@@ -177,7 +190,6 @@ const SubAdminJoiningRequestsTab = () => {
         >
           <Divider sx={{ borderColor: "#e0d6c2", mb: 3 }} />
 
-          {}
           <Box
             sx={{
               display: "flex",
@@ -225,23 +237,13 @@ const SubAdminJoiningRequestsTab = () => {
             </Button>
           </Box>
 
-          {}
           {view === "form" ? (
             <AttendanceForm
-              students={students.filter(
-                (s) => s.subjectId === selectedSubject.id
-              )}
+              subjectId={selectedSubject.id}
               onSubmit={handleSubmitAttendance}
             />
           ) : (
-            <AttendanceHistory
-              history={attendanceHistory.filter(
-                (h) => h.subjectId === selectedSubject.id
-              )}
-              students={students.filter(
-                (s) => s.subjectId === selectedSubject.id
-              )}
-            />
+            <AttendanceHistory subjectId={selectedSubject.id} />
           )}
         </Paper>
       )}

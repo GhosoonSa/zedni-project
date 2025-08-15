@@ -146,7 +146,10 @@ const SubAdminCourseTabs = () => {
           >
             <Tab eventKey="SubjectsTab" title="الحضور">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <SubAdminJoiningRequestsTab />
+                <SubAdminJoiningRequestsTab
+                  courseId={courseId}
+                  level={courseLevel}
+                />
               </div>
             </Tab>
             <Tab eventKey="PeopleTab" title="الكتب">
@@ -161,7 +164,7 @@ const SubAdminCourseTabs = () => {
             </Tab>
             <Tab eventKey="JoiningRequestsTab" title="النتائج">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <SubAdminResultsTab />
+                <SubAdminResultsTab courseId={courseId} level={courseLevel} />
               </div>
             </Tab>
           </Tabs>

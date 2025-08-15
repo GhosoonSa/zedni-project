@@ -133,7 +133,7 @@ const CourseTabs = () => {
               <PeopleTab />
             </Tab>
             <Tab eventKey="ResultsTab" title="النتائج">
-              <ResultsTab />
+              <ResultsTab courseId={courseID} level={level} />
             </Tab>
           </Tabs>
         </Paper>
