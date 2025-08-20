@@ -20,7 +20,7 @@ const AddWorksheet = () => {
   const subjects = [
     { id: 1, name: "فقه" },
     { id: 2, name: "تفسير" },
-    { id: 3, name: "حديث" },
+    { id: 3, name: "حدديث" },
   ];
 
   const [allSubjects, setAllSubjects] = useState([]);
