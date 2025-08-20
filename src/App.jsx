@@ -29,10 +29,7 @@ import MailsS from "./Student/Pages/MailsS";
 import StudentCourseTabs from "./Student/Pages/StudentCourseTabs";
 import PeopleSA from "./SubAdmin/Pages/PeopleSA";
 import PeopleT from "./Teacher/Pages/PeopleT";
-<<<<<<< HEAD
 import AddWorksheet from "./Teacher/Pages/AddWorkSheet";
-=======
->>>>>>> 4de047e8406cef6ba898401d50f895ae44136822
 
 function App() {
   return (
@@ -181,7 +178,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-<<<<<<< HEAD
         <Route
           path="/AddWorkSheetT"
           element={
@@ -190,8 +186,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-=======
->>>>>>> 4de047e8406cef6ba898401d50f895ae44136822
         {/*protected routes for Student */}
         <Route
           path="/CoursesS"
