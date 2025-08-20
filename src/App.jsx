@@ -30,6 +30,8 @@ import StudentCourseTabs from "./Student/Pages/StudentCourseTabs";
 import PeopleSA from "./SubAdmin/Pages/PeopleSA";
 import PeopleT from "./Teacher/Pages/PeopleT";
 import AddWorksheet from "./Teacher/Pages/AddWorkSheet";
+import WorksheetsBySubject from "./Teacher/Pages/WorkSheet";
+import WorksheetDetails from "./Teacher/Pages/WorkSheetDetails";
 
 function App() {
   return (
@@ -183,6 +185,22 @@ function App() {
           element={
             <ProtectedRoute roles={["teacher"]}>
               <AddWorksheet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Worksheets"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <WorksheetsBySubject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/worksheets/:id"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <WorksheetDetails />
             </ProtectedRoute>
           }
         />

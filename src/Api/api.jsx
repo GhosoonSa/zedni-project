@@ -8,3 +8,7 @@ export const DELETEWORKSHEET = "teacher/deleteWorksheet";
 export const GETWORKSHEETWITHANSWERS = "teacher/getWorksheetWithAnswers";
 export const ADDQUESTION = "teacher/addQuestionToWorksheet";
 export const GETWORKSHEETSSTUDENT = "student/getWorksheets";
+
+//questions
+export const DELETEQUESTION = "teacher/deleteQuestion";
+export const EDITQUESTION = "teacher/editQuestion";
