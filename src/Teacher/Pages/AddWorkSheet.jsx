@@ -19,7 +19,7 @@ import { Axios } from "../../Api/axios";
 const AddWorksheet = () => {
   const subjects = [
     { id: 1, name: "فقه" },
-    { id: 2, name: "تفسير" },
+    { id: 2, name: "jjjj" },
     { id: 3, name: "حديث" },
   ];
 
