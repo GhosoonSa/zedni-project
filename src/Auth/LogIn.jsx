@@ -24,13 +24,12 @@ const LogIn = () => {
   };
 
   const handleLogin = async (e) => {
-    console.log("formDataLogin", formData);
     e.preventDefault();
     //with userContext :
     try {
       const error = await login(formData);
       if (error) {
-        setError("Something went wrong. Please try again.");
+        setError("حدث خطأ ما , أعد المحاولة !");
       } else {
         setError("");
       }
@@ -91,14 +90,6 @@ const LogIn = () => {
             helperText="كلمة المرور مطلوبة"
             sx={{ direction: "ltr", width: "250px" }}
           />
-          <Typography>
-            <NavLink
-              to="/SignUp"
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              هل نسيت كلمة المرور؟
-            </NavLink>
-          </Typography>
 
           <Typography>
             <NavLink

@@ -58,17 +58,7 @@ const AdminHeader = () => {
             >
               الدورات
             </NavLink>
-            {/* <NavLink
-              to="/Profile"
-              style={{
-                color: isHoveredP ? "#8B5E34" : "#BC8A5F",
-                textDecoration: "none",
-              }}
-              onMouseEnter={() => setIsHoveredP(true)}
-              onMouseLeave={() => setIsHoveredP(false)}
-            >
-              الملف الشخصي
-            </NavLink> */}
+
             <NavLink
               to="/Mails"
               style={{
@@ -89,7 +79,7 @@ const AdminHeader = () => {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              الطلاب
+              الأشخاص
             </NavLink>
           </div>
           <div className="hidden sm:flex space-x-14 items-center ml-10 pt-2">
@@ -126,18 +116,6 @@ const AdminHeader = () => {
           الدورات
         </NavLink>
         <NavLink
-          to="/Profile"
-          className="block py-1 "
-          style={{
-            color: isHoveredP ? "#8B5E34" : "#BC8A5F",
-            textDecoration: "none",
-          }}
-          onMouseEnter={() => setIsHoveredP(true)}
-          onMouseLeave={() => setIsHoveredP(false)}
-        >
-          الملف الشخصي
-        </NavLink>
-        <NavLink
           to="/Mails"
           className="block py-1"
           style={{
@@ -158,7 +136,7 @@ const AdminHeader = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          الطلاب
+          الأشخاص
         </NavLink>
         <hr />
         <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>

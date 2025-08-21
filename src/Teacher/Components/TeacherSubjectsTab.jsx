@@ -28,29 +28,26 @@ const TeacherSubjectsTab = (props) => {
   const level = props.level;
   const [uploaded, setUploaded] = useState(false);
 
-  useEffect(() => {
-    console.log("from upload effect ");
-  }, [subjects, uploaded]);
+  const fetchsubjects = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/teacher/getSubjectDetails/${courseID}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSubjects(response.data.subjects);
+      console.log(response.data.subjects);
+    } catch (error) {
+      console.error("Error getting subjects :", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchsubjects = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/teacher/getSubjectDetails/${courseID}/${level}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setSubjects(response.data.subjects);
-        console.log(response.data.subjects);
-      } catch (error) {
-        console.error("Error getting subjects :", error);
-      }
-    };
     fetchsubjects();
   }, [authToken, uploaded]);
 
@@ -74,7 +71,7 @@ const TeacherSubjectsTab = (props) => {
       if (response.status === 201) {
         alert("تم إضافة الملحق بنجاح!");
         setUploaded(!uploaded);
-        window.location.reload();
+        fetchsubjects();
       }
     } catch (error) {
       console.error("Error adding attachments :", error);
@@ -95,7 +92,7 @@ const TeacherSubjectsTab = (props) => {
       );
       if (response.status === 200 || response.status === 201) {
         alert("تم حذف الملحق بنجاح!");
-        window.location.reload();
+        fetchsubjects();
       }
     } catch (error) {
       console.error("Error delete Ad :", error);
@@ -137,67 +134,83 @@ const TeacherSubjectsTab = (props) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 2,
-          py: 2,
-          "&::-webkit-scrollbar": { height: "8px" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#E7BC91",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
-        }}
-      >
-        {subjects.map((subject, index) => (
-          <Box
-            key={subject.id}
-            sx={{
-              minWidth: { xs: "45%", sm: "30%", md: "22%" },
-              flexShrink: 0,
-            }}
-          >
-            <Grow in={true} timeout={index * 200}>
-              <Card
-                onClick={() => handleSelectSubject(subject.id)}
-                sx={{
-                  backgroundColor:
-                    selectedSubject?.id === subject.id ? "#f8f4e9" : "#fffaf5",
-                  border:
-                    selectedSubject?.id === subject.id
-                      ? "2px solid #E7BC91"
-                      : "1px solid #e0d6c2",
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    borderColor: "#E7BC91",
-                  },
-                  cursor: "pointer",
-                  mb: 2,
-                  height: "100%",
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    {subject.subjectName}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grow>
-          </Box>
-        ))}
-      </Box>
+      {subjects.length === 0 ? (
+        <Box
+          sx={{
+            py: 4,
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <Typography variant="h6" color="textSecondary">
+            لا يوجد مواد حالياً
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            overflowX: "auto",
+            gap: 2,
+            py: 2,
+            "&::-webkit-scrollbar": { height: "8px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#E7BC91",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
+          }}
+        >
+          {subjects.map((subject, index) => (
+            <Box
+              key={subject.id}
+              sx={{
+                minWidth: { xs: "45%", sm: "30%", md: "22%" },
+                flexShrink: 0,
+              }}
+            >
+              <Grow in={true} timeout={index * 200}>
+                <Card
+                  onClick={() => handleSelectSubject(subject.id)}
+                  sx={{
+                    backgroundColor:
+                      selectedSubject?.id === subject.id
+                        ? "#f8f4e9"
+                        : "#fffaf5",
+                    border:
+                      selectedSubject?.id === subject.id
+                        ? "2px solid #E7BC91"
+                        : "1px solid #e0d6c2",
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      borderColor: "#E7BC91",
+                    },
+                    cursor: "pointer",
+                    mb: 2,
+                    height: "100%",
+                  }}
+                >
+                  <CardContent>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {subject.subjectName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grow>
+            </Box>
+          ))}
+        </Box>
+      )}
 
       {selectedSubject && (
         <Box

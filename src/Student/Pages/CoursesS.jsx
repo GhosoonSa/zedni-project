@@ -36,7 +36,6 @@ const CoursesS = () => {
           }
         );
         setAds(response.data.announcements);
-        console.log(response.data.announcements);
       } catch (error) {
         console.error("Error posting Ad info:", error);
       }
@@ -58,7 +57,6 @@ const CoursesS = () => {
           }
         );
         setNewCourses(response.data.courses);
-        console.log(response.data);
       } catch (error) {
         console.error("Error posting Ad info:", error);
       }
@@ -80,7 +78,6 @@ const CoursesS = () => {
           }
         );
         setEnrolledCourses(response.data.courses);
-        console.log(response.data);
       } catch (error) {
         console.error("Error posting Ad info:", error);
       }
@@ -144,8 +141,8 @@ const CoursesS = () => {
               width: "100%",
               height: "100%",
               background:
-                "linear-gradient(135deg, rgba(255, 253, 248, 0.92) 0%, rgba(252, 250, 245, 0.92) 100%)",
-              backdropFilter: "blur(2px)",
+                "linear-gradient(135deg, rgba(255, 253, 248, 0.4) 0%, rgba(252, 250, 245, 0.4) 100%)",
+              backdropFilter: "blur(1px)",
             },
           }}
         />

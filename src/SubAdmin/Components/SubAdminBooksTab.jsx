@@ -21,8 +21,6 @@ const SubAdminBooksTab = ({ courseId, level }) => {
   const [books, setBooks] = useState([]);
   const authToken = localStorage.getItem("authToken");
 
-  console.log("id ", courseId, " level ", level);
-
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -53,73 +51,86 @@ const SubAdminBooksTab = ({ courseId, level }) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 2,
-          py: 2,
-          "&::-webkit-scrollbar": { height: "8px" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#E7BC91",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
-        }}
-      >
-        {books.map((book, index) => (
-          <Box
-            key={book.bookID}
-            sx={{
-              minWidth: { xs: "45%", sm: "30%", md: "22%" },
-              flexShrink: 0,
-            }}
-          >
-            <Grow in={true} timeout={index * 200}>
-              <Card
-                onClick={() => handleSelectBook(book.bookID)}
-                sx={{
-                  backgroundColor:
-                    selectedBook?.bookID === book.bookID
-                      ? "#f8f4e9"
-                      : "#fffaf5",
-                  border:
-                    selectedBook?.bookID === book.bookID
-                      ? "2px solid #E7BC91"
-                      : "1px solid #e0d6c2",
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    borderColor: "#E7BC91",
-                  },
-                  cursor: "pointer",
-                  mb: 2,
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <CardContent sx={{ textAlign: "center", py: 3 }}>
-                  <MenuBookIcon
-                    color="primary"
-                    sx={{ fontSize: "2.5rem", mb: 1 }}
-                  />
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", fontSize: "1.1rem" }}
-                  >
-                    {book.bookName}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grow>
-          </Box>
-        ))}
-      </Box>
-
+      {books.length === 0 ? (
+        <Box
+          sx={{
+            py: 4,
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <Typography variant="h6" color="textSecondary">
+            لا يوجد كتب حالياً
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            overflowX: "auto",
+            gap: 2,
+            py: 2,
+            "&::-webkit-scrollbar": { height: "8px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#E7BC91",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
+          }}
+        >
+          {books.map((book, index) => (
+            <Box
+              key={book.bookID}
+              sx={{
+                minWidth: { xs: "45%", sm: "30%", md: "22%" },
+                flexShrink: 0,
+              }}
+            >
+              <Grow in={true} timeout={index * 200}>
+                <Card
+                  onClick={() => handleSelectBook(book.bookID)}
+                  sx={{
+                    backgroundColor:
+                      selectedBook?.bookID === book.bookID
+                        ? "#f8f4e9"
+                        : "#fffaf5",
+                    border:
+                      selectedBook?.bookID === book.bookID
+                        ? "2px solid #E7BC91"
+                        : "1px solid #e0d6c2",
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      borderColor: "#E7BC91",
+                    },
+                    cursor: "pointer",
+                    mb: 2,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CardContent sx={{ textAlign: "center", py: 3 }}>
+                    <MenuBookIcon
+                      color="primary"
+                      sx={{ fontSize: "2.5rem", mb: 1 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", fontSize: "1.1rem" }}
+                    >
+                      {book.bookName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grow>
+            </Box>
+          ))}
+        </Box>
+      )}
       {selectedBook && (
         <Paper
           elevation={3}

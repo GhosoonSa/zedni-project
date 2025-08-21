@@ -21,57 +21,49 @@ const CoursesT = () => {
   const [openLevelsModal, setOpenLevelsModal] = useState(false);
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
-
-  useEffect(() => {
-    console.log("Received token: ", authToken);
-  }, []);
-
+  const [ads, setAds] = useState([]);
   const [currentCourses, setCurrentCourses] = useState([]);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/teacher/getTeacherCourses",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setCurrentCourses(response.data.courses);
-        console.log(response.data.courses);
-      } catch (error) {
-        console.error("Error posting Ad info:", error);
-      }
-    };
-    fetchCourses();
-  }, [authToken]);
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/teacher/getTeacherCourses",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setCurrentCourses(response.data.courses);
+      console.log(response.data.courses);
+    } catch (error) {
+      console.error("Error posting Ad info:", error);
+    }
+  };
+  const fetchAds = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/getAllAnnouncements",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setAds(response.data.announcements);
+      console.log(response.data.announcements);
+    } catch (error) {
+      console.error("Error posting Ad info:", error);
+    }
+  };
 
-  const [ads, setAds] = useState([]);
-
   useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/getAllAnnouncements",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setAds(response.data.announcements);
-        console.log(response.data.announcements);
-      } catch (error) {
-        console.error("Error posting Ad info:", error);
-      }
-    };
     fetchAds();
+    fetchCourses();
   }, [authToken]);
 
   const handleCourseClick = (course) => {

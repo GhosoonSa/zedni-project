@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -9,54 +9,98 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  Card,
+  CardContent,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
+import Search from "../../Admin/Components/Search";
 
-const TeacherPeopleTab = () => {
-  const students = [
-    {
-      id: 1,
-      name: "أحمد ",
-      email: "ahmed@example.com",
-      fatherName: "محمد عبدالله",
-      phone: "0912345678",
-      address: "دمشق - المزة",
-      birthDate: "1995-05-15",
-      qualification: "بكالوريوس في الشريعة",
-      isCertified: true,
-      previousCourses: ["الفقه الأساسي", "أصول الفقه"],
-      lecturesAttended1: "7/8",
-      lecturesAttended2: "5/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8"
-    },
-    {
-      id: 2,
-      name: "اية ",
-      email: "aya@example.com",
-      fatherName: " عبدالله",
-      phone: "0912345678",
-      address: " المزة",
-      birthDate: "1999-05-15",
-      qualification: "بكالوريوس في الشريعة",
-      isCertified: true,
-      previousCourses: ["أصول الفقه"],
-      lecturesAttended1: "7/8",
-      lecturesAttended2: "5/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8"
-    },
-  ];
-
+const TeacherPeopleTab = ({ courseId, level }) => {
+  const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [attendance, setAttendance] = useState([]);
+  const authToken = localStorage.getItem("authToken");
+  const [searchTerm, setSearchTerm] = useState(null);
 
-  const handleStudentClick = (student) => {
-    setSelectedStudent(student);
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/getStudentInLevel2/${courseId}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("fetch student error ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, [authToken]);
+
+  const fetchStudentInfo = async (studentId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/getStudentInfoInLevel/${studentId}/${courseId}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSelectedStudent(response.data.data);
+      setAttendance(response.data.presence);
+    } catch (error) {
+      console.error("fetch student info error ", error);
+    }
+  };
+
+  const handleStudentClick = (studentId) => {
+    fetchStudentInfo(studentId);
   };
 
   const handleCloseModal = () => {
     setSelectedStudent(null);
   };
+
+  const fetchSearchResults = async (term) => {
+    if (!term) {
+      fetchStudents();
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/searchInLevel/${courseId}/${level}/${term}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("search error ", error);
+    }
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchSearchResults(searchTerm);
+    }, 400);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   return (
     <Box sx={{ direction: "rtl" }}>
@@ -70,9 +114,11 @@ const TeacherPeopleTab = () => {
           border: "1px solid #e0d6c2",
         }}
       >
+        <Search value={searchTerm} onChange={setSearchTerm} />
+
         <Grid container spacing={2}>
           {students.map((student) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={student.id}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={student.studentID}>
               <Paper
                 elevation={0}
                 sx={{
@@ -91,7 +137,11 @@ const TeacherPeopleTab = () => {
                   flexDirection: "column",
                   justifyContent: "center",
                 }}
-                onClick={() => handleStudentClick(student)}
+                onClick={() => {
+                  searchTerm !== null
+                    ? handleStudentClick(student.id)
+                    : handleStudentClick(student.studentID);
+                }}
               >
                 <Box
                   sx={{
@@ -108,7 +158,7 @@ const TeacherPeopleTab = () => {
                       fontSize: "1.1rem",
                     }}
                   >
-                    {student.name.split(" ")[0].charAt(0)}
+                    {student.firstAndLastName?.charAt(0)}
                   </Avatar>
                   <Box>
                     <Typography
@@ -119,7 +169,7 @@ const TeacherPeopleTab = () => {
                         fontSize: "1.1rem",
                       }}
                     >
-                      {student.name}
+                      {student.firstAndLastName}
                     </Typography>
                   </Box>
                 </Box>
@@ -184,30 +234,8 @@ const TeacherPeopleTab = () => {
               >
                 الاسم:
               </Typography>
-              <Typography variant="body1">{selectedStudent?.name}</Typography>
-            </Box>
-
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                اسم الأب:
-              </Typography>
               <Typography variant="body1">
-                {selectedStudent?.fatherName}
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                تاريخ الميلاد:
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.birthDate}
+                {selectedStudent?.firstAndLastName}
               </Typography>
             </Box>
 
@@ -228,19 +256,8 @@ const TeacherPeopleTab = () => {
               >
                 رقم الهاتف:
               </Typography>
-              <Typography variant="body1">{selectedStudent?.phone}</Typography>
-            </Box>
-
-
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                العنوان:
-              </Typography>
               <Typography variant="body1">
-                {selectedStudent?.address}
+                {selectedStudent?.phoneNumber}
               </Typography>
             </Box>
 
@@ -252,7 +269,7 @@ const TeacherPeopleTab = () => {
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.qualification}
+                {selectedStudent?.studyOrCareer}
               </Typography>
             </Box>
 
@@ -264,10 +281,22 @@ const TeacherPeopleTab = () => {
                 حاصل على إجازة:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.isCertified ? "نعم" : "لا"}
+                {selectedStudent?.mogazeh ? "نعم" : "لا"}
               </Typography>
             </Box>
 
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
+                الدورات السابقة في أماكن أخرى:
+              </Typography>
+              {selectedStudent?.PreviousCoursesInOtherPlace?.length > 0 ? (
+                <Typography variant="body1">
+                  {selectedStudent.PreviousCoursesInOtherPlace}
+                </Typography>
+              ) : (
+                <Typography variant="body1">لا يوجد دورات سابقة</Typography>
+              )}
+            </Box>
             <Box sx={{ mb: 2 }}>
               <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
                 الدورات السابقة:
@@ -284,50 +313,25 @@ const TeacherPeopleTab = () => {
                 <Typography variant="body1">لا يوجد دورات سابقة</Typography>
               )}
             </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الاولى:
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended1}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الثانية :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended2}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الثالثة :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended3}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الرابعة :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended4}
-              </Typography>
-            </Box>
+            <Grid container spacing={2}>
+              {attendance.map((subject) => (
+                <Grid item xs={12} sm={6} md={4} key={subject.subject_id}>
+                  <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+                    <CardContent>
+                      <Typography variant="h6">
+                        {subject.subject_name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        نسبة الحضور:
+                        <span style={{ fontWeight: "bold" }}>
+                          {subject.presence_rate}
+                        </span>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Box>
         </DialogContent>
       </Dialog>

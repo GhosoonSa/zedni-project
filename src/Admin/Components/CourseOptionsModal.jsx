@@ -42,33 +42,30 @@ const CourseOptionsModal = ({
   const courseID = course.id;
   const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    //get requests:
-    const fetchRequests = async (courseID) => {
-      try {
-        console.log("Received token: ", authToken);
-        console.log("course from modal: " + course);
-        if (!courseID) {
-          console.log("courseID is undefined");
-          return;
-        }
-        const response = await axios.get(
-          `http://localhost:8000/api/admin/getJoiningRequests/${courseID}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setRequests(response.data.data);
-        console.log("requests from api: " + requests);
-        console.log("message :" + response.data.message);
-      } catch (error) {
-        console.error("Error fetching requests:", error);
+  //get requests:
+  const fetchRequests = async (courseID) => {
+    try {
+      if (!courseID) {
+        console.log("courseID is undefined");
+        return;
       }
-    };
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/getJoiningRequests/${courseID}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setRequests(response.data.data);
+    } catch (error) {
+      console.error("Error fetching requests:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchRequests(courseID);
   }, [authToken]);
 
@@ -101,7 +98,6 @@ const CourseOptionsModal = ({
     setShow(true);
     const studentID = request.studentID;
     try {
-      console.log("Received token: ", authToken);
       const response = await axios.get(
         `http://localhost:8000/api/admin/getStudentInfo/${studentID}`,
         {
@@ -113,7 +109,6 @@ const CourseOptionsModal = ({
         }
       );
       setSelectedRequest(response.data.data);
-      console.log("selected request: " + selectedRequest);
     } catch (error) {
       console.error("Error getting user info:", error);
     }
@@ -128,7 +123,6 @@ const CourseOptionsModal = ({
   const handleAssignLevel = async (request) => {
     const studentID = request.id;
     try {
-      console.log("Received token: ", authToken);
       const response = await axios.get(
         `http://localhost:8000/api/admin/enrollStudentToLevel/${studentID}/${courseID}/${selectedLevel}`,
         {
@@ -141,11 +135,11 @@ const CourseOptionsModal = ({
       );
       if (selectedRequest && selectedLevel) {
         console.log(`تم تعيين المستوى ${selectedLevel} `);
-        alert("تم تحديد مستوى الطالب بنجاح!");
         setSnackbarOpen(true);
         setRequests(
           requests.filter((req) => req.email !== selectedRequest.email)
         );
+        fetchRequests();
         handleCloseRequestModal();
       }
     } catch (error) {

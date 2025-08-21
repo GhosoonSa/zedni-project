@@ -13,6 +13,7 @@ import SubAdminHeader from "../Components/SubAdminHeader";
 import SubAdminLevelsModal from "../Components/SubAdminLevelsModal";
 import AdsSection from "../Components/AdsSection";
 import axios from "axios";
+
 const CoursesSA = () => {
   const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -134,65 +135,11 @@ const CoursesSA = () => {
           elevation={3}
           sx={{
             p: 3,
-            mb: 6,
-            backgroundColor: "rgba(255, 250, 245, 0.95)",
-            border: "1px solid #e0d6c2",
-            backdropFilter: "blur(2px)",
-            width: "75%",
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              mb: 3,
-              color: "#7b3f00",
-              fontWeight: "bold",
-            }}
-          >
-            الدورات الحالية
-          </Typography>
-          <Grid container spacing={3}>
-            {currentCourses.map((course) => (
-              <Grid item xs={12} sm={6} md={4} key={course.id}>
-                <Card
-                  onClick={() => handleCourseClick(course, true)}
-                  sx={{
-                    cursor: "pointer",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: 5,
-                    },
-                    transition: "all 0.3s ease",
-                    boxShadow: 3,
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={course.courseImage}
-                    alt={course.courseName}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" align="center">
-                      {course.courseName}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Paper>
-
-        <Paper
-          elevation={3}
-          sx={{
-            p: 3,
             backgroundColor: "rgba(255, 250, 245, 0.95)",
             border: "1px solid #e0d6c2",
             backdropFilter: "blur(2px)",
             marginBottom: "30px",
-            width: "75%",
+            width: "auto",
           }}
         >
           <Typography
@@ -205,37 +152,139 @@ const CoursesSA = () => {
           >
             الدورات الجديدة
           </Typography>
-          <Grid container spacing={3}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              overflowX: "auto",
+              gap: 2,
+              justifyContent: "center",
+              py: 1,
+              "&::-webkit-scrollbar": {
+                height: "6px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#E7BC91",
+                borderRadius: "3px",
+              },
+            }}
+          >
             {newCourses.map((course) => (
               <Grid item xs={12} sm={6} md={4} key={course.id}>
-                <Card
-                  onClick={() => handleCourseClick(course, false)}
+                <Box
                   sx={{
-                    cursor: "pointer",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: 5,
-                    },
-                    transition: "all 0.3s ease",
-                    boxShadow: 3,
+                    width: { xs: 140, sm: 180, md: 200, lg: 220 },
+                    flex: "0 0 auto",
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={course.courseImage}
-                    alt={course.courseName}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" align="center">
-                      {course.courseName}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                  <Card
+                    onClick={() => handleCourseClick(course, false)}
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow: 5,
+                      },
+                      transition: "all 0.3s ease",
+                      boxShadow: 3,
+                      my: 1,
+                      mx: 1,
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={course.courseImage}
+                      alt={course.courseName}
+                      sx={{ objectFit: "cover" }}
+                    />
+                    <CardContent>
+                      <Typography variant="h6" align="center">
+                        {course.courseName}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
               </Grid>
             ))}
-          </Grid>
+          </Box>
+        </Paper>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 3,
+            mb: 6,
+            backgroundColor: "rgba(255, 250, 245, 0.95)",
+            border: "1px solid #e0d6c2",
+            backdropFilter: "blur(2px)",
+            width: "auto",
+            boxSizing: "border-box",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 3,
+              color: "#7b3f00",
+              fontWeight: "bold",
+            }}
+          >
+            الدورات الحالية
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              overflowX: "auto",
+              gap: 2,
+              justifyContent: "center",
+              py: 1,
+              "&::-webkit-scrollbar": {
+                height: "6px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#E7BC91",
+                borderRadius: "3px",
+              },
+            }}
+          >
+            {currentCourses.map((course) => (
+              <Grid item xs={12} sm={6} md={4} key={course.id}>
+                <Box
+                  sx={{
+                    width: { xs: 140, sm: 180, md: 200, lg: 220 },
+                    flex: "0 0 auto",
+                  }}
+                >
+                  <Card
+                    onClick={() => handleCourseClick(course, true)}
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow: 5,
+                      },
+                      transition: "all 0.3s ease",
+                      boxShadow: 3,
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={course.courseImage}
+                      alt={course.courseName}
+                      sx={{ objectFit: "cover" }}
+                    />
+                    <CardContent>
+                      <Typography variant="h6" align="center">
+                        {course.courseName}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+            ))}
+          </Box>
         </Paper>
       </Box>
 

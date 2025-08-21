@@ -14,31 +14,21 @@ const AddCourse = ({ isOpen, onClose, token }) => {
     image: "",
   });
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    console.log("Received token: ", token);
-  }, [token]);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleFileChange = (e) => {
-    console.log("File selected: ", e.target.files[0]);
     setSelectedFile(e.target.files[0]);
-    console.log("image " + selectedFile);
   };
 
   const handleAddCourse = async (event) => {
     event.preventDefault();
-    console.log("name " + courseName);
     const formData = new FormData();
     formData.append("courseName", courseName);
     if (selectedFile) {
       formData.append("courseImage", selectedFile);
     }
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
 
     try {
-      console.log("before posting " + token);
       const response = await axios.post(
         "http://localhost:8000/api/admin/createCourse",
         formData,
@@ -51,11 +41,9 @@ const AddCourse = ({ isOpen, onClose, token }) => {
         }
       );
       setMessage(response.massage);
-      console.log("after posting post's message " + message);
       if (response.status === 200) {
         alert("course submitted successfully");
       }
-      window.location.reload();
     } catch (error) {
       console.error("Error adding article:", error);
     }
@@ -71,7 +59,7 @@ const AddCourse = ({ isOpen, onClose, token }) => {
         centered
         style={{ direction: "rtl" }}
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={{ backgroundColor: "#FFEDD8" }}>
           <Modal.Title style={{ marginLeft: "260px" }}>
             أضف دورة جديدة
           </Modal.Title>
@@ -87,7 +75,7 @@ const AddCourse = ({ isOpen, onClose, token }) => {
               onChange={(e) => {
                 setCourseName(e.target.value);
               }}
-              color="success"
+              color="warning"
               size="small"
               fullWidth
               sx={{ direction: "ltr" }}
@@ -103,7 +91,7 @@ const AddCourse = ({ isOpen, onClose, token }) => {
               id="name"
               variant="outlined"
               onChange={handleFileChange}
-              color="success"
+              color="warning"
               size="small"
               fullWidth
               sx={{ direction: "ltr", marginTop: 1 }}
@@ -118,15 +106,23 @@ const AddCourse = ({ isOpen, onClose, token }) => {
                 className="btn"
                 onClick={onClose}
               >
-                Close
+                إغلاق
               </Button>
               <Button
-                variant="outline-success"
                 className="btn"
                 type="submit"
                 onClick={onClose}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  backgroundColor: isHovered ? "#FFEDD8" : "white",
+                  color: "black",
+                  border: isHovered ? "#FFEDD8" : "solid 1.5px #FFEDD8",
+                  margin: "10px",
+                  width: "100px",
+                }}
               >
-                Submit
+                إضافة
               </Button>
             </Modal.Footer>
           </form>

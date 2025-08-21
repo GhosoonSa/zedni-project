@@ -27,34 +27,33 @@ const StudentSubjectsTab = ({ courseId }) => {
   const [isRecommended, setIsRecommended] = useState(false);
   const authToken = localStorage.getItem("authToken");
   const location = useLocation();
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const [subjects, setSubjects] = useState([]);
   const [books, setBooks] = useState([]);
 
+  const fetchsubjects = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/student/getSubjectDetailsStudent/${courseId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSubjects(response.data.subjects);
+      setBooks(response.data.requested_books);
+    } catch (error) {
+      console.error("Error getting subjects :", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchsubjects = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/student/getSubjectDetailsStudent/${courseId}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setSubjects(response.data.subjects);
-        setBooks(response.data.requested_books);
-        console.log("from books", books);
-      } catch (error) {
-        console.error("Error getting subjects :", error);
-      }
-    };
     fetchsubjects();
   }, [authToken]);
-
-  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const handleSelectSubject = (subjectId) => {
     const subject = subjects.find((s) => s.id === subjectId);
@@ -410,7 +409,7 @@ const StudentSubjectsTab = ({ courseId }) => {
               الكتب:
             </Typography>
 
-            {selectedSubject ? (
+            {selectedSubject?.curriculumName ? (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 {subjects.map((subject) => (
                   <Box

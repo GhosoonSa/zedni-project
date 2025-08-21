@@ -248,71 +248,84 @@ const SubAdminResultsTab = ({ courseId, level }) => {
   };
 
   // عرض قائمة المواد
-  const renderSubjects = () => (
-    <Box
-      sx={{
-        display: "flex",
-        overflowX: "auto",
-        gap: 2,
-        py: 2,
-        "&::-webkit-scrollbar": { height: "8px" },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: "#E7BC91",
-          borderRadius: "4px",
-        },
-        "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
-      }}
-    >
-      {subjects.map((subject, index) => (
-        <Box key={subject.id} sx={{ minWidth: "22%", flexShrink: 0 }}>
-          <Grow in={true} timeout={index * 200}>
-            <Card
-              onClick={() => {
-                setSelectedSubject(subject);
-                addEmptyMarks(subject.id);
-                setActiveView(null);
-                fetchStudents(subject.id);
-              }}
-              sx={{
-                backgroundColor:
-                  selectedSubject?.id === subject.id ? "#f8f4e9" : "#fffaf5",
-                border:
-                  selectedSubject?.id === subject.id
-                    ? "2px solid #E7BC91"
-                    : "1px solid #e0d6c2",
-                borderRadius: 2,
-                boxShadow: 3,
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  borderColor: "#E7BC91",
-                },
-                cursor: "pointer",
-                height: "100%",
-                minHeight: "100px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    fontSize: "1.1rem",
-                  }}
-                >
-                  {subject.subjectName}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grow>
-        </Box>
-      ))}
-    </Box>
-  );
+  const renderSubjects = () =>
+    subjects.length === 0 ? (
+      <Box
+        sx={{
+          py: 4,
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        <Typography variant="h6" color="textSecondary">
+          لا يوجد مواد حالياً
+        </Typography>
+      </Box>
+    ) : (
+      <Box
+        sx={{
+          display: "flex",
+          overflowX: "auto",
+          gap: 2,
+          py: 2,
+          "&::-webkit-scrollbar": { height: "8px" },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#E7BC91",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": { backgroundColor: "#f8f4e9" },
+        }}
+      >
+        {subjects.map((subject, index) => (
+          <Box key={subject.id} sx={{ minWidth: "22%", flexShrink: 0 }}>
+            <Grow in={true} timeout={index * 200}>
+              <Card
+                onClick={() => {
+                  setSelectedSubject(subject);
+                  addEmptyMarks(subject.id);
+                  setActiveView(null);
+                  fetchStudents(subject.id);
+                }}
+                sx={{
+                  backgroundColor:
+                    selectedSubject?.id === subject.id ? "#f8f4e9" : "#fffaf5",
+                  border:
+                    selectedSubject?.id === subject.id
+                      ? "2px solid #E7BC91"
+                      : "1px solid #e0d6c2",
+                  borderRadius: 2,
+                  boxShadow: 3,
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "translateY(-5px)",
+                    borderColor: "#E7BC91",
+                  },
+                  cursor: "pointer",
+                  height: "100%",
+                  minHeight: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: "1.1rem",
+                    }}
+                  >
+                    {subject.subjectName}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grow>
+          </Box>
+        ))}
+      </Box>
+    );
 
   // عرض أزرار التحكم
   const renderControlButtons = () => (

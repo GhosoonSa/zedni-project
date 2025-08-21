@@ -54,13 +54,12 @@ const SignUp = () => {
 
   const handleCheck = (e) => {};
   const handleSignUp = async (e) => {
-    console.log("formDataLogin", formData);
     e.preventDefault();
     //with userContext :
     try {
       const error = await signup(formData);
       if (error) {
-        setError("Something went wrong. Please try again.");
+        setError("حدث خطأ ما , أعد المحاولة !");
       } else {
         setError("");
       }

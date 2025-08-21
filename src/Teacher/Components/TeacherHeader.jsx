@@ -80,17 +80,7 @@ const TeacherHeader = () => {
             >
               البريد
             </NavLink>
-            <NavLink
-              to="/PeopleT"
-              style={{
-                color: isHovered ? "#8B5E34" : "#BC8A5F",
-                textDecoration: "none",
-              }}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              الطلاب
-            </NavLink>
+
             <NavLink
               to="/WorkSheets"
               style={{
@@ -161,16 +151,18 @@ const TeacherHeader = () => {
           البريد
         </NavLink>
         <NavLink
-          to="/PeopleT"
+          to="/WorkSheets"
+          className="block py-1"
           style={{
-            color: isHovered ? "#8B5E34" : "#BC8A5F",
+            color: isHoveredM ? "#8B5E34" : "#BC8A5F",
             textDecoration: "none",
           }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={() => setIsHoveredM(true)}
+          onMouseLeave={() => setIsHoveredM(false)}
         >
-          الطلاب
+          البريد
         </NavLink>
+
         <hr />
         <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>
           تسجيل خروج

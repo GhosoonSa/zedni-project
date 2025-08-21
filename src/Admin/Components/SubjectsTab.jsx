@@ -35,9 +35,26 @@ const SubjectsTab = (props) => {
   const courseID = props.courseId;
   const level = props.level;
 
-  useEffect(() => {
-    console.log("from use effect " + subjects);
-  }, [subjects]);
+  //fetch subjects
+  const fetchsubjects = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/getSubjectDetails/${courseID}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSubjects(response.data.subjects);
+      console.log(response.data.subjects);
+    } catch (error) {
+      console.error("Error getting subjects :", error);
+    }
+  };
+
   //fetch teachers names to add a subject
   const handleAddOpen = async () => {
     setOpenAddDialog(true);
@@ -58,6 +75,7 @@ const SubjectsTab = (props) => {
     }
   };
 
+  //post subject
   const handleAddSubject = async () => {
     try {
       const formData = new FormData();
@@ -78,31 +96,13 @@ const SubjectsTab = (props) => {
       );
       console.log("success add " + response.data.message);
       setOpenAddDialog(false);
-      window.location.reload();
+      fetchsubjects();
     } catch (error) {
       console.error("Error adding subject :", error);
     }
   };
 
   useEffect(() => {
-    const fetchsubjects = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/admin/getSubjectDetails/${courseID}/${level}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setSubjects(response.data.subjects);
-        console.log(response.data.subjects);
-      } catch (error) {
-        console.error("Error getting subjects :", error);
-      }
-    };
     fetchsubjects();
   }, [authToken]);
 
@@ -126,7 +126,7 @@ const SubjectsTab = (props) => {
       if (response.status === 200 || response.status === 201) {
         alert("تم رفع الملف بنجاح!");
       }
-      window.location.reload();
+      fetchsubjects();
     } catch (error) {
       console.error("Error adding curriculumFile :", error);
     }
@@ -153,7 +153,7 @@ const SubjectsTab = (props) => {
       if (response.status === 200 || response.status === 201) {
         alert("تم رفع الملف بنجاح!");
       }
-      window.location.reload();
+      fetchsubjects();
     } catch (error) {
       console.error("Error adding curriculumFile :", error);
     }

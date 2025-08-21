@@ -102,78 +102,98 @@ const SubAdminJoiningRequestsTab = ({ courseId, level }) => {
         backgroundColor: "#f9f5f0",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 2,
-          py: 2,
-          "&::-webkit-scrollbar": { height: "8px" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#E7BC91",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "#f8f4e9",
-          },
-        }}
-      >
-        {subjects.map((subject, index) => (
-          <Box
-            key={subject.id}
-            sx={{
-              minWidth: isSmallScreen ? "80%" : isMediumScreen ? "45%" : "22%",
-              flexShrink: 0,
-            }}
-          >
-            <Grow in={true} timeout={index * 200}>
-              <Card
-                onClick={() => handleSelectSubject(subject.id)}
-                sx={{
-                  backgroundColor:
-                    selectedSubject?.id === subject.id ? "#f8f4e9" : "#fffaf5",
-                  border:
-                    selectedSubject?.id === subject.id
-                      ? "2px solid #E7BC91"
-                      : "1px solid #e0d6c2",
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    borderColor: "#E7BC91",
-                  },
-                  cursor: "pointer",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <CardContent sx={{ textAlign: "center", py: 3 }}>
-                  <EventIcon
-                    sx={{
-                      fontSize: "2.5rem",
-                      mb: 1,
-                      color: "#7b3f00",
-                    }}
-                  />
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      fontSize: isSmallScreen ? "1rem" : "1.1rem",
-                      color: "#5a3e1b",
-                    }}
-                  >
-                    {subject.subjectName}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grow>
-          </Box>
-        ))}
-      </Box>
+      {subjects.length === 0 ? (
+        <Box
+          sx={{
+            py: 4,
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <Typography variant="h6" color="textSecondary">
+            لا يوجد مواد حالياً
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            overflowX: "auto",
+            gap: 2,
+            py: 2,
+            "&::-webkit-scrollbar": { height: "8px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#E7BC91",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f8f4e9",
+            },
+          }}
+        >
+          {subjects.map((subject, index) => (
+            <Box
+              key={subject.id}
+              sx={{
+                minWidth: isSmallScreen
+                  ? "80%"
+                  : isMediumScreen
+                  ? "45%"
+                  : "22%",
+                flexShrink: 0,
+              }}
+            >
+              <Grow in={true} timeout={index * 200}>
+                <Card
+                  onClick={() => handleSelectSubject(subject.id)}
+                  sx={{
+                    backgroundColor:
+                      selectedSubject?.id === subject.id
+                        ? "#f8f4e9"
+                        : "#fffaf5",
+                    border:
+                      selectedSubject?.id === subject.id
+                        ? "2px solid #E7BC91"
+                        : "1px solid #e0d6c2",
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      borderColor: "#E7BC91",
+                    },
+                    cursor: "pointer",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CardContent sx={{ textAlign: "center", py: 3 }}>
+                    <EventIcon
+                      sx={{
+                        fontSize: "2.5rem",
+                        mb: 1,
+                        color: "#7b3f00",
+                      }}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: isSmallScreen ? "1rem" : "1.1rem",
+                        color: "#5a3e1b",
+                      }}
+                    >
+                      {subject.subjectName}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grow>
+            </Box>
+          ))}
+        </Box>
+      )}
 
       {selectedSubject && (
         <Paper

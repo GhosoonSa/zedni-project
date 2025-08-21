@@ -89,7 +89,7 @@ const SubAdminHeader = () => {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              الطلاب
+              الأشخاص
             </NavLink>
           </div>
           <div className="hidden sm:flex space-x-14 items-center ml-10 pt-2">
@@ -158,7 +158,7 @@ const SubAdminHeader = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          الطلاب
+          الأشخاص
         </NavLink>
         <hr />
         <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>

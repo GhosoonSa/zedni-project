@@ -15,8 +15,6 @@ import CourseOptionsModal from "../Components/CourseOptionsModal";
 import backgroundTabs from "/backgroundTabs.jpg";
 import axios from "axios";
 
-const CARD_WIDTH = 260;
-
 const Courses = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
@@ -27,49 +25,44 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
   const authToken = localStorage.getItem("authToken");
 
+  //get ads
+  const fetchAds = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/getAllAnnouncements",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+          },
+        }
+      );
+      setAds(response.data.announcements);
+      console.log("get ads " + ads);
+    } catch (error) {
+      console.error("Error getting ads :", error);
+    }
+  };
+  //get courses
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/admin/getAdminCourses",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+          },
+        }
+      );
+      setCourses(response.data.courses);
+      console.log("get courses " + courses);
+    } catch (error) {
+      console.error("Error getting courses :", error);
+    }
+  };
   useEffect(() => {
-    console.log("Received token: ", authToken);
-  }, [authToken]);
-
-  useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/getAllAnnouncements",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-            },
-          }
-        );
-        setAds(response.data.announcements);
-        console.log("get ads " + ads);
-      } catch (error) {
-        console.error("Error getting ads :", error);
-      }
-    };
     fetchAds();
-  }, [authToken]);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/admin/getAdminCourses",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-            },
-          }
-        );
-        setCourses(response.data.courses);
-        console.log("get courses " + courses);
-      } catch (error) {
-        console.error("Error getting courses :", error);
-      }
-    };
     fetchCourses();
   }, [authToken]);
 
@@ -85,7 +78,7 @@ const Courses = () => {
         }
       );
       setIsOptionsOpen(false);
-      window.location.reload();
+      fetchCourses();
     } catch (error) {
       console.error("Error starting course :", error);
     }
@@ -103,7 +96,7 @@ const Courses = () => {
         }
       );
       setIsOptionsOpen(false);
-      window.location.reload();
+      fetchCourses();
     } catch (error) {
       console.error("Error ending course :", error);
     }
@@ -113,7 +106,6 @@ const Courses = () => {
     setSelectedCourse(course);
     setShowOnlyLevels(course.status === "previous");
     setAnchorEl(event.currentTarget);
-    //problem is here
     setIsOptionsOpen(true);
   };
 
@@ -124,7 +116,9 @@ const Courses = () => {
   };
 
   const CourseCard = ({ course }) => (
-    <Box sx={{ width: CARD_WIDTH, flex: "0 0 auto" }}>
+    <Box
+      sx={{ width: { xs: 140, sm: 180, md: 200, lg: 220 }, flex: "0 0 auto" }}
+    >
       <Card
         sx={{
           mx: 1,
@@ -405,7 +399,7 @@ const Courses = () => {
                     display: "flex",
                     flexWrap: "wrap",
                     gap: 2,
-                    justifyContent: "flex-start",
+                    justifyContent: "center",
                   }}
                 >
                   {list.map((course) => (

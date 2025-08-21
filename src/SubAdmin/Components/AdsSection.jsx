@@ -19,24 +19,25 @@ const AdsSection = () => {
 
   const [openAddAdDialog, setOpenAddAdDialog] = useState(false);
 
+  const fetchAds = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/getAllAnnouncements",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setAds(response.data.announcements);
+    } catch (error) {
+      console.error("Error posting Ad info:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/getAllAnnouncements",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ` + authToken,
-              ContentType: "application/json",
-            },
-          }
-        );
-        setAds(response.data.announcements);
-      } catch (error) {
-        console.error("Error posting Ad info:", error);
-      }
-    };
     fetchAds();
   }, [authToken]);
 
@@ -53,7 +54,7 @@ const AdsSection = () => {
       );
       if (response.status === 200 || response.status === 201) {
         alert("تم حذف الإعلان بنجاح!");
-        window.location.reload();
+        fetchAds();
       }
     } catch (error) {
       console.error("Error delete Ad :", error);

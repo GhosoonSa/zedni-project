@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -9,150 +9,94 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  Card,
+  CardContent,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
+import Search from "../../Admin/Components/Search";
 
-const SubAdminPeopleTab = () => {
-  const students = [
-    {
-      id: 1,
-      name: "أحمد ",
-      email: "ahmed@example.com",
-      fatherName: "محمد عبدالله",
-      phone: "0912345678",
-      address: "دمشق - المزة",
-      birthDate: "1995-05-15",
-      qualification: "بكالوريوس في الشريعة",
-      isCertified: true,
-      previousCourses: ["الفقه الأساسي", "أصول الفقه"],
-      lecturesAttended1: "7/8",
-      lecturesAttended2: "5/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8",
-    },
-    {
-      id: 2,
-      name: "سارة ",
-      email: "sara@example.com",
-      fatherName: "علي محمود",
-      phone: "0934567890",
-      address: "دمشق - القابون",
-      birthDate: "1998-08-22",
-      qualification: "طالبة جامعية",
-      isCertified: false,
-      previousCourses: ["التجويد"],
-      lecturesAttended1: "7/8",
-      lecturesAttended2: "8/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "8/8",
-    },
-    {
-      id: 3,
-      name: " عبدالله",
-      email: "khaled@example.com",
-      fatherName: "عبدالله أحمد",
-      phone: "0945678901",
-      address: "دمشق - قدسيا",
-      birthDate: "1990-03-10",
-      qualification: "إمام مسجد",
-      isCertified: true,
-      previousCourses: ["الفقه", "التفسير", "الحديث"],
-      lecturesAttended1: "7/8",
-      lecturesAttended2: "5/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "7/8",
-    },
-    {
-      id: 4,
-      name: " بيان",
-      email: "bayyan@example.com",
-      fatherName: "محمود حسن",
-      phone: "0956789012",
-      address: "دمشق - الميدان",
-      birthDate: "1993-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-      lecturesAttended1: "",
-      lecturesAttended2: "",
-      lecturesAttended3: "",
-      lecturesAttended4: "",
-    },
-    {
-      id: 5,
-      name: "نور",
-      email: "nour@example.com",
-      fatherName: "محمود ",
-      phone: "0956779012",
-      address: "دمشق ",
-      birthDate: "1983-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-      lecturesAttended1: "",
-      lecturesAttended2: "",
-      lecturesAttended3: "",
-      lecturesAttended4: "",
-    },
-    {
-      id: 6,
-      name: "اية",
-      email: "aya@example.com",
-      fatherName: " حسن",
-      phone: "0956749012",
-      address: " الميدان",
-      birthDate: "1999-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-      lecturesAttended1: "5/8",
-      lecturesAttended2: "2/8",
-      lecturesAttended3: "8/8",
-      lecturesAttended4: "4/8",
-    },
-    {
-      id: 7,
-      name: "راية",
-      email: "raya@example.com",
-      fatherName: "محمود ",
-      phone: "0996789012",
-      address: " الميدان",
-      birthDate: "1999-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-      lecturesAttended1: "",
-      lecturesAttended2: "",
-      lecturesAttended3: "",
-      lecturesAttended4: "",
-    },
-    {
-      id: 8,
-      name: "شمس",
-      email: "ya@example.com",
-      fatherName: "محمود ",
-      phone: "0906789012",
-      address: " الميدان",
-      birthDate: "1979-11-05",
-      qualification: "مدرسة",
-      isCertified: false,
-      previousCourses: [],
-      lecturesAttended1: "3/8",
-      lecturesAttended2: "1/8",
-      lecturesAttended3: "7/8",
-      lecturesAttended4: "8/8",
-    },
-  ];
-
+const SubAdminPeopleTab = ({ courseId, level }) => {
+  const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [attendance, setAttendance] = useState([]);
+  const authToken = localStorage.getItem("authToken");
+  const [searchTerm, setSearchTerm] = useState(null);
 
-  const handleStudentClick = (student) => {
-    setSelectedStudent(student);
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/getStudentInLevel2/${courseId}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("fetch student error ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, [authToken]);
+
+  const fetchStudentInfo = async (studentId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/getStudentInfoInLevel/${studentId}/${courseId}/${level}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setSelectedStudent(response.data.data);
+      setAttendance(response.data.presence);
+    } catch (error) {
+      console.error("fetch student info error ", error);
+    }
   };
 
   const handleCloseModal = () => {
     setSelectedStudent(null);
   };
+
+  const fetchSearchResults = async (term) => {
+    if (!term) {
+      fetchStudents();
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/searchInLevel/${courseId}/${level}/${term}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("search error ", error);
+    }
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchSearchResults(searchTerm);
+    }, 400);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   return (
     <Box sx={{ direction: "rtl" }}>
@@ -166,9 +110,11 @@ const SubAdminPeopleTab = () => {
           border: "1px solid #e0d6c2",
         }}
       >
+        <Search value={searchTerm} onChange={setSearchTerm} />
+
         <Grid container spacing={2}>
           {students.map((student) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={student.id}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={student.studentID}>
               <Paper
                 elevation={0}
                 sx={{
@@ -187,7 +133,11 @@ const SubAdminPeopleTab = () => {
                   flexDirection: "column",
                   justifyContent: "center",
                 }}
-                onClick={() => handleStudentClick(student)}
+                onClick={() => {
+                  searchTerm !== null
+                    ? fetchStudentInfo(student.id)
+                    : fetchStudentInfo(student.studentID);
+                }}
               >
                 <Box
                   sx={{
@@ -204,7 +154,7 @@ const SubAdminPeopleTab = () => {
                       fontSize: "1.1rem",
                     }}
                   >
-                    {student.name.split(" ")[0].charAt(0)}
+                    {student.firstAndLastName?.charAt(0)}
                   </Avatar>
                   <Box>
                     <Typography
@@ -215,7 +165,7 @@ const SubAdminPeopleTab = () => {
                         fontSize: "1.1rem",
                       }}
                     >
-                      {student.name}
+                      {student.firstAndLastName}
                     </Typography>
                   </Box>
                 </Box>
@@ -281,7 +231,9 @@ const SubAdminPeopleTab = () => {
               >
                 الاسم:
               </Typography>
-              <Typography variant="body1">{selectedStudent?.name}</Typography>
+              <Typography variant="body1">
+                {selectedStudent?.firstAndLastName}
+              </Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
@@ -325,7 +277,9 @@ const SubAdminPeopleTab = () => {
               >
                 رقم الهاتف:
               </Typography>
-              <Typography variant="body1">{selectedStudent?.phone}</Typography>
+              <Typography variant="body1">
+                {selectedStudent?.phoneNumber}
+              </Typography>
             </Box>
 
             <Box sx={{ display: "flex", mb: 2 }}>
@@ -348,7 +302,7 @@ const SubAdminPeopleTab = () => {
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.qualification}
+                {selectedStudent?.studyOrcareer}
               </Typography>
             </Box>
 
@@ -360,10 +314,21 @@ const SubAdminPeopleTab = () => {
                 حاصل على إجازة:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.isCertified ? "نعم" : "لا"}
+                {selectedStudent?.mogazeh ? "نعم" : "لا"}
               </Typography>
             </Box>
-
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
+                الدورات السابقة في أماكن أخرى:
+              </Typography>
+              {selectedStudent?.PreviousCoursesInOtherPlace?.length > 0 ? (
+                <Typography variant="body1">
+                  {selectedStudent.PreviousCoursesInOtherPlace}
+                </Typography>
+              ) : (
+                <Typography variant="body1">لا يوجد دورات سابقة</Typography>
+              )}
+            </Box>
             <Box sx={{ mb: 2 }}>
               <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
                 الدورات السابقة:
@@ -380,50 +345,26 @@ const SubAdminPeopleTab = () => {
                 <Typography variant="body1">لا يوجد دورات سابقة</Typography>
               )}
             </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الاولى:
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended1}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الثانية :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended2}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الثالثة :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended3}
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                الحضور للمادة الرابعة :
-              </Typography>
-              <Typography variant="body1">
-                {selectedStudent?.lecturesAttended4}
-              </Typography>
-            </Box>
+
+            <Grid container spacing={2}>
+              {attendance.map((subject) => (
+                <Grid item xs={12} sm={6} md={4} key={subject.subject_id}>
+                  <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+                    <CardContent>
+                      <Typography variant="h6">
+                        {subject.subject_name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        نسبة الحضور:{" "}
+                        <span style={{ fontWeight: "bold" }}>
+                          {subject.presence_rate}
+                        </span>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Box>
         </DialogContent>
       </Dialog>

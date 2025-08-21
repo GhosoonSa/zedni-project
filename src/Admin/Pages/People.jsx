@@ -10,75 +10,97 @@ import {
   Paper,
   Typography,
   Box,
-  Avatar,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
 } from "@mui/material";
-import { Close, Edit, Delete } from "@mui/icons-material";
 import Person from "../Components/Person";
 import Search from "../Components/Search";
+import axios from "axios";
 
 const People = () => {
   const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const authToken = localStorage.getItem("authToken");
-  const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  let isAdmin = "admin";
+
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/getAllStudents`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+    } catch (error) {
+      console.error("fetch student error ", error);
+    }
+  };
+  const fetchTeachers = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/admin/getAllTeachers`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ` + authToken,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setTeachers(response.data.teachers);
+    } catch (error) {
+      console.error("fetch student error ", error);
+    }
+  };
+
+  const fetchSearchResults = async (term) => {
+    if (!term) {
+      fetchStudents();
+      fetchTeachers();
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/searchStudentTeacherInSystem/${term}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+            ContentType: "application/json",
+          },
+        }
+      );
+      setStudents(response.data.students);
+      setTeachers(response.data.teachers);
+    } catch (error) {
+      console.error("search error ", error);
+    }
+  };
 
   useEffect(() => {
-    const mockUsers = [
-      {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        role: "Admin",
-        avatar: "",
-        fatherName: "Jane Smith",
-        phoneNumber: "099999999",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        email: "jane@example.com",
-        role: "User",
-        avatar: "",
-        fatherName: "Bob Johnson",
-        phoneNumber: "099999999",
-      },
-      {
-        id: 3,
-        name: "Bob Johnson",
-        email: "bob@example.com",
-        role: "User",
-        avatar: "",
-        fatherName: "John Doe",
-        phoneNumber: "099999999",
-      },
-    ];
-    setStudents(mockUsers);
-    setFilteredStudents(mockUsers);
-  }, []);
+    fetchStudents();
+    fetchTeachers();
+  }, [authToken]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchSearchResults(searchTerm);
+    }, 400);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   const handleUserClick = (user) => {
     setSelectedStudent(user);
     setIsOpen(true);
   };
-
-  useEffect(() => {
-    const lowerSearch = searchTerm.toLowerCase();
-    const results = students.filter(
-      (user) =>
-        user.name.toLowerCase().includes(lowerSearch) ||
-        user.email.toLowerCase().includes(lowerSearch) ||
-        user.fatherName.toLowerCase().includes(lowerSearch)
-    );
-    setFilteredStudents(results);
-  }, [searchTerm, students]);
 
   return (
     <>
@@ -102,62 +124,143 @@ const People = () => {
             الأشخاص
           </Typography>
           <Search value={searchTerm} onChange={setSearchTerm} />
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>اسم الأب</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    البريد الالكتروني
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    رقم الموبايل
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>الدور</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {students.map((user) => (
-                  <TableRow key={user.id} hover>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {user.name}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {user.fatherName}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {user.email}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {user.phoneNumber}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {user.role}
-                    </TableCell>
+          {students.length === 0 ? (
+            "لا يوجد طلاب "
+          ) : (
+            <>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                الطلاب:
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        اسم الأب
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        البريد الالكتروني
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        رقم الموبايل
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>الدور</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {students.map((student) => (
+                      <TableRow key={student.studentID} hover>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {student.firstAndLastName}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {student.fatherName}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {student.email}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {student.phoneNumber}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {student.role === "student" ? "طالب" : ""}
+                        </TableCell>
 
-                    <TableCell sx={{ textAlign: "center" }}>
-                      <Button
-                        color="warning"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => handleUserClick(user)}
-                      >
-                        تفاصيل
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <Person
-                  isOpen={isOpen}
-                  onClose={() => setIsOpen(false)}
-                  person={selectedStudent}
-                  token={authToken}
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          <Button
+                            color="warning"
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleUserClick(student)}
+                          >
+                            تفاصيل
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          )}
+          {teachers.length === 0 ? (
+            "لا يوجد أساتذة"
+          ) : (
+            <>
+              <Typography variant="body1" sx={{ mb: 2, mt: 5 }}>
+                الأساتذة:
+              </Typography>
+              <TableContainer component={Paper} sx={{ mt: 5 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        اسم الأب
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        البريد الالكتروني
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        رقم الموبايل
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>الدور</TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {teachers.map((teacher) => (
+                      <TableRow key={teacher.teacherID} hover>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {teacher.firstAndLastName}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {teacher.fatherName}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {teacher.email}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {teacher.phoneNumber}
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "center" }}>
+                          {teacher.role === "teacher" ? "استاذ" : ""}
+                        </TableCell>
+
+                        <TableCell sx={{ textAlign: "center" }}>
+                          <Button
+                            color="warning"
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleUserClick(teacher)}
+                          >
+                            تفاصيل
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          )}
+          <Person
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            person={selectedStudent}
+            token={authToken}
+            sender={isAdmin}
+            refreshData={() => {
+              fetchStudents();
+              fetchTeachers();
+            }}
+          />
         </Box>
       </Paper>
     </>
