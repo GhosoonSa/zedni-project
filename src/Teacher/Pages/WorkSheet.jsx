@@ -69,12 +69,6 @@ const WorksheetsBySubject = () => {
     navigate(`/worksheets/${id}`);
   };
 
-  const handleAddQuestionClick = (worksheetId) => {
-    console.log(worksheetId);
-    setCurrentWorksheetId(worksheetId);
-    setDialogOpen(true);
-  };
-  //hiiiiii
   const handleDialogClose = () => {
     setDialogOpen(false);
     setQuestionType("editorial");
@@ -154,8 +148,6 @@ const WorksheetsBySubject = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-
-            mb: 3,
           }}
         >
           <Typography variant="h4">أوراق العمل</Typography>
@@ -199,7 +191,7 @@ const WorksheetsBySubject = () => {
 
         {selectedSubject && (
           <Box>
-            <Typography variant="h5">
+            <Typography variant="h5" sx={{ mb: 3 }}>
               أوراق العمل لمادة{" "}
               {subjects.find((s) => s.id === selectedSubject)?.name}
             </Typography>
@@ -238,9 +230,11 @@ const WorksheetsBySubject = () => {
                             <Button
                               variant="outlined"
                               color="success"
-                              onClick={() => handleAddQuestionClick(ws.id)}
+                              onClick={() =>
+                                navigate(`/SubmitAnswers/${ws.id}`)
+                              }
                             >
-                              إضافة سؤال
+                              رفع الإجابات
                             </Button>
                             <Button
                               variant="outlined"

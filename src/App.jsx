@@ -32,6 +32,8 @@ import PeopleT from "./Teacher/Pages/PeopleT";
 import AddWorksheet from "./Teacher/Pages/AddWorkSheet";
 import WorksheetsBySubject from "./Teacher/Pages/WorkSheet";
 import WorksheetDetails from "./Teacher/Pages/WorkSheetDetails";
+import AddQuestion from "./Teacher/Pages/AddQuestion";
+import SubmitAnswers from "./Teacher/Pages/SubmitAnswers";
 
 function App() {
   return (
@@ -201,6 +203,22 @@ function App() {
           element={
             <ProtectedRoute roles={["teacher"]}>
               <WorksheetDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/AddQuestion/:id"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <AddQuestion />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/SubmitAnswers/:id"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <SubmitAnswers />
             </ProtectedRoute>
           }
         />

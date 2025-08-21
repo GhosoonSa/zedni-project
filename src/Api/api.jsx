@@ -1,4 +1,4 @@
-export const baseUrl = `http://192.168.43.86:8000/api`;
+export const baseUrl = `http://127.0.0.1:8000/api`;
 
 //WorkSheet
 export const ADDWORKSHEET = "teacher/addWorksheet";
@@ -12,3 +12,5 @@ export const GETWORKSHEETSSTUDENT = "student/getWorksheets";
 //questions
 export const DELETEQUESTION = "teacher/deleteQuestion";
 export const EDITQUESTION = "teacher/editQuestion";
+export const SUBMITANSWERS = "teacher/teacherSubmitAnswers";
+export const EDITANSWERS = "teacher/teacherEditAnswer";
