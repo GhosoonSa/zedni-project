@@ -11,10 +11,16 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { Axios } from "../../Api/axios";
-import { GETWORKSHEETWITHANSWERS, SUBMITANSWERS } from "../../Api/api";
-import TeacherHeader from "../Components/TeacherHeader";
+import {
+  GETWORKSHEETWITHANSWERS,
+  GETWORKSHEETWITHANSWERSSTUDENT,
+  SUBMITANSWERS,
+  SUBMITANSWERSSTUDENT,
+} from "../../Api/api";
 
-const SubmitAnswers = () => {
+import StudentHeader from "../Components/StudentHeader";
+
+const SubmitAnswersStudent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [worksheet, setWorksheet] = useState(null);
@@ -24,7 +30,7 @@ const SubmitAnswers = () => {
 
   useEffect(() => {
     setLoading(true);
-    Axios.get(`${GETWORKSHEETWITHANSWERS}/${id}`)
+    Axios.get(`${GETWORKSHEETWITHANSWERSSTUDENT}/${id}`)
       .then((res) => {
         setWorksheet(res.data.worksheet);
         const initialAnswers = {};
@@ -50,7 +56,7 @@ const SubmitAnswers = () => {
     };
 
     try {
-      await Axios.post(`${SUBMITANSWERS}`, payload);
+      await Axios.post(`${SUBMITANSWERSSTUDENT}`, payload);
       alert("تم رفع الإجابات بنجاح!");
       navigate(-1);
     } catch (err) {
@@ -68,7 +74,7 @@ const SubmitAnswers = () => {
 
   return (
     <>
-      <TeacherHeader />
+      <StudentHeader />
       <Paper
         elevation={3}
         sx={{
@@ -142,4 +148,4 @@ const SubmitAnswers = () => {
   );
 };
 
-export default SubmitAnswers;
+export default SubmitAnswersStudent;

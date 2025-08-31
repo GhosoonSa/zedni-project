@@ -14,18 +14,20 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import TeacherHeader from "../Components/TeacherHeader";
 import { ADDWORKSHEET, ALLSUBJECTS } from "../../Api/api";
 import { Axios } from "../../Api/axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 //hi
 const AddWorksheet = () => {
   const subjects = [
     { id: 1, name: "فقه" },
-    { id: 2, name: "تفسير" },
+    { id: 4, name: "تفسير" },
     { id: 3, name: "حدديث" },
   ];
-
+  const { subjectId } = useParams(); // id المادة المرسلة من الصفحة السابقة
+  const navigate = useNavigate();
+  const [subject, setSubject] = useState(subjectId || ""); // اجعل القيمة الافتراضية subjectId
   const [allSubjects, setAllSubjects] = useState([]);
   const [error, setError] = useState("");
-  const [subject, setSubject] = useState("");
   const [worksheetName, setWorksheetName] = useState("");
   const [questions, setQuestions] = useState([
     { type: "editorial", question: "", options: [] },
@@ -94,7 +96,7 @@ const AddWorksheet = () => {
       const res = await Axios.post(`${ADDWORKSHEET}`, payload);
       console.log(res);
       if (res.status === 201) {
-        window.location.pathname = "/Worksheets";
+        navigate(`/Worksheets/${subject}`); // العودة مباشرة إلى أوراق العمل الخاصة بالمادة
       }
     } catch (error) {
       if (error.response && error.response.status === 422)
@@ -122,25 +124,6 @@ const AddWorksheet = () => {
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Box sx={{ mb: 3 }}>
-            <Typography>اختر المادة</Typography>
-            <Select
-              fullWidth
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              displayEmpty
-            >
-              <MenuItem value="" disabled>
-                اختر المادة
-              </MenuItem>
-              {subjects.map((subj) => (
-                <MenuItem key={subj.id} value={subj.id}>
-                  {subj.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Box>
-
           <Box sx={{ mb: 3 }}>
             <Typography>اسم ورقة العمل</Typography>
             <TextField

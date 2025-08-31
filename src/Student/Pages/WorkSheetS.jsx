@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Typography,
@@ -10,23 +10,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  IconButton,
-  Select,
-  MenuItem,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import TeacherHeader from "../Components/TeacherHeader";
 import { Axios } from "../../Api/axios";
-import { ADDQUESTION, DELETEWORKSHEET, GETWORKSHEETBYID } from "../../Api/api";
+import {
+  ADDQUESTION,
+  DELETEWORKSHEET,
+  GETWORKSHEETBYID,
+  GETWORKSHEETSSTUDENT,
+} from "../../Api/api";
 import { useNavigate, useParams } from "react-router-dom";
+import StudentHeader from "../Components/StudentHeader";
+import { userContext } from "../../Auth/ContextProvider";
 
-const WorksheetsBySubject = () => {
+const WorksheetsStudents = () => {
   const [error, setError] = useState("");
   const [worksheets, setWorksheets] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -44,7 +40,7 @@ const WorksheetsBySubject = () => {
     if (id) {
       setSelectedSubject(id);
       setLoading(true);
-      Axios.get(`${GETWORKSHEETBYID}/${id}`)
+      Axios.get(`${GETWORKSHEETSSTUDENT}/${id}`)
         .then((res) => {
           setWorksheets(res.data.worksheets || []);
         })
@@ -53,17 +49,8 @@ const WorksheetsBySubject = () => {
     }
   }, [id]);
 
-  const handleDelete = async (worksheetId) => {
-    try {
-      await Axios.delete(`${DELETEWORKSHEET}/${worksheetId}`);
-      setWorksheets((prev) => prev.filter((item) => item.id !== worksheetId));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleDetails = (worksheetId) => {
-    navigate(`/worksheet/${worksheetId}`);
+    navigate(`/worksheetS/${worksheetId}`);
   };
 
   const handleDialogClose = () => {
@@ -120,7 +107,7 @@ const WorksheetsBySubject = () => {
 
   return (
     <div>
-      <TeacherHeader />
+      <StudentHeader />
       <Paper
         elevation={3}
         sx={{
@@ -134,19 +121,6 @@ const WorksheetsBySubject = () => {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h4">أوراق العمل</Typography>
-          <Button
-            variant="outlined"
-            sx={{
-              mb: 3,
-              backgroundColor: "#e7bc91",
-              color: "black",
-              borderColor: "gray",
-              "&:hover": { borderColor: "black" },
-            }}
-            onClick={() => navigate(`/AddWorkSheetT/${selectedSubject}`)}
-          >
-            إضافة ورقة عمل
-          </Button>
         </Box>
 
         <Box>
@@ -184,16 +158,9 @@ const WorksheetsBySubject = () => {
                           <Button
                             variant="outlined"
                             color="success"
-                            onClick={() => navigate(`/SubmitAnswers/${ws.id}`)}
+                            onClick={() => navigate(`/SubmitAnswersS/${ws.id}`)}
                           >
-                            رفع الإجابات
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={() => handleDelete(ws.id)}
-                          >
-                            حذف
+                            حل ورقة العمل
                           </Button>
                         </Box>
                       </TableCell>
@@ -215,4 +182,4 @@ const WorksheetsBySubject = () => {
   );
 };
 
-export default WorksheetsBySubject;
+export default WorksheetsStudents;

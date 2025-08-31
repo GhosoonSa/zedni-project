@@ -18,6 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const TeacherSubjectsTab = (props) => {
   const [subjects, setSubjects] = useState([]);
@@ -27,6 +28,7 @@ const TeacherSubjectsTab = (props) => {
   const courseID = props.courseId;
   const level = props.level;
   const [uploaded, setUploaded] = useState(false);
+  const navigate = useNavigate();
 
   const fetchsubjects = async () => {
     try {
@@ -259,6 +261,29 @@ const TeacherSubjectsTab = (props) => {
                 }}
               >
                 عرض المنهاج
+              </Button>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", color: "#5a3e1b", mb: 1 }}
+              >
+                أوراق العمل :
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#E7BC91",
+                  color: "#5a3e1b",
+                  fontWeight: "bold",
+                  "&:hover": { backgroundColor: "#d9a96e" },
+                  px: 3,
+                  py: 1,
+                }}
+                onClick={() => navigate(`/Worksheets/${selectedSubject.id}`)}
+              >
+                أوراق العمل
               </Button>
             </Box>
 

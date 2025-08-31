@@ -80,18 +80,6 @@ const TeacherHeader = () => {
             >
               البريد
             </NavLink>
-
-            <NavLink
-              to="/WorkSheets"
-              style={{
-                color: isHoveredM ? "#8B5E34" : "#BC8A5F",
-                textDecoration: "none",
-              }}
-              onMouseEnter={() => setIsHoveredM(true)}
-              onMouseLeave={() => setIsHoveredM(false)}
-            >
-              أوراق العمل
-            </NavLink>
           </div>
           <div className="hidden sm:flex space-x-14 items-center ml-10 pt-2">
             <Button onClick={handleLogOut} style={{ color: "#BC8A5F" }}>

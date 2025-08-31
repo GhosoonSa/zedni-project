@@ -19,7 +19,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StudentSubjectsTab = ({ courseId }) => {
   const [showSyllabus, setShowsyllabus] = useState(false);
@@ -28,7 +28,7 @@ const StudentSubjectsTab = ({ courseId }) => {
   const authToken = localStorage.getItem("authToken");
   const location = useLocation();
   const [selectedSubject, setSelectedSubject] = useState(null);
-
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
   const [books, setBooks] = useState([]);
 
@@ -270,6 +270,24 @@ const StudentSubjectsTab = ({ courseId }) => {
               }}
             >
               عرض الملحقات
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => navigate(`/WorksheetsS/${selectedSubject.id}`)}
+              // disabled={selectedSubject.extensions.length === 0}
+              sx={{
+                backgroundColor: "#5a3e1b",
+                color: "white",
+                "&:hover": { backgroundColor: "#7b3f00" },
+                "&:disabled": {
+                  backgroundColor: "#e0d6c2",
+                  color: "#5a3e1b",
+                },
+                px: 3,
+                py: 1,
+              }}
+            >
+              عرض أوراق العمل
             </Button>
           </Box>
 

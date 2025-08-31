@@ -25,6 +25,7 @@ const ContextProvider = ({ children }) => {
       const access_token = response.data.access_token;
       localStorage.setItem("authToken", access_token);
       setAuthenticated(true);
+      console.log(access_token);
 
       const account = response.data.user.role;
       setRole(account);

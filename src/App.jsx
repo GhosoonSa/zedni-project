@@ -34,6 +34,9 @@ import WorksheetsBySubject from "./Teacher/Pages/WorkSheet";
 import WorksheetDetails from "./Teacher/Pages/WorkSheetDetails";
 import AddQuestion from "./Teacher/Pages/AddQuestion";
 import SubmitAnswers from "./Teacher/Pages/SubmitAnswers";
+import WorksheetsStudents from "./Student/Pages/WorkSheetS";
+import SubmitAnswersStudent from "./Student/Pages/SubmitAnswersS";
+import WorksheetDetailsS from "./Student/Pages/WorkSheetDetailsS";
 
 function App() {
   return (
@@ -183,7 +186,7 @@ function App() {
           }
         />
         <Route
-          path="/AddWorkSheetT"
+          path="/AddWorkSheetT/:subjectId"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <AddWorksheet />
@@ -191,7 +194,7 @@ function App() {
           }
         />
         <Route
-          path="/Worksheets"
+          path="/Worksheets/:id"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <WorksheetsBySubject />
@@ -199,7 +202,7 @@ function App() {
           }
         />
         <Route
-          path="/worksheets/:id"
+          path="/worksheet/:id"
           element={
             <ProtectedRoute roles={["teacher"]}>
               <WorksheetDetails />
@@ -256,6 +259,30 @@ function App() {
           }
         />
         <Route path="/student/course/:id" element={<StudentCourseTabs />} />
+        <Route
+          path="/WorksheetsS/:id"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <WorksheetsStudents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/SubmitAnswersS/:id"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <SubmitAnswersStudent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/worksheetS/:id"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <WorksheetDetailsS />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

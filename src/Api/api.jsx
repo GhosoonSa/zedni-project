@@ -13,4 +13,6 @@ export const GETWORKSHEETSSTUDENT = "student/getWorksheets";
 export const DELETEQUESTION = "teacher/deleteQuestion";
 export const EDITQUESTION = "teacher/editQuestion";
 export const SUBMITANSWERS = "teacher/teacherSubmitAnswers";
+export const SUBMITANSWERSSTUDENT = "student/studentSubmitAnswers";
+export const GETWORKSHEETWITHANSWERSSTUDENT = "student/getWorksheetWithAnswers";
 export const EDITANSWERS = "teacher/teacherEditAnswer";
