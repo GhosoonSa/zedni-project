@@ -2,47 +2,28 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
-  Button,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  IconButton,
-  Select,
-  MenuItem,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import { useNavigate, useParams } from "react-router-dom";
 import TeacherHeader from "../Components/TeacherHeader";
 import { Axios } from "../../Api/axios";
-import { ADDQUESTION, DELETEWORKSHEET, GETWORKSHEETBYID } from "../../Api/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { GETWORKSHEETBYID, DELETEWORKSHEET } from "../../Api/api";
 
 const WorksheetsBySubject = () => {
-  const [error, setError] = useState("");
   const [worksheets, setWorksheets] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [currentWorksheetId, setCurrentWorksheetId] = useState(null);
-  const [questionType, setQuestionType] = useState("editorial");
-  const [questionText, setQuestionText] = useState("");
-  const [options, setOptions] = useState([""]);
-  const navigate = useNavigate();
   const { id } = useParams(); // id المادة
+  const navigate = useNavigate();
 
-  // useEffect لتحميل أوراق العمل مباشرة عند أول تحميل الصفحة
+  // تحميل أوراق العمل
   useEffect(() => {
     if (id) {
-      setSelectedSubject(id);
       setLoading(true);
       Axios.get(`${GETWORKSHEETBYID}/${id}`)
         .then((res) => {
@@ -62,154 +43,126 @@ const WorksheetsBySubject = () => {
     }
   };
 
-  const handleDetails = (worksheetId) => {
-    navigate(`/worksheet/${worksheetId}`);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-    setQuestionType("editorial");
-    setQuestionText("");
-    setOptions([""]);
-  };
-
-  const addOption = () => setOptions([...options, ""]);
-  const removeOption = (index) => {
-    if (options.length === 1) return;
-    const newOptions = [...options];
-    newOptions.splice(index, 1);
-    setOptions(newOptions);
-  };
-  const handleOptionChange = (index, value) => {
-    setError("");
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleSaveQuestion = () => {
-    if (!questionText.trim()) {
-      alert("يرجى إدخال نص السؤال");
-      return;
-    }
-    if (
-      questionType !== "editorial" &&
-      options.filter((o) => o.trim() !== "").length < 2
-    ) {
-      setError("يجب إضافة خيارين على الأقل");
-      return;
-    }
-
-    const payload = {
-      worksheetID: currentWorksheetId,
-      question: questionText.trim(),
-      type: questionType,
-      options:
-        questionType === "automation"
-          ? options.filter((o) => o.trim() !== "")
-          : undefined,
-    };
-
-    Axios.post(`${ADDQUESTION}`, payload)
-      .then(() => handleDialogClose())
-      .catch((err) => {
-        console.error(err);
-        alert("حدث خطأ أثناء إضافة السؤال");
-      });
-  };
-
   return (
     <div>
       <TeacherHeader />
       <Paper
         elevation={3}
         sx={{
-          my: 15,
-          py: 4,
-          px: 4,
+          my: 12,
+          mx: "auto",
+          p: 5,
           direction: "rtl",
-          backgroundColor: "#fffaf5",
-          mx: 5,
+          background: "linear-gradient(135deg, #fffaf5, #fffefd)",
+          minHeight: "70vh",
+          maxWidth: 1100,
+          borderRadius: 4,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h4">أوراق العمل</Typography>
-          <Button
-            variant="outlined"
-            sx={{
-              mb: 3,
-              backgroundColor: "#e7bc91",
-              color: "black",
-              borderColor: "gray",
-              "&:hover": { borderColor: "black" },
-            }}
-            onClick={() => navigate(`/AddWorkSheetT/${selectedSubject}`)}
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            mb: 4,
+            textAlign: "center",
+            color: "#5d4037",
+          }}
+        >
+          📚 أوراق العمل
+        </Typography>
+
+        {loading ? (
+          <Typography align="center" color="text.secondary" fontSize="1.2rem">
+            جاري التحميل...
+          </Typography>
+        ) : worksheets.length > 0 ? (
+          <Grid container spacing={3}>
+            {worksheets.map((ws, index) => (
+              <Grid item xs={12} sm={6} md={4} key={ws.id}>
+                <Card
+                  elevation={4}
+                  sx={{
+                    borderRadius: 3,
+                    backgroundColor: "#ffffff",
+                    transition: "0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: 6,
+                    },
+                  }}
+                >
+                  <CardContent sx={{ textAlign: "center" }}>
+                    <AssignmentIcon
+                      sx={{ fontSize: 50, color: "#8d6e63", mb: 1 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", mb: 1, fontSize: "1.2rem" }}
+                    >
+                      {ws.worksheetName}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      رقم الورقة: {index + 1}
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    sx={{
+                      justifyContent: "center",
+                      gap: 2,
+                      pb: 2,
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        backgroundColor: "#2196f3",
+                        "&:hover": { backgroundColor: "#1976d2" },
+                        borderRadius: 2,
+                      }}
+                      onClick={() => navigate(`/worksheet/${ws.id}`)}
+                    >
+                      تفاصيل
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        backgroundColor: "#4caf50",
+                        "&:hover": { backgroundColor: "#388e3c" },
+                        borderRadius: 2,
+                      }}
+                      onClick={() => navigate(`/SubmitAnswers/${ws.id}`)}
+                    >
+                      رفع الإجابات
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        backgroundColor: "#f44336",
+                        "&:hover": { backgroundColor: "#d32f2f" },
+                        borderRadius: 2,
+                      }}
+                      onClick={() => handleDelete(ws.id)}
+                    >
+                      حذف
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography
+            align="center"
+            color="text.secondary"
+            fontSize="1.2rem"
+            sx={{ mt: 3 }}
           >
-            إضافة ورقة عمل
-          </Button>
-        </Box>
-
-        <Box>
-          {loading ? (
-            <Typography>جاري التحميل...</Typography>
-          ) : worksheets.length > 0 ? (
-            <TableContainer component={Paper}>
-              <Table sx={{ direction: "rtl" }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">رقم</TableCell>
-                    <TableCell align="center">اسم الورقة</TableCell>
-                    <TableCell align="center">الإجراء</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {worksheets.map((ws, index) => (
-                    <TableRow key={ws.id}>
-                      <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">{ws.worksheetName}</TableCell>
-                      <TableCell align="center">
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 1,
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Button
-                            variant="outlined"
-                            onClick={() => handleDetails(ws.id)}
-                          >
-                            تفاصيل
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="success"
-                            onClick={() => navigate(`/SubmitAnswers/${ws.id}`)}
-                          >
-                            رفع الإجابات
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={() => handleDelete(ws.id)}
-                          >
-                            حذف
-                          </Button>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          ) : (
-            <Typography sx={{ mt: 2 }}>
-              لا توجد أوراق عمل لهذه المادة.
-            </Typography>
-          )}
-        </Box>
-
-        {/* Dialog لإضافة سؤال جديد كما في السابق */}
+            لا توجد أوراق عمل لهذه المادة.
+          </Typography>
+        )}
       </Paper>
     </div>
   );

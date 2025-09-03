@@ -37,6 +37,8 @@ import SubmitAnswers from "./Teacher/Pages/SubmitAnswers";
 import WorksheetsStudents from "./Student/Pages/WorkSheetS";
 import SubmitAnswersStudent from "./Student/Pages/SubmitAnswersS";
 import WorksheetDetailsS from "./Student/Pages/WorkSheetDetailsS";
+import InternalMail from "./Teacher/Pages/mail";
+import StudentAnswers from "./Student/Pages/StudentAnswers";
 
 function App() {
   return (
@@ -225,6 +227,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/mail"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <InternalMail />
+            </ProtectedRoute>
+          }
+        />
         {/*protected routes for Student */}
         <Route
           path="/CoursesS"
@@ -276,10 +286,18 @@ function App() {
           }
         />
         <Route
-          path="/worksheetS/:id"
+          path="/worksheetDetailsS/:id"
           element={
             <ProtectedRoute roles={["student"]}>
               <WorksheetDetailsS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/StudentAnswers/:id"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <StudentAnswers />
             </ProtectedRoute>
           }
         />

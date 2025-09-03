@@ -17,6 +17,7 @@ const IMG_CLICK_SCALE = 1.15;
 const TeacherCourseCard = ({ course, onClick }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
+  console.log(course.courseImage);
 
   const handleClick = () => {
     if (clicked) return;

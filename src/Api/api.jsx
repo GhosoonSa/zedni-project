@@ -15,4 +15,6 @@ export const EDITQUESTION = "teacher/editQuestion";
 export const SUBMITANSWERS = "teacher/teacherSubmitAnswers";
 export const SUBMITANSWERSSTUDENT = "student/studentSubmitAnswers";
 export const GETWORKSHEETWITHANSWERSSTUDENT = "student/getWorksheetWithAnswers";
+export const GETTEACHERANSWRS = "student/getTeacherAnswers";
+
 export const EDITANSWERS = "teacher/teacherEditAnswer";

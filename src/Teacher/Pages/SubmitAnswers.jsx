@@ -26,9 +26,17 @@ const SubmitAnswers = () => {
     setLoading(true);
     Axios.get(`${GETWORKSHEETWITHANSWERS}/${id}`)
       .then((res) => {
-        setWorksheet(res.data.worksheet);
+        const worksheetData = res.data.worksheet;
+
+        // فلترة الأسئلة التي ليس لها إجابة
+        const unansweredQuestions = worksheetData.questions.filter(
+          (q) => !q.answer || q.answer.length === 0
+        );
+
+        setWorksheet({ ...worksheetData, questions: unansweredQuestions });
+
         const initialAnswers = {};
-        res.data.worksheet.questions.forEach((q) => {
+        unansweredQuestions.forEach((q) => {
           initialAnswers[q.id] = "";
         });
         setAnswers(initialAnswers);
@@ -65,6 +73,29 @@ const SubmitAnswers = () => {
 
   if (loading) return <Typography>جاري التحميل...</Typography>;
   if (!worksheet) return <Typography>لا توجد بيانات لعرضها.</Typography>;
+
+  // إذا جميع الأسئلة تمت الإجابة عنها
+  if (worksheet?.questions.length === 0) {
+    return (
+      <>
+        <TeacherHeader />
+        <Paper
+          elevation={3}
+          sx={{
+            my: 15,
+            mx: 5,
+            p: 4,
+            direction: "rtl",
+            backgroundColor: "#fffaf5",
+          }}
+        >
+          <Typography variant="h4" mb={3}>
+            لقد قمت برفع جميع الإجابات مسبقًا لهذه الورقة: {worksheet.name}
+          </Typography>
+        </Paper>
+      </>
+    );
+  }
 
   return (
     <>

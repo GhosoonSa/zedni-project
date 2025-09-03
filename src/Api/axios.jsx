@@ -1,10 +1,18 @@
 import axios from "axios";
 import { baseUrl } from "./api";
 
-const authToken = localStorage.getItem("authToken");
 export const Axios = axios.create({
   baseURL: baseUrl,
-  headers: {
-    Authorization: `Bearer ${authToken}`,
-  },
 });
+
+// interceptor يضيف التوكن لكل طلب بشكل ديناميكي
+Axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);

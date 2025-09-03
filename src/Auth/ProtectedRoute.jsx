@@ -3,14 +3,14 @@ import { userContext } from "./ContextProvider";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children, roles }) => {
-  const { role, authenticated } = useContext(userContext);
+  const token = localStorage.getItem("authToken");
+  const userRole = localStorage.getItem("role");
 
-  if (!authenticated) {
-    return <Navigate to="/LogIn" />;
-  }
-  if (!roles.includes(role)) {
-    return <Navigate to="/UnAuthenticated" />;
-  }
+  console.log("ProtectedRoute token:", token, "role:", userRole);
+
+  if (!token) return <Navigate to="/LogIn" replace />;
+  if (!roles.includes(userRole))
+    return <Navigate to="/UnAuthenticated" replace />;
 
   return children;
 };

@@ -3,115 +3,34 @@ import {
   Box,
   Typography,
   Paper,
-  IconButton,
-  List,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Card,
+  CardContent,
+  Chip,
+  Divider,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Axios } from "../../Api/axios";
-import {
-  GETWORKSHEETWITHANSWERS,
-  EDITQUESTION,
-  DELETEQUESTION,
-  EDITANSWERS,
-  GETWORKSHEETWITHANSWERSSTUDENT,
-} from "../../Api/api";
-
-import { Edit, Delete } from "@mui/icons-material";
+import { GETTEACHERANSWRS } from "../../Api/api";
 import StudentHeader from "../Components/StudentHeader";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const WorksheetDetailsS = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [worksheet, setWorksheet] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [editOpen, setEditOpen] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [editedQuestion, setEditedQuestion] = useState("");
-  const [editedOptions, setEditedOptions] = useState([]);
-  const [editedAnswer, setEditedAnswer] = useState("");
-
   useEffect(() => {
     setLoading(true);
-    Axios.get(`${GETWORKSHEETWITHANSWERSSTUDENT}/${id}`)
+    Axios.get(`${GETTEACHERANSWRS}/${id}`)
       .then((res) => {
-        setWorksheet(res.data.worksheet);
+        setWorksheet(res.data);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        console.error("Error fetching worksheet:", err);
+      })
       .finally(() => setLoading(false));
   }, [id]);
-
-  const handleEditClick = (question) => {
-    setCurrentQuestion(question);
-    setEditedQuestion(question.question);
-    setEditedOptions(question.options ? [...question.options] : []);
-    setEditedAnswer(question.answer?.[0]?.answer || "");
-    setEditOpen(true);
-  };
-
-  const handleDelete = (questionID) => {
-    Axios.delete(`${DELETEQUESTION}/${questionID}`)
-      .then(() => {
-        setWorksheet((prev) => ({
-          ...prev,
-          questions: prev.questions.filter((q) => q.id !== questionID),
-        }));
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const handleSave = async () => {
-    const filteredOptions = editedOptions.filter((o) => o.trim() !== "");
-    const questionPayload = {
-      questionID: currentQuestion.id,
-      question: editedQuestion,
-      type: currentQuestion.type,
-      ...(filteredOptions.length > 0 && { options: filteredOptions }),
-    };
-
-    try {
-      await Axios.put(`${EDITQUESTION}`, questionPayload);
-      if (currentQuestion.type === "editorial" && editedAnswer.trim() !== "") {
-        const answerPayload = {
-          answerID: currentQuestion.answer?.[0]?.id,
-          answer: editedAnswer,
-        };
-        await Axios.put(`${EDITANSWERS}`, answerPayload);
-      }
-
-      setWorksheet((prev) => ({
-        ...prev,
-        questions: prev.questions.map((q) =>
-          q.id === currentQuestion.id
-            ? {
-                ...q,
-                question: editedQuestion,
-                options: filteredOptions,
-                answer:
-                  currentQuestion.type === "editorial"
-                    ? [{ ...currentQuestion.answer?.[0], answer: editedAnswer }]
-                    : currentQuestion.answer,
-              }
-            : q
-        ),
-      }));
-
-      setEditOpen(false);
-    } catch (err) {
-      console.error(err);
-      alert("حدث خطأ أثناء حفظ السؤال أو الإجابة");
-    }
-  };
-
-  const handleAddQuestionClick = () => {
-    navigate(`/AddQuestion/${id}`);
-  };
 
   return (
     <>
@@ -119,191 +38,129 @@ const WorksheetDetailsS = () => {
       <Paper
         elevation={3}
         sx={{
-          my: 15,
-          mx: 5,
-          p: 4,
+          my: 10,
+          mx: "auto",
+          p: 5,
           direction: "rtl",
-          backgroundColor: "#fffaf5",
+          background: "linear-gradient(135deg, #fffaf5, #fffefd)",
           minHeight: "70vh",
+          maxWidth: 1100,
+          borderRadius: 4,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-          <Typography variant="h4">تفاصيل ورقة العمل</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddQuestionClick}
-          >
-            إضافة سؤال
-          </Button>
-        </Box>
+        <Typography
+          variant="h4"
+          mb={4}
+          sx={{ fontWeight: "bold", textAlign: "center", color: "#5d4037" }}
+        >
+          📝 إجابات الأستاذ
+        </Typography>
 
-        {loading && <Typography>جاري التحميل...</Typography>}
+        {loading && (
+          <Typography align="center" color="text.secondary" fontSize="1.2rem">
+            جاري التحميل...
+          </Typography>
+        )}
 
         {!loading && worksheet ? (
           <>
-            <Typography variant="h5" mb={3}>
-              اسم ورقة العمل: {worksheet.name}
+            <Typography
+              variant="h5"
+              mb={4}
+              sx={{ fontWeight: "bold", color: "#3e2723", textAlign: "center" }}
+            >
+              اسم ورقة العمل : {worksheet.worksheet_name}
             </Typography>
 
             {worksheet.questions?.length > 0 ? (
-              <List>
+              <Box display="flex" flexDirection="column" gap={3}>
                 {worksheet.questions.map((q, index) => (
-                  <Paper
-                    key={q.id}
-                    elevation={1}
+                  <Card
+                    key={q.questionID}
+                    elevation={4}
                     sx={{
-                      mb: 2,
-                      p: 2,
-                      borderRadius: 2,
-                      backgroundColor: "#fffefc",
+                      borderRadius: 3,
+                      backgroundColor: "#ffffff",
+                      transition: "0.3s",
+                      "&:hover": {
+                        boxShadow: 6,
+                        transform: "translateY(-3px)",
+                      },
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        mb: 1,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        السؤال {index + 1}: {q.question}
-                      </Typography>
-                      <Box>
-                        <IconButton
-                          onClick={() => handleEditClick(q)}
-                          color="primary"
-                        >
-                          <Edit fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleDelete(q.id)}
-                          color="error"
-                        >
-                          <Delete fontSize="small" />
-                        </IconButton>
+                    <CardContent>
+                      {/* السؤال */}
+                      <Box display="flex" alignItems="center" mb={2}>
+                        <HelpOutlineIcon sx={{ color: "#8d6e63", mr: 1 }} />
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                          السؤال {index + 1}: {q.question}
+                        </Typography>
                       </Box>
-                    </Box>
 
-                    {q.options?.length > 0 && (
-                      <Box
-                        sx={{
-                          mb: 1,
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 0.5,
-                        }}
-                      >
-                        {q.options.map((opt, i) => {
-                          const isCorrect = q.answer?.some(
-                            (a) => a.answer === opt
-                          );
-                          return (
-                            <Box
-                              key={i}
-                              sx={{
-                                px: 1.5,
-                                py: 0.2,
-                                borderRadius: "16px",
-                                border: "1px solid #e0c097",
-                                backgroundColor: isCorrect
-                                  ? "#d0f0c0"
-                                  : "#fff8f0",
-                                fontSize: "13px",
-                                fontWeight: isCorrect ? "bold" : "normal",
-                                color: isCorrect ? "#2e7d32" : "#000",
-                              }}
-                            >
-                              {opt}
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    )}
+                      {/* الخيارات */}
+                      {q.options?.length > 0 && (
+                        <Box
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 1,
+                          }}
+                        >
+                          {q.options.map((opt, i) => {
+                            const isCorrect = q.teacherAnswers?.some(
+                              (a) => a.answer === opt
+                            );
+                            return (
+                              <Chip
+                                key={i}
+                                label={opt}
+                                color={isCorrect ? "success" : "default"}
+                                variant={isCorrect ? "filled" : "outlined"}
+                                sx={{
+                                  fontWeight: isCorrect ? "bold" : "normal",
+                                }}
+                              />
+                            );
+                          })}
+                        </Box>
+                      )}
 
-                    {q.answer?.length > 0 && q.type === "editorial" && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontWeight: "500",
-                          color: "#2e2e2e",
-                          fontSize: "14px",
-                        }}
-                      >
-                        الإجابة:{" "}
-                        <span style={{ color: "#2e7d32" }}>
-                          {q.answer.map((a) => a.answer).join(", ")}
-                        </span>
-                      </Typography>
-                    )}
-                  </Paper>
+                      <Divider sx={{ my: 2 }} />
+
+                      {/* الإجابة */}
+                      {q.teacherAnswers?.length > 0 && (
+                        <Box display="flex" alignItems="center">
+                          <CheckCircleOutlineIcon
+                            sx={{ color: "#2e7d32", mr: 1 }}
+                          />
+                          <Typography
+                            variant="body1"
+                            sx={{ fontWeight: "500", color: "#2e7d32" }}
+                          >
+                            الإجابة:{" "}
+                            {q.teacherAnswers.map((a) => a.answer).join(", ")}
+                          </Typography>
+                        </Box>
+                      )}
+                    </CardContent>
+                  </Card>
                 ))}
-              </List>
+              </Box>
             ) : (
-              <Typography>لا توجد أسئلة لعرضها.</Typography>
+              <Typography align="center" color="text.secondary">
+                لا توجد أسئلة لعرضها.
+              </Typography>
             )}
           </>
         ) : (
-          !loading && <Typography>لا توجد بيانات لعرضها.</Typography>
+          !loading && (
+            <Typography align="center" color="text.secondary">
+              لا توجد بيانات لعرضها.
+            </Typography>
+          )
         )}
       </Paper>
-
-      <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth>
-        <DialogTitle>تعديل السؤال</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            multiline
-            minRows={2}
-            label="نص السؤال"
-            value={editedQuestion}
-            onChange={(e) => setEditedQuestion(e.target.value)}
-            sx={{ mt: 1, mb: 2 }}
-          />
-          {currentQuestion &&
-            currentQuestion.type !== "editorial" &&
-            editedOptions.map((opt, idx) => (
-              <Box key={idx} sx={{ display: "flex", mb: 1 }}>
-                <TextField
-                  fullWidth
-                  value={opt}
-                  onChange={(e) => {
-                    const newOpts = [...editedOptions];
-                    newOpts[idx] = e.target.value;
-                    setEditedOptions(newOpts);
-                  }}
-                />
-                <Button
-                  color="error"
-                  onClick={() =>
-                    setEditedOptions(editedOptions.filter((_, i) => i !== idx))
-                  }
-                  sx={{ ml: 1 }}
-                >
-                  حذف
-                </Button>
-              </Box>
-            ))}
-
-          {currentQuestion && currentQuestion.type === "editorial" && (
-            <TextField
-              fullWidth
-              multiline
-              minRows={2}
-              label="الإجابة"
-              value={editedAnswer}
-              onChange={(e) => setEditedAnswer(e.target.value)}
-              sx={{ mt: 2, mb: 2 }}
-            />
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditOpen(false)}>إلغاء</Button>
-          <Button variant="contained" onClick={handleSave}>
-            حفظ
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };

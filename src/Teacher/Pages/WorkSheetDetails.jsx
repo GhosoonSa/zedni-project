@@ -3,14 +3,16 @@ import {
   Box,
   Typography,
   Paper,
-  IconButton,
-  List,
   Button,
-  TextField,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { Axios } from "../../Api/axios";
@@ -18,10 +20,8 @@ import {
   GETWORKSHEETWITHANSWERS,
   EDITQUESTION,
   DELETEQUESTION,
-  EDITANSWERS,
 } from "../../Api/api";
 import TeacherHeader from "../Components/TeacherHeader";
-import { Edit, Delete } from "@mui/icons-material";
 
 const WorksheetDetails = () => {
   const { id } = useParams();
@@ -38,51 +38,50 @@ const WorksheetDetails = () => {
   useEffect(() => {
     setLoading(true);
     Axios.get(`${GETWORKSHEETWITHANSWERS}/${id}`)
-      .then((res) => {
-        setWorksheet(res.data.worksheet);
-      })
+      .then((res) => setWorksheet(res.data.worksheet))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleEditClick = (question) => {
-    setCurrentQuestion(question);
-    setEditedQuestion(question.question);
-    setEditedOptions(question.options ? [...question.options] : []);
-    setEditedAnswer(question.answer?.[0]?.answer || "");
+  const handleEditClick = (q) => {
+    setCurrentQuestion(q);
+    setEditedQuestion(q.question);
+    setEditedOptions(q.options ? [...q.options] : []);
+    setEditedAnswer(q.answer?.[0]?.answer || "");
     setEditOpen(true);
   };
 
-  const handleDelete = (questionID) => {
-    Axios.delete(`${DELETEQUESTION}/${questionID}`)
-      .then(() => {
-        setWorksheet((prev) => ({
-          ...prev,
-          questions: prev.questions.filter((q) => q.id !== questionID),
-        }));
-      })
-      .catch((err) => console.error(err));
+  const handleDelete = async (questionID) => {
+    await Axios.delete(`${DELETEQUESTION}/${questionID}`);
+    setWorksheet((prev) => ({
+      ...prev,
+      questions: prev.questions.filter((q) => q.id !== questionID),
+    }));
   };
 
   const handleSave = async () => {
     const filteredOptions = editedOptions.filter((o) => o.trim() !== "");
-    const questionPayload = {
+    if (
+      !editedQuestion.trim() ||
+      (currentQuestion.type !== "editorial" && filteredOptions.length < 2)
+    ) {
+      alert("يرجى إدخال نص السؤال وخيارين على الأقل");
+      return;
+    }
+
+    const payload = {
       questionID: currentQuestion.id,
       question: editedQuestion,
       type: currentQuestion.type,
-      ...(filteredOptions.length > 0 && { options: filteredOptions }),
+      options:
+        currentQuestion.type !== "editorial" ? filteredOptions : undefined,
+      ...(currentQuestion.type !== "editorial" && editedAnswer
+        ? { answer: editedAnswer }
+        : {}),
     };
 
     try {
-      await Axios.put(`${EDITQUESTION}`, questionPayload);
-      if (currentQuestion.type === "editorial" && editedAnswer.trim() !== "") {
-        const answerPayload = {
-          answerID: currentQuestion.answer?.[0]?.id,
-          answer: editedAnswer,
-        };
-        await Axios.put(`${EDITANSWERS}`, answerPayload);
-      }
-
+      await Axios.put(`${EDITQUESTION}`, payload);
       setWorksheet((prev) => ({
         ...prev,
         questions: prev.questions.map((q) =>
@@ -91,25 +90,19 @@ const WorksheetDetails = () => {
                 ...q,
                 question: editedQuestion,
                 options: filteredOptions,
-                answer:
-                  currentQuestion.type === "editorial"
-                    ? [{ ...currentQuestion.answer?.[0], answer: editedAnswer }]
-                    : currentQuestion.answer,
+                answer: [{ answer: editedAnswer }],
               }
             : q
         ),
       }));
-
       setEditOpen(false);
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء حفظ السؤال أو الإجابة");
+      alert("حدث خطأ أثناء حفظ السؤال");
     }
   };
 
-  const handleAddQuestionClick = () => {
-    navigate(`/AddQuestion/${id}`);
-  };
+  const handleAddQuestion = () => navigate(`/AddQuestion/${id}`);
 
   return (
     <>
@@ -117,46 +110,45 @@ const WorksheetDetails = () => {
       <Paper
         elevation={3}
         sx={{
-          my: 15,
-          mx: 5,
-          p: 4,
+          my: 12,
+          mx: "auto",
+          p: 5,
           direction: "rtl",
-          backgroundColor: "#fffaf5",
+          background: "linear-gradient(135deg, #fffaf5, #fffefd)",
           minHeight: "70vh",
+          maxWidth: 1100,
+          borderRadius: 4,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-          <Typography variant="h4">تفاصيل ورقة العمل</Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            تفاصيل ورقة العمل
+          </Typography>
           <Button
+            sx={{ backgroundColor: "#5D4037" }}
             variant="contained"
             color="primary"
-            onClick={handleAddQuestionClick}
+            onClick={handleAddQuestion}
           >
             إضافة سؤال
           </Button>
         </Box>
 
-        {loading && <Typography>جاري التحميل...</Typography>}
-
-        {!loading && worksheet ? (
-          <>
-            <Typography variant="h5" mb={3}>
-              اسم ورقة العمل: {worksheet.name}
-            </Typography>
-
-            {worksheet.questions?.length > 0 ? (
-              <List>
-                {worksheet.questions.map((q, index) => (
-                  <Paper
-                    key={q.id}
-                    elevation={1}
-                    sx={{
-                      mb: 2,
-                      p: 2,
-                      borderRadius: 2,
-                      backgroundColor: "#fffefc",
-                    }}
-                  >
+        {loading ? (
+          <Typography align="center">جاري التحميل...</Typography>
+        ) : worksheet && worksheet.questions?.length > 0 ? (
+          <Grid container spacing={3}>
+            {worksheet.questions.map((q, idx) => (
+              <Grid item xs={12} sm={6} key={q.id}>
+                <Card
+                  sx={{
+                    borderRadius: 3,
+                    backgroundColor: "#ffffff",
+                    transition: "0.3s",
+                    "&:hover": { transform: "translateY(-5px)", boxShadow: 6 },
+                  }}
+                >
+                  <CardContent>
                     <Box
                       sx={{
                         display: "flex",
@@ -164,85 +156,85 @@ const WorksheetDetails = () => {
                         mb: 1,
                       }}
                     >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        السؤال {index + 1}: {q.question}
+                      <Typography variant="h6" fontWeight="bold">
+                        السؤال {idx + 1}: {q.question}
                       </Typography>
                       <Box>
-                        <IconButton
+                        <Button
+                          size="small"
+                          variant="outlined"
                           onClick={() => handleEditClick(q)}
-                          color="primary"
                         >
-                          <Edit fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleDelete(q.id)}
+                          تعديل
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
                           color="error"
+                          onClick={() => handleDelete(q.id)}
+                          sx={{ ml: 1 }}
                         >
-                          <Delete fontSize="small" />
-                        </IconButton>
+                          حذف
+                        </Button>
                       </Box>
                     </Box>
 
                     {q.options?.length > 0 && (
                       <Box
                         sx={{
-                          mb: 1,
                           display: "flex",
                           flexWrap: "wrap",
-                          gap: 0.5,
+                          gap: 1,
+                          mb: 1,
                         }}
                       >
-                        {q.options.map((opt, i) => {
-                          const isCorrect = q.answer?.some(
-                            (a) => a.answer === opt
-                          );
-                          return (
-                            <Box
-                              key={i}
-                              sx={{
-                                px: 1.5,
-                                py: 0.2,
-                                borderRadius: "16px",
-                                border: "1px solid #e0c097",
-                                backgroundColor: isCorrect
-                                  ? "#d0f0c0"
-                                  : "#fff8f0",
-                                fontSize: "13px",
-                                fontWeight: isCorrect ? "bold" : "normal",
-                                color: isCorrect ? "#2e7d32" : "#000",
-                              }}
-                            >
-                              {opt}
-                            </Box>
-                          );
-                        })}
+                        {q.options.map((opt, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: "16px",
+                              border: "1px solid #e0c097",
+                              backgroundColor: q.answer?.some(
+                                (a) => a.answer === opt
+                              )
+                                ? "#d0f0c0"
+                                : "#fff8f0",
+                              fontWeight: q.answer?.some(
+                                (a) => a.answer === opt
+                              )
+                                ? "bold"
+                                : "normal",
+                              color: q.answer?.some((a) => a.answer === opt)
+                                ? "#2e7d32"
+                                : "#000",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {opt}
+                          </Box>
+                        ))}
                       </Box>
                     )}
 
-                    {q.answer?.length > 0 && q.type === "editorial" && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontWeight: "500",
-                          color: "#2e2e2e",
-                          fontSize: "14px",
-                        }}
-                      >
+                    {q.type === "editorial" && q.answer?.length > 0 && (
+                      <Typography fontSize="14px">
                         الإجابة:{" "}
                         <span style={{ color: "#2e7d32" }}>
                           {q.answer.map((a) => a.answer).join(", ")}
                         </span>
                       </Typography>
                     )}
-                  </Paper>
-                ))}
-              </List>
-            ) : (
-              <Typography>لا توجد أسئلة لعرضها.</Typography>
-            )}
-          </>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         ) : (
-          !loading && <Typography>لا توجد بيانات لعرضها.</Typography>
+          <Typography align="center" mt={3}>
+            لا توجد أسئلة لعرضها.
+          </Typography>
         )}
       </Paper>
 
@@ -256,33 +248,43 @@ const WorksheetDetails = () => {
             label="نص السؤال"
             value={editedQuestion}
             onChange={(e) => setEditedQuestion(e.target.value)}
-            sx={{ mt: 1, mb: 2 }}
+            sx={{ mb: 2 }}
           />
-          {currentQuestion &&
-            currentQuestion.type !== "editorial" &&
-            editedOptions.map((opt, idx) => (
-              <Box key={idx} sx={{ display: "flex", mb: 1 }}>
-                <TextField
-                  fullWidth
-                  value={opt}
-                  onChange={(e) => {
-                    const newOpts = [...editedOptions];
-                    newOpts[idx] = e.target.value;
-                    setEditedOptions(newOpts);
-                  }}
-                />
-                <Button
-                  color="error"
-                  onClick={() =>
-                    setEditedOptions(editedOptions.filter((_, i) => i !== idx))
-                  }
-                  sx={{ ml: 1 }}
+          {currentQuestion && currentQuestion.type !== "editorial" && (
+            <>
+              {editedOptions.map((opt, i) => (
+                <Box
+                  key={i}
+                  sx={{ display: "flex", alignItems: "center", mb: 1 }}
                 >
-                  حذف
-                </Button>
-              </Box>
-            ))}
-
+                  <TextField
+                    fullWidth
+                    value={opt}
+                    onChange={(e) => {
+                      const newOpts = [...editedOptions];
+                      newOpts[i] = e.target.value;
+                      setEditedOptions(newOpts);
+                    }}
+                  />
+                  <Button
+                    variant={editedAnswer === opt ? "contained" : "outlined"}
+                    color="success"
+                    sx={{ mx: 1 }}
+                    onClick={() => setEditedAnswer(opt)}
+                  >
+                    صحيحة
+                  </Button>
+                </Box>
+              ))}
+              <Button
+                variant="outlined"
+                onClick={() => setEditedOptions([...editedOptions, ""])}
+                sx={{ mt: 1 }}
+              >
+                إضافة خيار
+              </Button>
+            </>
+          )}
           {currentQuestion && currentQuestion.type === "editorial" && (
             <TextField
               fullWidth
@@ -291,7 +293,7 @@ const WorksheetDetails = () => {
               label="الإجابة"
               value={editedAnswer}
               onChange={(e) => setEditedAnswer(e.target.value)}
-              sx={{ mt: 2, mb: 2 }}
+              sx={{ mt: 2 }}
             />
           )}
         </DialogContent>

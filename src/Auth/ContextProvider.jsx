@@ -13,7 +13,7 @@ const ContextProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(
     () => !!localStorage.getItem("authToken")
   );
-
+  console.log(authenticated);
   const navigate = useNavigate();
 
   const login = async (formData) => {

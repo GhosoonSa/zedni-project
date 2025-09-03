@@ -92,7 +92,7 @@ const AddQuestion = () => {
         await Axios.post(`${ADDQUESTION}`, payload);
       }
 
-      navigate(`/worksheets/${id}`);
+      navigate(-1);
     } catch (err) {
       console.error(err);
       setError("حدث خطأ أثناء إضافة السؤال");
