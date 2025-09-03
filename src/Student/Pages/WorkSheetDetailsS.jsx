@@ -89,7 +89,6 @@ const WorksheetDetailsS = () => {
                     }}
                   >
                     <CardContent>
-                      {/* السؤال */}
                       <Box display="flex" alignItems="center" mb={2}>
                         <HelpOutlineIcon sx={{ color: "#8d6e63", mr: 1 }} />
                         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -97,7 +96,6 @@ const WorksheetDetailsS = () => {
                         </Typography>
                       </Box>
 
-                      {/* الخيارات */}
                       {q.options?.length > 0 && (
                         <Box
                           sx={{
@@ -128,7 +126,6 @@ const WorksheetDetailsS = () => {
 
                       <Divider sx={{ my: 2 }} />
 
-                      {/* الإجابة */}
                       {q.teacherAnswers?.length > 0 && (
                         <Box display="flex" alignItems="center">
                           <CheckCircleOutlineIcon

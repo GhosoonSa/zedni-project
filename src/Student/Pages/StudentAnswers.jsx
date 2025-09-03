@@ -95,7 +95,6 @@ const StudentAnswers = () => {
                       </Typography>
                     </Box>
 
-                    {/* خيارات السؤال (اختياري) */}
                     {q.options?.length > 0 && (
                       <Box
                         sx={{
@@ -137,7 +136,6 @@ const StudentAnswers = () => {
                       </Box>
                     )}
 
-                    {/* إجابة السؤال التحريري */}
                     {q.type === "editorial" && q.answer?.length > 0 && (
                       <Box
                         mt={2}

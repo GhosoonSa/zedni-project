@@ -18,10 +18,9 @@ import { GETWORKSHEETSSTUDENT } from "../../Api/api";
 const WorksheetsStudents = () => {
   const [worksheets, setWorksheets] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { id } = useParams(); // id المادة
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // تحميل أوراق العمل
   useEffect(() => {
     if (id) {
       setLoading(true);

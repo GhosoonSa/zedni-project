@@ -162,7 +162,6 @@ const SubmitAnswersStudent = () => {
                 }}
               >
                 <CardContent>
-                  {/* عنوان السؤال */}
                   <Box display="flex" alignItems="center" mb={2}>
                     <HelpOutlineIcon sx={{ color: "#6d4c41", mr: 1 }} />
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -172,7 +171,6 @@ const SubmitAnswersStudent = () => {
 
                   <Divider sx={{ mb: 2 }} />
 
-                  {/* نوع السؤال */}
                   {q.type === "editorial" ? (
                     <TextField
                       fullWidth
@@ -215,8 +213,8 @@ const SubmitAnswersStudent = () => {
             variant="contained"
             onClick={handleSubmit}
             sx={{
-              backgroundColor: "#5D4037", // برتقالي
-              "&:hover": { backgroundColor: "#e64a19" }, // عند التمرير
+              backgroundColor: "#5D4037",
+              "&:hover": { backgroundColor: "#e64a19" },
               px: 5,
               py: 1.5,
               fontSize: "1.1rem",

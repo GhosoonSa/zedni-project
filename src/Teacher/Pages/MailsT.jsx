@@ -18,7 +18,6 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import TeacherHeader from "../Components/TeacherHeader";
 
-// بيانات ثابتة للتجربة
 const mockStudents = [
   { id: 1, name: "الطالب أحمد" },
   { id: 2, name: "الطالبة سارة" },
@@ -46,7 +45,7 @@ const mockInbox = [
 ];
 
 const InternalMail = () => {
-  const [tab, setTab] = useState(0); // 0: الوارد, 1: الصادر, 2: رسالة جديدة
+  const [tab, setTab] = useState(0);
   const [receiverTab, setReceiverTab] = useState("students");
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedSupervisors, setSelectedSupervisors] = useState([]);
@@ -90,7 +89,7 @@ const InternalMail = () => {
     setSelectedStudents([]);
     setSelectedSupervisors([]);
     alert("تم إرسال الرسالة بنجاح!");
-    setTab(1); // الانتقال تلقائيًا إلى الصادر بعد الإرسال
+    setTab(1);
   };
 
   return (
@@ -110,7 +109,6 @@ const InternalMail = () => {
             البريد الداخلي
           </Typography>
 
-          {/* Tabs من الأعلى */}
           <Tabs value={tab} onChange={(e, v) => setTab(v)} sx={{ mb: 2 }}>
             <Tab label="الوارد" />
             <Tab label="الصادر" />
@@ -118,7 +116,6 @@ const InternalMail = () => {
           </Tabs>
           <Divider sx={{ my: 2 }} />
 
-          {/* محتوى كل تبويب */}
           {tab === 0 && (
             <>
               {mockInbox.map((msg) => (
@@ -169,7 +166,6 @@ const InternalMail = () => {
 
           {tab === 2 && (
             <>
-              {/* تبويب داخلي للطلاب أو المشرفين */}
               <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
                 <Button
                   variant={
@@ -189,7 +185,6 @@ const InternalMail = () => {
                 </Button>
               </Box>
 
-              {/* اختيار المستلمين */}
               {receiverTab === "students" && (
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <Select
@@ -252,7 +247,6 @@ const InternalMail = () => {
                 </FormControl>
               )}
 
-              {/* الموضوع */}
               <TextField
                 fullWidth
                 placeholder="أدخل الموضوع هنا"
@@ -262,7 +256,6 @@ const InternalMail = () => {
                 sx={{ mb: 2 }}
               />
 
-              {/* الرسالة */}
               <TextField
                 fullWidth
                 placeholder="أدخل الرسالة هنا"

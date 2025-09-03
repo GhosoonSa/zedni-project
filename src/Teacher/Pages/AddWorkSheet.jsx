@@ -24,9 +24,9 @@ const AddWorksheet = () => {
     { id: 4, name: "تفسير" },
     { id: 3, name: "حدديث" },
   ];
-  const { subjectId } = useParams(); // id المادة المرسلة من الصفحة السابقة
+  const { subjectId } = useParams();
   const navigate = useNavigate();
-  const [subject, setSubject] = useState(subjectId || ""); // اجعل القيمة الافتراضية subjectId
+  const [subject, setSubject] = useState(subjectId || "");
   const [allSubjects, setAllSubjects] = useState([]);
   const [error, setError] = useState("");
   const [worksheetName, setWorksheetName] = useState("");
@@ -98,7 +98,7 @@ const AddWorksheet = () => {
       const res = await Axios.post(`${ADDWORKSHEET}`, payload);
       console.log(res);
       if (res.status === 201) {
-        navigate(`/Worksheets/${subject}`); // العودة مباشرة إلى أوراق العمل الخاصة بالمادة
+        navigate(`/Worksheets/${subject}`);
       }
     } catch (error) {
       if (error.response && error.response.status === 422)

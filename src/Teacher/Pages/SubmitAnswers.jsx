@@ -28,7 +28,6 @@ const SubmitAnswers = () => {
       .then((res) => {
         const worksheetData = res.data.worksheet;
 
-        // فلترة الأسئلة التي ليس لها إجابة
         const unansweredQuestions = worksheetData.questions.filter(
           (q) => !q.answer || q.answer.length === 0
         );
@@ -74,7 +73,6 @@ const SubmitAnswers = () => {
   if (loading) return <Typography>جاري التحميل...</Typography>;
   if (!worksheet) return <Typography>لا توجد بيانات لعرضها.</Typography>;
 
-  // إذا جميع الأسئلة تمت الإجابة عنها
   if (worksheet?.questions.length === 0) {
     return (
       <>
