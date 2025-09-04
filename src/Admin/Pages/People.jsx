@@ -125,14 +125,22 @@ const People = () => {
           </Typography>
           <Search value={searchTerm} onChange={setSearchTerm} />
           {students.length === 0 ? (
-            "لا يوجد طلاب "
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              لا يوجد طلاب
+            </Typography>
           ) : (
             <>
               <Typography variant="body1" sx={{ mb: 2 }}>
                 الطلاب:
               </Typography>
-              <TableContainer component={Paper}>
-                <Table>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  maxHeight: students.length > 20 ? 400 : "auto",
+                  overflowY: students.length > 20 ? "auto" : "visible",
+                }}
+              >
+                <Table stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>
@@ -188,14 +196,23 @@ const People = () => {
             </>
           )}
           {teachers.length === 0 ? (
-            "لا يوجد أساتذة"
+            <Typography variant="body1" sx={{ mb: 2, mt: 5 }}>
+              لا يوجد أساتذة
+            </Typography>
           ) : (
             <>
               <Typography variant="body1" sx={{ mb: 2, mt: 5 }}>
                 الأساتذة:
               </Typography>
-              <TableContainer component={Paper} sx={{ mt: 5 }}>
-                <Table>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  mt: 5,
+                  maxHeight: teachers.length > 20 ? 400 : "auto",
+                  overflowY: teachers.length > 20 ? "auto" : "visible",
+                }}
+              >
+                <Table stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>

@@ -37,7 +37,7 @@ import SubmitAnswers from "./Teacher/Pages/SubmitAnswers";
 import WorksheetsStudents from "./Student/Pages/WorkSheetS";
 import SubmitAnswersStudent from "./Student/Pages/SubmitAnswersS";
 import WorksheetDetailsS from "./Student/Pages/WorkSheetDetailsS";
-import InternalMail from "./Teacher/Pages/mail";
+import InternalMail from "./Teacher/Pages/MailsT";
 import StudentAnswers from "./Student/Pages/StudentAnswers";
 
 function App() {

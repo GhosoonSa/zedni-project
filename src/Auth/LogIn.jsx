@@ -1,10 +1,17 @@
 import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Typography, Button, Stack, TextField } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { userContext } from "./ContextProvider";
-import backgroundLogIn from "../assets/backgroundLogIn4.png";
+import loginpage from "../assets/logInFinal.png";
 import Header from "../Header";
 
 const LogIn = () => {
@@ -39,15 +46,16 @@ const LogIn = () => {
     }
   };
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <>
       <Header />
       <form onSubmit={handleLogin}>
         <Stack
-          direction="column"
-          spacing={2}
           sx={{
-            backgroundImage: `url(${backgroundLogIn})`,
+            backgroundImage: `url(${loginpage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             justifyContent: "center",
@@ -57,60 +65,70 @@ const LogIn = () => {
             padding: "50px",
           }}
         >
-          <Typography variant="h5"> مرحباً بعودتك</Typography>
-
-          <TextField
-            required
-            name="email"
-            id="email"
-            label="البريد الالكتروني "
-            variant="outlined"
-            onChange={handleChange}
-            color="warning"
-            size="small"
-            slotProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <AccountCircle />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ direction: "ltr", width: "250px" }}
-          />
-          <TextField
-            required
-            name="password"
-            id="password-outline"
-            label="كلمة المرور"
-            type="password"
-            variant="outlined"
-            onChange={handleChange}
-            color="warning"
-            size="small"
-            helperText="كلمة المرور مطلوبة"
-            sx={{ direction: "ltr", width: "250px" }}
-          />
-
-          <Typography>
-            <NavLink
-              to="/SignUp"
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              ليس لديك حساب؟ أنشئ الآن
-            </NavLink>
-          </Typography>
-          {error && <Typography color="error">{error}</Typography>}
-          <Button
-            type="submit"
-            variant="outlined"
-            style={{
-              backgroundColor: "#E7BC91",
-              color: "black",
-              border: "#DAE2ED",
+          <Stack
+            direction="column"
+            spacing={2}
+            sx={{
+              ml: isSmallScreen ? 0 : 28,
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            تسجيل دخول
-          </Button>
+            <Typography variant="h5"> مرحباً بعودتك</Typography>
+
+            <TextField
+              required
+              name="email"
+              id="email"
+              label="البريد الالكتروني "
+              variant="outlined"
+              onChange={handleChange}
+              color="warning"
+              size="small"
+              slotProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ direction: "ltr", width: "250px" }}
+            />
+            <TextField
+              required
+              name="password"
+              id="password-outline"
+              label="كلمة المرور"
+              type="password"
+              variant="outlined"
+              onChange={handleChange}
+              color="warning"
+              size="small"
+              helperText="كلمة المرور مطلوبة"
+              sx={{ direction: "ltr", width: "250px" }}
+            />
+
+            <Typography>
+              <NavLink
+                to="/SignUp"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                ليس لديك حساب؟ أنشئ الآن
+              </NavLink>
+            </Typography>
+            {error && <Typography color="error">{error}</Typography>}
+            <Button
+              type="submit"
+              variant="outlined"
+              style={{
+                backgroundColor: "#E7BC91",
+                color: "black",
+                border: "#DAE2ED",
+              }}
+            >
+              تسجيل دخول
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </>

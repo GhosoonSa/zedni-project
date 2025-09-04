@@ -135,9 +135,9 @@ const AdsSection = () => {
           <Card
             key={ad.id}
             sx={{
-              minWidth: "300px",
+              maxWidth: "300px",
               flexShrink: 0,
-              height: "400px",
+              height: "350px",
               borderRadius: "16px",
               boxShadow: 4,
               transition: "all 0.3s ease",

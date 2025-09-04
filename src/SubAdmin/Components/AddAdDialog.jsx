@@ -38,9 +38,6 @@ const AddAdDialog = ({ open, onClose, onSave, authToken }) => {
       const formData = new FormData();
       formData.append("image", newAdImage);
       formData.append("description", newAdText);
-      console.log("formData: " + formData);
-      console.log("token:" + authToken);
-      console.log("role: " + role);
       const response = await axios.post(
         "http://localhost:8000/api/subadmin/createAnnouncementCourse",
         formData,
