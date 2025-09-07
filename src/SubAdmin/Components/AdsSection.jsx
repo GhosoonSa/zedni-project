@@ -137,19 +137,22 @@ const AdsSection = () => {
             sx={{
               maxWidth: "300px",
               flexShrink: 0,
-              height: "350px",
+              height: "450px",
               borderRadius: "16px",
               boxShadow: 4,
               transition: "all 0.3s ease",
+              display: "flex",
+              flexDirection: "column",
               "&:hover": {
                 transform: "translateY(-8px)",
                 boxShadow: 6,
               },
             }}
           >
+            {/* الصورة */}
             <Box
               sx={{
-                height: "70%",
+                flex: "0 0 280px", // ارتفاع ثابت للصورة
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
@@ -170,13 +173,21 @@ const AdsSection = () => {
               />
             </Box>
 
-            <Stack direction="column" spacing={2} sx={{ alignItems: "center" }}>
+            {/* النص + الزر */}
+            <Stack
+              direction="column"
+              spacing={1}
+              sx={{
+                flex: 1,
+                p: 1,
+                justifyContent: "space-between",
+              }}
+            >
               <CardContent
                 sx={{
-                  height: "30%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  flex: 1,
+                  maxHeight: "80px",
+                  overflowY: "auto",
                   backgroundColor: "#fffaf5",
                 }}
               >
@@ -192,16 +203,16 @@ const AdsSection = () => {
                   {ad.description}
                 </Typography>
               </CardContent>
+
               <Button
                 type="button"
                 variant="outlined"
                 color="error"
-                style={{
+                sx={{
                   backgroundColor: "#E7BC91",
                   color: "black",
                   border: "#DAE2ED",
-                  margin: "10px",
-                  width: "100px",
+                  width: "100%",
                 }}
                 onClick={() => handleDelete(ad.id)}
               >
@@ -214,7 +225,10 @@ const AdsSection = () => {
 
       <AddAdDialog
         open={openAddAdDialog}
-        onClose={() => setOpenAddAdDialog(false)}
+        onClose={() => {
+          setOpenAddAdDialog(false);
+          fetchAds();
+        }}
         onSave={handleAddAd}
         authToken={authToken}
       />

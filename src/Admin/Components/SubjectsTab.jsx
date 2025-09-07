@@ -308,7 +308,6 @@ const SubjectsTab = (props) => {
                   <Typography
                     variant="body1"
                     sx={{
-                      wordBreak: "break-word",
                       whiteSpace: "normal",
                       pr: 4,
                     }}

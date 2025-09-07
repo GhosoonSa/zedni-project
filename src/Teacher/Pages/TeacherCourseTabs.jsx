@@ -145,7 +145,7 @@ const TeacherCourseTabs = () => {
           >
             <Tab eventKey="ClassesPlanTab" title="الخطة الدرسية">
               <div style={{ flex: 1, overflow: "auto" }}>
-                <TeacherClassesPlanTab />
+                <TeacherClassesPlanTab level={level} courseId={courseID} />
               </div>
             </Tab>
             <Tab eventKey="SubjectsTab" title="المواد">

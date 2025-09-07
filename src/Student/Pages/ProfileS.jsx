@@ -128,10 +128,10 @@ const ProfileS = () => {
             position: "relative",
             mb: { xs: 6, sm: 8 },
             boxShadow: "0 4px 20px rgba(210, 180, 140, 0.3)",
-            backgroundImage: user.userImage
-              ? `url(${user.userImage})`
+            backgroundImage: user.profileImage
+              ? `url(${user.profileImage})`
               : "linear-gradient(45deg, #FFEDD8 30%, #E7BC91 90%)",
-            backgroundSize: user.userImage ? "cover" : "auto",
+            backgroundSize: user.profileImage ? "cover" : "auto",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             "&::before": {
@@ -194,7 +194,10 @@ const ProfileS = () => {
           </Button>
           <AddProfileImage
             isOpen={isAddOpen}
-            onClose={() => setIsAddOpen(false)}
+            onClose={() => {
+              setIsAddOpen(false);
+              fetchProfile();
+            }}
             token={authToken}
           />
 
