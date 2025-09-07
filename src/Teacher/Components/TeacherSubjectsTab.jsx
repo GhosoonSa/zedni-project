@@ -305,7 +305,6 @@ const TeacherSubjectsTab = (props) => {
                   <Typography
                     variant="body1"
                     sx={{
-                      wordBreak: "break-word",
                       whiteSpace: "normal",
                       flex: 1,
                     }}

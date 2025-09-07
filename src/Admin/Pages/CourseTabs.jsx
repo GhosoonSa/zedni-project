@@ -53,7 +53,7 @@ const CourseTabs = () => {
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get("tab");
     if (tabParam === "joining") {
-      setKey("JoiningRequestsTab");
+      setKey("ClassesPlanTab");
     }
   }, []);
 
@@ -124,7 +124,7 @@ const CourseTabs = () => {
             justify
           >
             <Tab eventKey="ClassesPlanTab" title="الخطة الدرسية">
-              <ClassesPlanTab level={level} />
+              <ClassesPlanTab courseId={courseID} level={level} />
             </Tab>
             <Tab eventKey="SubjectsTab" title="المواد">
               <SubjectsTab level={level} courseId={courseID} />

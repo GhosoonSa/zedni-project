@@ -129,8 +129,14 @@ const PeopleSA = () => {
           <Typography variant="body1" sx={{ mb: 2 }}>
             الطلاب
           </Typography>
-          <TableContainer component={Paper}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            sx={{
+              maxHeight: students.length > 20 ? 400 : "auto",
+              overflowY: students.length > 20 ? "auto" : "visible",
+            }}
+          >
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>
@@ -182,8 +188,15 @@ const PeopleSA = () => {
           <Typography variant="body1" sx={{ mb: 2, mt: 5 }}>
             الأساتذة
           </Typography>
-          <TableContainer component={Paper} sx={{ mt: 5 }}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            sx={{
+              mt: 5,
+              maxHeight: teachers.length > 20 ? 400 : "auto",
+              overflowY: teachers.length > 20 ? "auto" : "visible",
+            }}
+          >
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ textAlign: "center" }}>الاسم</TableCell>

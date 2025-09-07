@@ -32,10 +32,6 @@ const CourseCard = ({ course, isNew = false }) => {
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
 
-  useEffect(() => {
-    console.log("Received token: ", authToken);
-  }, [authToken]);
-
   const handleCardClick = () => {
     if (clicked || isNew) return;
     setClicked(true);
@@ -58,7 +54,6 @@ const CourseCard = ({ course, isNew = false }) => {
           },
         }
       );
-      console.log("response :" + response.message);
       if (response.status === 200 || response.status === 201) {
         if (cardRef.current) {
           const rect = cardRef.current.getBoundingClientRect();

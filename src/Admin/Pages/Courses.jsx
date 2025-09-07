@@ -14,6 +14,7 @@ import AddCourse from "../Components/AddCourse";
 import CourseOptionsModal from "../Components/CourseOptionsModal";
 import backgroundTabs from "/backgroundTabs.jpg";
 import axios from "axios";
+import SearchSubject from "../Components/SearchSubject";
 
 const Courses = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -64,7 +65,7 @@ const Courses = () => {
   useEffect(() => {
     fetchAds();
     fetchCourses();
-  }, [authToken]);
+  }, []);
 
   const handleChangeNew = async (courseID) => {
     try {
@@ -298,7 +299,7 @@ const Courses = () => {
             ))}
           </Box>
         </Paper>
-
+        <SearchSubject />
         {/* courses section */}
         {statuses.map((status) => {
           const list = courses.filter((c) => c.status === status);
@@ -361,7 +362,10 @@ const Courses = () => {
                     </Button>
                     <AddCourse
                       isOpen={isAddOpen}
-                      onClose={() => setIsAddOpen(false)}
+                      onClose={() => {
+                        setIsAddOpen(false);
+                        fetchCourses();
+                      }}
                       token={authToken}
                     />
                   </Box>
