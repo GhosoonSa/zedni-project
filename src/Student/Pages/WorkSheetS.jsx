@@ -126,7 +126,7 @@ const WorksheetsStudents = () => {
                       sx={{ borderRadius: 2 }}
                       onClick={() => navigate(`/SubmitAnswersS/${ws.id}`)}
                     >
-                      التفاصيل
+                      حل الورقة
                     </Button>
                   </CardActions>
                 </Card>

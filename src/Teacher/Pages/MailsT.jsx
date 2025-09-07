@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -17,79 +17,126 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import TeacherHeader from "../Components/TeacherHeader";
-
-const mockStudents = [
-  { id: 1, name: "الطالب أحمد" },
-  { id: 2, name: "الطالبة سارة" },
-  { id: 3, name: "الطالبة مريم" },
-];
-
-const mockSupervisors = [
-  { id: 1, name: "المشرف أحمد" },
-  { id: 2, name: "المشرفة فاطمة" },
-];
-
-const mockInbox = [
-  {
-    id: 1,
-    from: "الأستاذة فاطمة",
-    subject: "مرحبًا بكم",
-    body: "أهلاً في الدورة",
-  },
-  {
-    id: 2,
-    from: "المشرف أحمد",
-    subject: "تنبيه",
-    body: "يرجى الالتزام بالمواعيد",
-  },
-];
+import { Axios } from "../../Api/axios";
+import {
+  GETSUBADMIN,
+  GETLEVELFORTEACHER,
+  GETSTUDENTINLEVEL,
+  SENDMESSAGE,
+} from "../../Api/api";
+import SentMessagesT from "./SentMessagesT";
+import ReceivedMessagesT from "./ReceivedMessagesT";
+// 🟢 ضيف المسارات الحقيقية لـ API عندك
 
 const InternalMail = () => {
   const [tab, setTab] = useState(0);
   const [receiverTab, setReceiverTab] = useState("students");
+  const [levels, setLevels] = useState([]);
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [students, setStudents] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedSupervisors, setSelectedSupervisors] = useState([]);
+
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [sentMessages, setSentMessages] = useState([]);
+  const [selectedReceiverID, setSelectedReceiverID] = useState(""); // 🟢 إضافة state جديد
 
-  const isAllStudentsSelected = selectedStudents.length === mockStudents.length;
+  // ✅ جلب المشرفين
+  useEffect(() => {
+    const fetchSupervisors = async () => {
+      try {
+        const res = await Axios.get(GETSUBADMIN);
+
+        setSupervisors(res.data.subadmin || []);
+        console.log(res.data.subadmin);
+      } catch (err) {
+        console.error("خطأ في جلب المشرفين:", err);
+      }
+    };
+    fetchSupervisors();
+  }, []);
+
+  // ✅ جلب المستويات التي يدرّسها الأستاذ
+  useEffect(() => {
+    const fetchLevels = async () => {
+      try {
+        const res = await Axios.get(GETLEVELFORTEACHER);
+        console.log("المستويات:", res.data.levels); // تحقق من اسم الحقل
+        setLevels(res.data.levels || []);
+      } catch (err) {
+        console.error("خطأ في جلب المستويات:", err);
+      }
+    };
+    fetchLevels();
+  }, []);
+
+  // ✅ جلب الطلاب بناء على المستوى
+  useEffect(() => {
+    if (!selectedLevel) return;
+    const fetchStudents = async () => {
+      try {
+        const res = await Axios.get(`${GETSTUDENTINLEVEL}/${selectedLevel}`);
+        setStudents(res.data.students || []);
+        console.log(res.data.students);
+      } catch (err) {
+        console.error("خطأ في جلب الطلاب:", err);
+      }
+    };
+    fetchStudents();
+  }, [selectedLevel]);
+
+  const handleSend = async () => {
+    if (!subject || !body) {
+      alert("الرجاء إدخال الموضوع والرسالة");
+      return;
+    }
+
+    let receivers =
+      receiverTab === "students" ? selectedStudents : selectedSupervisors;
+
+    if (!receivers.length) {
+      alert("الرجاء اختيار مستلم واحد على الأقل");
+      return;
+    }
+
+    try {
+      for (let id of receivers) {
+        let payload = {
+          subject,
+          content: body,
+          receiverID: String(id), // 🟢 سيرفر يريد string واحد فقط
+        };
+        await Axios.post(SENDMESSAGE, payload);
+      }
+      alert("✅ تم إرسال الرسالة لجميع المستلمين");
+      setSubject("");
+      setBody("");
+      setSelectedStudents([]);
+      setSelectedSupervisors([]);
+    } catch (err) {
+      console.error("خطأ أثناء الإرسال:", err);
+      alert("❌ فشل إرسال الرسالة");
+    }
+  };
+
+  const isAllStudentsSelected = selectedStudents.length === students.length;
   const isAllSupervisorsSelected =
-    selectedSupervisors.length === mockSupervisors.length;
+    selectedSupervisors.length === supervisors.length;
 
   const handleToggleAllStudents = () => {
-    if (isAllStudentsSelected) setSelectedStudents([]);
-    else setSelectedStudents(mockStudents.map((s) => s.name));
+    if (isAllStudentsSelected) {
+      setSelectedStudents([]);
+    } else {
+      setSelectedStudents(students.map((s) => s.id));
+    }
   };
 
   const handleToggleAllSupervisors = () => {
     if (isAllSupervisorsSelected) setSelectedSupervisors([]);
-    else setSelectedSupervisors(mockSupervisors.map((s) => s.name));
-  };
-
-  const handleSend = () => {
-    if (
-      !subject ||
-      !body ||
-      (selectedStudents.length === 0 && selectedSupervisors.length === 0)
-    ) {
-      alert("الرجاء إدخال الموضوع والرسالة واختيار المستلمين");
-      return;
-    }
-
-    const payload = {
-      to: [...selectedStudents, ...selectedSupervisors],
-      subject,
-      body,
-    };
-
-    setSentMessages((prev) => [...prev, payload]);
-    setSubject("");
-    setBody("");
-    setSelectedStudents([]);
-    setSelectedSupervisors([]);
-    alert("تم إرسال الرسالة بنجاح!");
-    setTab(1);
+    else setSelectedSupervisors(supervisors.map((s) => s.id));
   };
 
   return (
@@ -98,7 +145,7 @@ const InternalMail = () => {
       <Box
         sx={{
           p: 3,
-          mt: 7,
+          mt: 12,
           minHeight: "100vh",
           direction: "rtl",
           backgroundColor: "#fffaf5",
@@ -116,54 +163,13 @@ const InternalMail = () => {
           </Tabs>
           <Divider sx={{ my: 2 }} />
 
-          {tab === 0 && (
-            <>
-              {mockInbox.map((msg) => (
-                <Box
-                  key={msg.id}
-                  sx={{
-                    mb: 2,
-                    p: 2,
-                    border: "1px solid #eee",
-                    borderRadius: 1,
-                  }}
-                >
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    {msg.from}
-                  </Typography>
-                  <Typography sx={{ fontStyle: "italic" }}>
-                    {msg.subject}
-                  </Typography>
-                  <Typography>{msg.body}</Typography>
-                </Box>
-              ))}
-            </>
-          )}
+          {/* 📨 الوارد */}
+          {tab === 0 && <ReceivedMessagesT />}
 
-          {tab === 1 && (
-            <>
-              {sentMessages.map((msg, idx) => (
-                <Box
-                  key={idx}
-                  sx={{
-                    mb: 2,
-                    p: 2,
-                    border: "1px solid #eee",
-                    borderRadius: 1,
-                  }}
-                >
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    إلى: {msg.to.join(", ")}
-                  </Typography>
-                  <Typography sx={{ fontStyle: "italic" }}>
-                    {msg.subject}
-                  </Typography>
-                  <Typography>{msg.body}</Typography>
-                </Box>
-              ))}
-            </>
-          )}
+          {/* 📤 الصادر */}
+          {tab === 1 && <SentMessagesT />}
 
+          {/* ✍️ إرسال رسالة */}
           {tab === 2 && (
             <>
               <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
@@ -186,34 +192,77 @@ const InternalMail = () => {
               </Box>
 
               {receiverTab === "students" && (
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                  <Select
-                    multiple
-                    value={selectedStudents}
-                    onChange={(e) => setSelectedStudents(e.target.value)}
-                    input={<OutlinedInput placeholder="اختر الطلاب" />}
-                    renderValue={(selected) => selected.join(", ")}
-                    MenuProps={{ PaperProps: { sx: { direction: "rtl" } } }}
-                    sx={{ direction: "rtl", textAlign: "right" }}
-                  >
-                    <MenuItem value="all" onClick={handleToggleAllStudents}>
-                      <ListItemIcon>
-                        <Checkbox checked={isAllStudentsSelected} />
-                      </ListItemIcon>
-                      تحديد الكل
-                    </MenuItem>
-                    {mockStudents.map((s) => (
-                      <MenuItem key={s.id} value={s.name}>
-                        <ListItemIcon>
-                          <Checkbox
-                            checked={selectedStudents.indexOf(s.name) > -1}
-                          />
-                        </ListItemIcon>
-                        {s.name}
+                <>
+                  <FormControl fullWidth sx={{ mb: 2 }}>
+                    <Select
+                      value={selectedLevel}
+                      onChange={(e) => setSelectedLevel(e.target.value)}
+                      displayEmpty
+                      input={<OutlinedInput />}
+                    >
+                      <MenuItem disabled value="">
+                        اختر المستوى
                       </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                      {levels.map((lvl) => (
+                        <MenuItem key={lvl.id} value={lvl.id}>
+                          {lvl.levelName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {selectedLevel && (
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <Select
+                        multiple
+                        value={selectedStudents}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value.includes("all")) {
+                            // إذا تم اختيار "all"، نحدد كل الطلاب أو نلغيهم حسب الحالة الحالية
+                            if (isAllStudentsSelected) {
+                              setSelectedStudents([]);
+                            } else {
+                              setSelectedStudents(students.map((s) => s.id));
+                            }
+                          } else {
+                            setSelectedStudents(value);
+                          }
+                        }}
+                        displayEmpty
+                        input={<OutlinedInput />}
+                        renderValue={(selected) =>
+                          selected.length === 0
+                            ? "اختر الطلاب"
+                            : students
+                                .filter((s) => selected.includes(s.id))
+                                .map((s) => s.firstAndLastName)
+                                .join(", ")
+                        }
+                        MenuProps={{ PaperProps: { sx: { direction: "rtl" } } }}
+                        sx={{ direction: "rtl", textAlign: "right" }}
+                      >
+                        <MenuItem value="all">
+                          <ListItemIcon>
+                            <Checkbox checked={isAllStudentsSelected} />
+                          </ListItemIcon>
+                          تحديد الكل
+                        </MenuItem>
+
+                        {students.map((s) => (
+                          <MenuItem key={s.id} value={s.id}>
+                            <ListItemIcon>
+                              <Checkbox
+                                checked={selectedStudents.indexOf(s.id) > -1}
+                              />
+                            </ListItemIcon>
+                            {s.firstAndLastName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                </>
               )}
 
               {receiverTab === "supervisors" && (
@@ -221,26 +270,46 @@ const InternalMail = () => {
                   <Select
                     multiple
                     value={selectedSupervisors}
-                    onChange={(e) => setSelectedSupervisors(e.target.value)}
-                    input={<OutlinedInput placeholder="اختر المشرفين" />}
-                    renderValue={(selected) => selected.join(", ")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value.includes("all")) {
+                        if (isAllSupervisorsSelected) {
+                          setSelectedSupervisors([]);
+                        } else {
+                          setSelectedSupervisors(supervisors.map((s) => s.id));
+                        }
+                      } else {
+                        setSelectedSupervisors(value);
+                      }
+                    }}
+                    displayEmpty
+                    input={<OutlinedInput />}
+                    renderValue={(selected) =>
+                      selected.length === 0
+                        ? "اختر المشرف"
+                        : supervisors
+                            .filter((s) => selected.includes(s.id))
+                            .map((s) => s.firstAndLastName)
+                            .join(", ")
+                    }
                     MenuProps={{ PaperProps: { sx: { direction: "rtl" } } }}
                     sx={{ direction: "rtl", textAlign: "right" }}
                   >
-                    <MenuItem value="all" onClick={handleToggleAllSupervisors}>
+                    <MenuItem value="all">
                       <ListItemIcon>
                         <Checkbox checked={isAllSupervisorsSelected} />
                       </ListItemIcon>
                       تحديد الكل
                     </MenuItem>
-                    {mockSupervisors.map((s) => (
-                      <MenuItem key={s.id} value={s.name}>
+
+                    {supervisors.map((s) => (
+                      <MenuItem key={s.id} value={s.id}>
                         <ListItemIcon>
                           <Checkbox
-                            checked={selectedSupervisors.indexOf(s.name) > -1}
+                            checked={selectedSupervisors.indexOf(s.id) > -1}
                           />
                         </ListItemIcon>
-                        {s.name}
+                        {s.firstAndLastName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -272,9 +341,7 @@ const InternalMail = () => {
                 startIcon={<SendIcon />}
                 onClick={handleSend}
                 sx={{ backgroundColor: "#e7bc91", color: "black" }}
-              >
-                إرسال
-              </Button>
+              ></Button>
             </>
           )}
         </Paper>

@@ -70,6 +70,20 @@ const WorksheetsBySubject = () => {
           📚 أوراق العمل
         </Typography>
 
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#ff9800",
+              "&:hover": { backgroundColor: "#fb8c00" },
+              borderRadius: 2,
+            }}
+            onClick={() => navigate(`/AddWorkSheetT/${id}`)}
+          >
+            إضافة ورقة عمل
+          </Button>
+        </Box>
+
         {loading ? (
           <Typography align="center" color="text.secondary" fontSize="1.2rem">
             جاري التحميل...

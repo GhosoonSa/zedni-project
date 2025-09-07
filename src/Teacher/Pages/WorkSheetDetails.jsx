@@ -20,6 +20,7 @@ import {
   GETWORKSHEETWITHANSWERS,
   EDITQUESTION,
   DELETEQUESTION,
+  EDITANSWERS,
 } from "../../Api/api";
 import TeacherHeader from "../Components/TeacherHeader";
 
@@ -59,46 +60,81 @@ const WorksheetDetails = () => {
     }));
   };
 
-  const handleSave = async () => {
-    const filteredOptions = editedOptions.filter((o) => o.trim() !== "");
-    if (
-      !editedQuestion.trim() ||
-      (currentQuestion.type !== "editorial" && filteredOptions.length < 2)
-    ) {
-      alert("يرجى إدخال نص السؤال وخيارين على الأقل");
-      return;
-    }
+  const handleSaveUnified = async () => {
+    if (!currentQuestion) return;
 
-    const payload = {
-      questionID: currentQuestion.id,
-      question: editedQuestion,
-      type: currentQuestion.type,
-      options:
-        currentQuestion.type !== "editorial" ? filteredOptions : undefined,
-      ...(currentQuestion.type !== "editorial" && editedAnswer
-        ? { answer: editedAnswer }
-        : {}),
-    };
+    const filteredOptions = editedOptions.filter((o) => o.trim() !== "");
+
+    const questionChanged =
+      editedQuestion.trim() !== currentQuestion.question ||
+      (currentQuestion.type !== "editorial" &&
+        JSON.stringify(filteredOptions) !==
+          JSON.stringify(currentQuestion.options));
+
+    const answerChanged =
+      editedAnswer !== (currentQuestion.answer?.[0]?.answer || "");
 
     try {
-      await Axios.put(`${EDITQUESTION}`, payload);
-      setWorksheet((prev) => ({
-        ...prev,
-        questions: prev.questions.map((q) =>
-          q.id === currentQuestion.id
-            ? {
-                ...q,
-                question: editedQuestion,
-                options: filteredOptions,
-                answer: [{ answer: editedAnswer }],
-              }
-            : q
-        ),
-      }));
+      if (questionChanged) {
+        const payload = {
+          questionID: currentQuestion.id,
+          question: editedQuestion,
+          type: currentQuestion.type,
+          options:
+            currentQuestion.type !== "editorial" ? filteredOptions : undefined,
+          answer:
+            currentQuestion.type !== "editorial" && editedAnswer
+              ? [{ answer: editedAnswer }]
+              : [],
+        };
+
+        await Axios.put(`${EDITQUESTION}`, payload);
+
+        setWorksheet((prev) => ({
+          ...prev,
+          questions: prev.questions.map((q) =>
+            q.id === currentQuestion.id
+              ? {
+                  ...q,
+                  question: editedQuestion,
+                  options: filteredOptions,
+                  answer:
+                    currentQuestion.type !== "editorial"
+                      ? [{ answer: editedAnswer }]
+                      : q.answer,
+                }
+              : q
+          ),
+        }));
+      }
+
+      if (answerChanged) {
+        const answerID = currentQuestion.answer?.[0]?.id;
+        if (!answerID) {
+          alert("لا يوجد جواب موجود لتعديله.");
+          return;
+        }
+
+        await Axios.put(`${EDITANSWERS}`, {
+          questionID: currentQuestion.id,
+          answerID: answerID,
+          answer: editedAnswer,
+        });
+
+        setWorksheet((prev) => ({
+          ...prev,
+          questions: prev.questions.map((q) =>
+            q.id === currentQuestion.id
+              ? { ...q, answer: [{ ...q.answer[0], answer: editedAnswer }] }
+              : q
+          ),
+        }));
+      }
+
       setEditOpen(false);
     } catch (err) {
       console.error(err);
-      alert("حدث خطأ أثناء حفظ السؤال");
+      alert("حدث خطأ أثناء حفظ التعديلات");
     }
   };
 
@@ -262,8 +298,14 @@ const WorksheetDetails = () => {
                     value={opt}
                     onChange={(e) => {
                       const newOpts = [...editedOptions];
-                      newOpts[i] = e.target.value;
+                      const newValue = e.target.value;
+
+                      newOpts[i] = newValue;
                       setEditedOptions(newOpts);
+
+                      if (editedAnswer === opt) {
+                        setEditedAnswer(newValue);
+                      }
                     }}
                   />
                   <Button
@@ -299,7 +341,7 @@ const WorksheetDetails = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditOpen(false)}>إلغاء</Button>
-          <Button variant="contained" onClick={handleSave}>
+          <Button variant="contained" onClick={handleSaveUnified}>
             حفظ
           </Button>
         </DialogActions>

@@ -18,3 +18,13 @@ export const GETWORKSHEETWITHANSWERSSTUDENT = "student/getWorksheetWithAnswers";
 export const GETTEACHERANSWRS = "student/getTeacherAnswers";
 
 export const EDITANSWERS = "teacher/teacherEditAnswer";
+
+//Messages
+export const GETSUBADMIN = "getSubadmin";
+export const GETLEVELFORTEACHER = "teacher/getLevelsForTeacher";
+export const GETSTUDENTINLEVEL = "teacher/getStudentInLevel";
+export const SENDMESSAGE = "sendMessage";
+export const SENTMESSAGES = "sentMessages";
+export const RECEIVEDMESSAGES = "receivedMessages";
+export const OPENMESSAGE = "openMessage";
+export const GETTEACHERS = "getTeachers";
