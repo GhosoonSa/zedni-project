@@ -37,8 +37,16 @@ import SubmitAnswers from "./Teacher/Pages/SubmitAnswers";
 import WorksheetsStudents from "./Student/Pages/WorkSheetS";
 import SubmitAnswersStudent from "./Student/Pages/SubmitAnswersS";
 import WorksheetDetailsS from "./Student/Pages/WorkSheetDetailsS";
-import InternalMail from "./Teacher/Pages/mail";
+
 import StudentAnswers from "./Student/Pages/StudentAnswers";
+import SentMessagesT from "./Teacher/Pages/SentMessagesT";
+import ReceivedMessagesT from "./Teacher/Pages/ReceivedMessagesT";
+import SentMessagesS from "./Student/Pages/SentMessagesS";
+import ReceivedMessagesS from "./Student/Pages/ReceivedMessagesS";
+import SentMessagesAdmin from "./Admin/Pages/SentMessagesAdmin";
+import ReceivedMessagesAdmin from "./Admin/Pages/ReceivedMessagesAdmin";
+import SentMessagesSubAdmin from "./SubAdmin/Pages/SentMessagesSubAdmin";
+import ReceivedMessagesSubAdmin from "./SubAdmin/Pages/ReceivedMessagesSubAdmin";
 
 function App() {
   return (
@@ -97,6 +105,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/sentMessagesAdmin"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <SentMessagesAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reccivedMessagesAdmin"
+          element={
+            <ProtectedRoute roles={["admin"]}>
+              <ReceivedMessagesAdmin />
+            </ProtectedRoute>
+          }
+        />
         {/*protected routes for SubAdmin */}
         <Route
           path="/CoursesSA"
@@ -135,6 +159,22 @@ function App() {
           element={
             <ProtectedRoute roles={["subadmin"]}>
               <SubAdminCourseTabs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sentMessagesSubAdmin"
+          element={
+            <ProtectedRoute roles={["subadmin"]}>
+              <SentMessagesSubAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reccivedMessagesSubAdmin"
+          element={
+            <ProtectedRoute roles={["subadmin"]}>
+              <ReceivedMessagesSubAdmin />
             </ProtectedRoute>
           }
         />
@@ -228,13 +268,22 @@ function App() {
           }
         />
         <Route
-          path="/mail"
+          path="/sentMessagesT"
           element={
             <ProtectedRoute roles={["teacher"]}>
-              <InternalMail />
+              <SentMessagesT />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/reccivedMessagesT"
+          element={
+            <ProtectedRoute roles={["teacher"]}>
+              <ReceivedMessagesT />
+            </ProtectedRoute>
+          }
+        />
+
         {/*protected routes for Student */}
         <Route
           path="/CoursesS"
@@ -298,6 +347,22 @@ function App() {
           element={
             <ProtectedRoute roles={["student"]}>
               <StudentAnswers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sentMessagesS"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <SentMessagesS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reccivedMessagesS"
+          element={
+            <ProtectedRoute roles={["student"]}>
+              <ReceivedMessagesS />
             </ProtectedRoute>
           }
         />
