@@ -117,6 +117,7 @@ const StudentSubjectsTab = ({ courseId }) => {
         }
       );
       if (response.status === 201 || response.status === 200) {
+        fetchsubjects();
         const updatedSubjects = subjects.map((subject) => {
           if (subject.id === subjectId) {
             const updatedBooks = subject.recommendedBooks.map((book) => {

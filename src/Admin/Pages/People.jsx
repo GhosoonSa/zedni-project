@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Person from "../Components/Person";
 import Search from "../Components/Search";
+import SubAdminTable from "../Components/SubAdminTable";
 import axios from "axios";
 
 const People = () => {
@@ -267,6 +268,7 @@ const People = () => {
               </TableContainer>
             </>
           )}
+          <SubAdminTable />
           <Person
             isOpen={isOpen}
             onClose={() => setIsOpen(false)}

@@ -137,7 +137,6 @@ const AdsSection = () => {
             sx={{
               maxWidth: "300px",
               flexShrink: 0,
-              height: "450px",
               borderRadius: "16px",
               boxShadow: 4,
               transition: "all 0.3s ease",
@@ -149,10 +148,9 @@ const AdsSection = () => {
               },
             }}
           >
-            {/* الصورة */}
             <Box
               sx={{
-                flex: "0 0 280px", // ارتفاع ثابت للصورة
+                flex: "0 0 auto",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
@@ -173,7 +171,6 @@ const AdsSection = () => {
               />
             </Box>
 
-            {/* النص + الزر */}
             <Stack
               direction="column"
               spacing={1}
