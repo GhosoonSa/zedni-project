@@ -302,7 +302,7 @@ const SubAdminPeopleTab = ({ courseId, level }) => {
                 الشهادة/العمل:
               </Typography>
               <Typography variant="body1">
-                {selectedStudent?.studyOrcareer}
+                {selectedStudent?.studyOrCareer}
               </Typography>
             </Box>
 

@@ -69,7 +69,7 @@ const MailsS = () => {
     const payload = {
       subject,
       content: body,
-      receiverID: String(2),
+      receiverID: String(selectedTeacherID),
     };
 
     console.log("📨 payload:", payload);

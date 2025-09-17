@@ -27,7 +27,7 @@ const ReceivedMessagesS = () => {
     const fetchReceived = async () => {
       try {
         const res = await Axios.get(RECEIVEDMESSAGES);
-        setMessages(res.data.received || []);
+        console.log(res.data.received || []);
       } catch (err) {
         console.error("خطأ في جلب الرسائل الواردة:", err);
       }
